@@ -82,7 +82,7 @@
       },
       playCard: function(card){
         // Remove from hand
-        let cardIndex = this.handCards.indexOf(card);
+        this.handCards.splice(this.handCards.indexOf(card), 1);
 
         // Check whether card is first in dojo
         if (this.playedCards.length == 0) {
