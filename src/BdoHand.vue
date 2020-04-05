@@ -1,5 +1,12 @@
 <template>
 	<div class="hand clearfix">
+    <button
+      v-if="cards.length == 0"
+      v-on:click="$emit('cardDeal')"
+     >
+      Deal hand
+    </button>
+
     <div
       class="hand-card-slot"
       v-for="card in cards"

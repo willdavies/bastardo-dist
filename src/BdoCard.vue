@@ -4,12 +4,12 @@
     v-bind:id="'card-' + card.id"
   >
     <div class="card-corner-label">
-      <span class="card-value">{{card.value}}</span>
+      <span class="card-value">{{card.label}}</span>
       <BdoCardSymbol
         v-bind:suit="card.suit"
       ></BdoCardSymbol>
     </div>
-    <span class="card-value card-value-main">{{card.value}}</span>
+    <span class="card-value card-value-main">{{card.label}}</span>
   </div>
 </template>
 

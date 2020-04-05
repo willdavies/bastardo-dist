@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <BdoHand
-        v-bind:cards=cards
+        v-bind:cards=handCards
+        v-on:cardDeal="dealCards"
     ></BdoHand>
   </div>
 </template>
@@ -13,275 +14,53 @@ import BdoDojo from './BdoDojo.vue';
 export default {
   data: function(){
     return {
-      deck: [
-        {
-          id: 1,
-          suit: 'clubs',
-          value: '2'
-        },
-        {
-          id: 2,
-          suit: 'clubs',
-          value: '3'
-        },
-        {
-          id: 3,
-          suit: 'clubs',
-          value: '4'
-        },
-        {
-          id: 4,
-          suit: 'clubs',
-          value: '5'
-        },
-        {
-          id: 5,
-          suit: 'clubs',
-          value: '6'
-        },
-        {
-          id: 6,
-          suit: 'clubs',
-          value: '7'
-        },
-        {
-          id: 7,
-          suit: 'clubs',
-          value: '8'
-        },
-        {
-          id: 8,
-          suit: 'clubs',
-          value: '9'
-        },
-        {
-          id: 9,
-          suit: 'clubs',
-          value: '10'
-        },
-        {
-          id: 10,
-          suit: 'clubs',
-          value: 'J'
-        },
-        {
-          id: 11,
-          suit: 'clubs',
-          value: 'Q'
-        },
-        {
-          id: 12,
-          suit: 'clubs',
-          value: 'K'
-        },
-        {
-          id: 13,
-          suit: 'clubs',
-          value: 'A'
-        },
-        {
-          id: 14,
-          suit: 'diamonds',
-          value: '2'
-        },
-        {
-          id: 15,
-          suit: 'diamonds',
-          value: '3'
-        },
-        {
-          id: 16,
-          suit: 'diamonds',
-          value: '4'
-        },
-        {
-          id: 17,
-          suit: 'diamonds',
-          value: '5'
-        },
-        {
-          id: 18,
-          suit: 'diamonds',
-          value: '6'
-        },
-        {
-          id: 19,
-          suit: 'diamonds',
-          value: '7'
-        },
-        {
-          id: 20,
-          suit: 'diamonds',
-          value: '8'
-        },
-        {
-          id: 21,
-          suit: 'diamonds',
-          value: '9'
-        },
-        {
-          id: 22,
-          suit: 'diamonds',
-          value: '10'
-        },
-        {
-          id: 23,
-          suit: 'diamonds',
-          value: 'J'
-        },
-        {
-          id: 24,
-          suit: 'diamonds',
-          value: 'Q'
-        },
-        {
-          id: 25,
-          suit: 'diamonds',
-          value: 'K'
-        },
-        {
-          id: 26,
-          suit: 'diamonds',
-          value: 'A'
-        },
-        {
-          id: 27,
-          suit: 'spades',
-          value: '2'
-        },
-        {
-          id: 28,
-          suit: 'spades',
-          value: '3'
-        },
-        {
-          id: 29,
-          suit: 'spades',
-          value: '4'
-        },
-        {
-          id: 30,
-          suit: 'spades',
-          value: '5'
-        },
-        {
-          id: 31,
-          suit: 'spades',
-          value: '6'
-        },
-        {
-          id: 32,
-          suit: 'spades',
-          value: '7'
-        },
-        {
-          id: 33,
-          suit: 'spades',
-          value: '8'
-        },
-        {
-          id: 34,
-          suit: 'spades',
-          value: '9'
-        },
-        {
-          id: 35,
-          suit: 'spades',
-          value: '10'
-        },
-        {
-          id: 36,
-          suit: 'spades',
-          value: 'J'
-        },
-        {
-          id: 37,
-          suit: 'spades',
-          value: 'Q'
-        },
-        {
-          id: 38,
-          suit: 'spades',
-          value: 'K'
-        },
-        {
-          id: 39,
-          suit: 'spades',
-          value: 'A'
-        },
-        {
-          id: 40,
-          suit: 'hearts',
-          value: '2'
-        },
-        {
-          id: 41,
-          suit: 'hearts',
-          value: '3'
-        },
-        {
-          id: 42,
-          suit: 'hearts',
-          value: '4'
-        },
-        {
-          id: 43,
-          suit: 'hearts',
-          value: '5'
-        },
-        {
-          id: 44,
-          suit: 'hearts',
-          value: '6'
-        },
-        {
-          id: 45,
-          suit: 'hearts',
-          value: '7'
-        },
-        {
-          id: 46,
-          suit: 'hearts',
-          value: '8'
-        },
-        {
-          id: 47,
-          suit: 'hearts',
-          value: '9'
-        },
-        {
-          id: 48,
-          suit: 'hearts',
-          value: '10'
-        },
-        {
-          id: 49,
-          suit: 'hearts',
-          value: 'J'
-        },
-        {
-          id: 50,
-          suit: 'hearts',
-          value: 'Q'
-        },
-        {
-          id: 51,
-          suit: 'hearts',
-          value: 'K'
-        },
-        {
-          id: 52,
-          suit: 'hearts',
-          value: 'A'
-        }
-      ],
+      deck: [],
       handSize: 10,
+      handCards: [],
     }
   },
-  computed: {
-    cards: function(){
+  methods: {
+    createDeck: function(){
+      let cards = [];
+
+      const suits = [
+        {suit: 'clubs'},
+        {suit: 'diamonds'},
+        {suit: 'spades'},
+        {suit: 'hearts'},
+      ];
+
+      const ranks = [
+        { label: '2', value: 1 },
+        { label: '3', value: 2 },
+        { label: '4', value: 3 },
+        { label: '5', value: 4 },
+        { label: '6', value: 5 },
+        { label: '7', value: 6 },
+        { label: '8', value: 7 },
+        { label: '9', value: 8 },
+        { label: '10', value: 9 },
+        { label: 'J', value: 10 },
+        { label: 'Q', value: 11 },
+        { label: 'K', value: 12 },
+        { label: 'A', value: 13 },
+      ];
+
+      while (this.deck.length < 52) {
+        this.deck.push(Object.assign(
+          {},
+          suits[Math.floor(this.deck.length / 13)],
+          ranks[this.deck.length % 13]
+        ));
+      }
+    },
+    dealCards: function(){
       let cards = [];
       let usedIndexes = [];
+
+      if (this.deck.length == 0) {
+        this.createDeck();
+      }
 
       while (cards.length < this.handSize) {
         let random = Math.floor(Math.random() * this.deck.length);
@@ -293,7 +72,7 @@ export default {
         usedIndexes.push(random);
       }
 
-      return cards
+      this.handCards = cards;
     }
   },
   components: {
