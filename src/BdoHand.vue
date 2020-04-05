@@ -1,22 +1,17 @@
 <template>
-	<div class="hand clearfix">
+	<div id="hand" class="clearfix">
     <button
       v-if="cards.length == 0"
       v-on:click="$emit('cardDeal')"
      >
       Deal hand
     </button>
-
-    <div
-      class="hand-card-slot"
+    <BdoCard
       v-for="card in cards"
-    >
-      <BdoCard
-        v-bind:card="card"
-        v-bind:key="card.id"
-        v-on:cardClick="$emit('cardPlay', $event)"
-      ></BdoCard>
-    </div>
+      v-bind:card="card"
+      v-bind:key="card.id"
+      v-on:cardClick="$emit('cardPlay', $event)"
+    ></BdoCard>
   </div>
 </template>
 
@@ -32,15 +27,20 @@
 </script>
 
 <style>
-  .hand {
-    width: 80%;
+  #hand {
     margin: 0 auto;
   }
 
-  .hand .hand-card-slot {
+  #hand .card {
     float: left;
+    margin-left: -6em;
   }
 
-  .hand .card {
+  #hand .card:first-child {
+    margin-left: 0;
+  }
+
+  #hand .card:hover {
+    transform: translate(0, -15%);
   }
 </style>
