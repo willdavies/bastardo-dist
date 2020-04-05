@@ -1,7 +1,11 @@
 <template>
   <div id="app">
+    <BdoDojo
+        v-bind:cards=playedCards
+    ></BdoDojo>
     <BdoHand
         v-bind:cards=handCards
+        v-on:cardPlay="playCard"
         v-on:cardDeal="dealCards"
     ></BdoHand>
   </div>
@@ -17,6 +21,7 @@ export default {
       deck: [],
       handSize: 10,
       handCards: [],
+      playedCards: [],
     }
   },
   methods: {
@@ -73,23 +78,31 @@ export default {
       }
 
       this.handCards = cards;
+    },
+    playCard: function(card){
+      // Remove from hand
+      let cardIndex = this.handCards.indexOf(card);
+
+      // Add to dojo
+      this.playedCards.push(card);
     }
   },
   components: {
     BdoHand,
+    BdoDojo
   }
 };
 </script>
 
 <style>
 body {
-    background-color: #2c8426;
-    font-size: 16px
+  background-color: #2c8426;
+  font-size: 16px
 }
 
 .clearfix {
-    content: "";
-    display: table;
-    clear: both;
+  content: "";
+  display: table;
+  clear: both;
 }
 </style>

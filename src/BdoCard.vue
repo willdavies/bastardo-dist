@@ -2,6 +2,7 @@
   <div class="card"
     v-bind:class="'card-' + card.suit"
     v-bind:id="'card-' + card.id"
+    v-on:click="$emit('cardClick', card)"
   >
     <div class="card-corner-label">
       <span class="card-value">{{card.label}}</span>

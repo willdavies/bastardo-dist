@@ -13,7 +13,8 @@
     >
       <BdoCard
         v-bind:card="card"
-        v-bind:key="card.id" 
+        v-bind:key="card.id"
+        v-on:cardClick="$emit('cardPlay', $event)"
       ></BdoCard>
     </div>
   </div>
