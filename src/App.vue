@@ -22,6 +22,7 @@
         handSize: 10,
         handCards: [],
         playedCards: [],
+        leadSuit: null,
       }
     },
     methods: {
@@ -82,6 +83,11 @@
       playCard: function(card){
         // Remove from hand
         let cardIndex = this.handCards.indexOf(card);
+
+        // Check whether card is first in dojo
+        if (this.playedCards.length == 0) {
+          this.leadSuit = card.suit;
+        }
 
         // Add to dojo
         this.playedCards.push(card);
