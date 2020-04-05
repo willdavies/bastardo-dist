@@ -1,7 +1,8 @@
-
-
 <template>
-	<div class="card" v-bind:class="'card-' + card.suit" v-bind:id="'card-' + card.id" v-on:click="testFunction">
+  <div class="card"
+    v-bind:class="'card-' + card.suit"
+    v-bind:id="'card-' + card.id"
+  >
     <div class="card-corner-label">
       <span class="card-value">{{card.value}}</span>
       <BdoCardSymbol
@@ -17,17 +18,9 @@ import BdoCardSymbol from './BdoCardSymbol.vue';
 
 export default {
   props: ['card'],
-  template: ``,
-  methods: {
-    testFunction: function(event){
-      console.group('testFunction');
-      console.log(event.target.id)
-      console.groupEnd();
-    }    
-  },
   components: {
     BdoCardSymbol
-  }
+  },
 };
 </script>
 
@@ -67,4 +60,3 @@ export default {
   text-align: center;
 }
 </style>
-

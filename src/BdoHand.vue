@@ -25,21 +25,14 @@ export default {
 
 <style>
 .hand {
-/*    // display: flex;
-    // align-items: center;
-    // justify-content: space-around;
-*/
-    border: 1px solid red;
-    width: 50%;
-    margin: 0 auto;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .hand .hand-card-slot {
-/*    // flex: 1;
-*/
-    border: 1px solid blue; 
-    float: left;
+  float: left;
 }
+
 .hand .card {
 }
 </style>

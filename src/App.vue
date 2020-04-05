@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h2>{{message}}</h2>
     <BdoHand
         v-bind:cards=cards
     ></BdoHand>
