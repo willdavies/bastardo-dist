@@ -13,8 +13,13 @@
 </template>
 
 <script>
+import BdoCard from './BdoCard.vue';
+
 export default {
   props: ['cards'],
+  components: {
+    BdoCard
+  },
 };
 </script>
 

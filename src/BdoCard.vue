@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import BdoCardSymbol from './BdoCardSymbol.vue';
+
 export default {
   props: ['card'],
   template: ``,
@@ -22,6 +24,9 @@ export default {
       console.log(event.target.id)
       console.groupEnd();
     }    
+  },
+  components: {
+    BdoCardSymbol
   }
 };
 </script>
