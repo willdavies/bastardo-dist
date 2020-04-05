@@ -21,26 +21,26 @@
 </template>
 
 <script>
-import BdoCard from './BdoCard.vue';
+  import BdoCard from './BdoCard.vue';
 
-export default {
-  props: ['cards'],
-  components: {
-    BdoCard
-  },
-};
+  export default {
+    props: ['cards'],
+    components: {
+      BdoCard
+    },
+  };
 </script>
 
 <style>
-.hand {
-  width: 80%;
-  margin: 0 auto;
-}
+  .hand {
+    width: 80%;
+    margin: 0 auto;
+  }
 
-.hand .hand-card-slot {
-  float: left;
-}
+  .hand .hand-card-slot {
+    float: left;
+  }
 
-.hand .card {
-}
+  .hand .card {
+  }
 </style>
