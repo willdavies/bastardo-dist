@@ -47,6 +47,7 @@
   }
 
   #hand .card {
+    position: relative;
     float: left;
     margin-left: -6em;
   }
@@ -57,5 +58,6 @@
 
   #hand .card.playable:hover {
     transform: translate(0, -15%);
+    transition: transform 0.15s;
   }
 </style>
