@@ -34,7 +34,7 @@
 
 <style>
   .card-symbol {
-
+    width: 100%;
   }
 </style>
 
