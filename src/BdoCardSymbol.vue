@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
   import SymbolClubs from './assets/symbol-clubs.svg';
   import SymbolDiamonds from './assets/symbol-diamonds.svg';
   import SymbolHearts from './assets/symbol-hearts.svg';
@@ -37,4 +36,3 @@
     width: 100%;
   }
 </style>
-

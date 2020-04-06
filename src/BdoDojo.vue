@@ -39,10 +39,12 @@
     background: rgba(0, 0, 0, 0.5);
     margin: 2em auto;
   }
+
   #bastardo-dojo .card {
     float: left;
     margin-left: -8em;
   }
+
   #bastardo-dojo .card:first-child {
     margin-left: 0;
   }
