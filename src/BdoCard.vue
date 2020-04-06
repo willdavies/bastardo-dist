@@ -1,6 +1,10 @@
 <template>
   <div class="card"
-    v-bind:class="'card-' + card.suit"
+    v-bind:class="[
+      'card',
+      'card-' + card.suit,
+      (isPlayable == null || isPlayable ? '' : 'not-') + 'playable'
+    ]"
     v-bind:id="'card-' + card.id"
     v-on:click="$emit('cardClick', card)"
   >
@@ -18,7 +22,7 @@
   import BdoCardSymbol from './BdoCardSymbol.vue';
 
   export default {
-    props: ['card'],
+    props: ['card', 'isPlayable'],
     components: {
       BdoCardSymbol
     },
@@ -59,5 +63,9 @@
     display: block;
     font-size: 4em;
     text-align: center;
+  }
+
+  .card.not-playable {
+    background-color: #CECECE;
   }
 </style>

@@ -9,8 +9,9 @@
     <BdoCard
       v-for="card in cards"
       v-bind:card="card"
+      v-bind:isPlayable="cardIsPlayable(card)"
       v-bind:key="card.id"
-      v-on:cardClick="$emit('cardPlay', $event)"
+      v-on:cardClick="cardClickHandler(card)"
     ></BdoCard>
   </div>
 </template>
@@ -19,10 +20,24 @@
   import BdoCard from './BdoCard.vue';
 
   export default {
-    props: ['cards'],
+    props: ['cards', 'leadSuit'],
     components: {
       BdoCard
     },
+    methods: {
+      cardIsPlayable: function(card){
+        return (
+          this.leadSuit === null
+          || card.suit == this.leadSuit
+          || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
+        );
+      },
+      cardClickHandler: function(card){
+        if (this.cardIsPlayable(card)) {
+          this.$emit('cardPlay', card);
+        }
+      }
+    }
   };
 </script>
 
@@ -40,7 +55,7 @@
     margin-left: 0;
   }
 
-  #hand .card:hover {
+  #hand .card.playable:hover {
     transform: translate(0, -15%);
   }
 </style>
