@@ -42,7 +42,7 @@
 
   #bastardo-dojo .card {
     float: left;
-    margin-left: -8em;
+    margin-left: -6.5em;
   }
 
   #bastardo-dojo .card:first-child {
