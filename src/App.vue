@@ -21,7 +21,7 @@
     data: function(){
       return {
         deck: [],
-        handSize: 10,
+        handSize: 7,
         handCards: [],
         playedCards: [],
         leadSuit: null,
