@@ -12,6 +12,7 @@
         v-bind:card="card"
         v-bind:key="card.id" 
         v-for="card in cards"
+        v-bind:class="{'card-leader': cardIsLeader(card)}"
       ></BdoCard>
     </div>
   </div>
@@ -27,6 +28,18 @@
       BdoCard,
       BdoCardSymbol
     },
+    methods: {
+      cardIsLeader: function(card){
+        // Get highest relative value in deck
+        let max = this.cards
+          .map(card => card.relativeValue)
+          .reduce(function(a, b) {
+            return Math.max(a, b);
+          });
+
+        return max == card.relativeValue;
+      },
+    },
   };
 </script>
 
@@ -41,8 +54,14 @@
   }
 
   #bastardo-dojo .card {
+    position: relative;
     float: left;
     margin-left: -6.5em;
+  }
+
+  #bastardo-dojo .card.card-leader {
+    transform: translate(0, -15%);
+    transition: transform 0.15s;
   }
 
   #bastardo-dojo .card:first-child {

@@ -56,7 +56,7 @@
 
         while (this.deck.length < 52) {
           this.deck.push(Object.assign(
-            {},
+            { relativeValue: 0 },
             suits[Math.floor(this.deck.length / 13)],
             ranks[this.deck.length % 13]
           ));
@@ -90,6 +90,23 @@
         if (this.playedCards.length == 0) {
           this.leadSuit = card.suit;
         }
+
+        // Set relative value of card
+        let modifier;
+
+        switch (card.suit) {
+          case 'diamonds':
+            modifier = 26;
+            break;
+          case this.leadSuit:
+            modifier = 13;
+            break;
+          default:
+            modifier = 0;
+            break;
+        }
+
+        card.relativeValue = card.value + modifier;
 
         // Add to dojo
         this.playedCards.push(card);
