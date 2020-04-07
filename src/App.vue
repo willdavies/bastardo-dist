@@ -29,7 +29,7 @@
     },
     methods: {
       createDeck: function(){
-        let cards = [];
+        this.deck = [];
 
         const suits = [
           {suit: 'clubs'},
