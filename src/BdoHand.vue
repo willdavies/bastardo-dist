@@ -9,7 +9,7 @@
     <BdoCard
       v-for="card in cards"
       v-bind:card="card"
-      v-bind:isPlayable="cardIsPlayable(card)"
+      v-bind:class="[(cardIsPlayable(card) ? '' : 'not-') + 'playable']"
       v-bind:key="card.id"
       v-on:cardClick="cardClickHandler(card)"
     ></BdoCard>

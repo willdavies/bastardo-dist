@@ -1,9 +1,7 @@
 <template>
   <div class="card"
     v-bind:class="[
-      'card',
       'card-' + card.suit,
-      (isPlayable == null || isPlayable ? '' : 'not-') + 'playable'
     ]"
     v-bind:id="'card-' + card.id"
     v-on:click="$emit('cardClick', card)"
