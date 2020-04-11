@@ -12,7 +12,9 @@
         v-bind:card="card"
         v-bind:key="card.id" 
         v-for="card in cards"
-        v-bind:class="{'card-leader': cardIsLeader(card)}"
+        v-bind:class="{
+          'card-leader': (cards.length != 1 && cardIsLeader(card))
+        }"
       ></BdoCard>
     </div>
   </div>
