@@ -78,8 +78,8 @@
     top: -1em;
     left: 50%;
     transform: translate(-50%, 0);
-    width: 2.5em;
-    border: 4px outset #D4AF37;
+    width: 4em;
+    border: 0.25em outset #D4AF37;
     padding: 0.5em;
     background: #FFDF00;
     border-bottom-left-radius: 45%;

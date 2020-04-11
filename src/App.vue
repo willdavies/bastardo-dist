@@ -120,6 +120,10 @@
 </script>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     background-color: #2c8426;
     font-size: 16px;
