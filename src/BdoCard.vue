@@ -1,7 +1,7 @@
 <template>
   <div class="card"
     v-bind:class="this.getSuitClass()"
-    v-on:click="$emit('cardClick', card)"
+    v-on:click="$emit('cardClick', $event, card)"
   >
     <div class="card-specifics"
       v-if="card != undefined"

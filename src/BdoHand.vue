@@ -11,7 +11,7 @@
       v-bind:card="card"
       v-bind:class="[(cardIsPlayable(card) ? '' : 'not-') + 'playable']"
       v-bind:key="card.id"
-      v-on:cardClick="cardClickHandler(card)"
+      v-on:cardClick="cardClickHandler"
     ></BdoCard>
   </div>
 </template>
@@ -32,7 +32,7 @@
           || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
         );
       },
-      cardClickHandler: function(card){
+      cardClickHandler: function($event, card){
         if (this.cardIsPlayable(card)) {
           this.$emit('cardPlay', card);
         }
