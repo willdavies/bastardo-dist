@@ -1,5 +1,12 @@
 <template>
   <div id="bastardo-app">
+    <div id="opponents">
+      <BdoOpponent
+        v-for="opponent in opponents"
+        v-bind:user="opponent"
+        v-bind:key="opponent.id"
+      ></BdoOpponent>      
+    </div>
     <BdoDojo
       v-bind:cards=playedCards
       v-bind:leadSuit=leadSuit
@@ -16,6 +23,7 @@
 <script>
   import BdoHand from './BdoHand.vue';
   import BdoDojo from './BdoDojo.vue';
+  import BdoOpponent from './BdoOpponent.vue';
 
   export default {
     data: function(){
@@ -26,6 +34,48 @@
         playedCards: [],
         leadSuit: null,
       }
+    },
+    computed: {
+      opponents: function(){
+        return [
+          {
+            id: 1,
+            name: 'Chris',
+            color: 'black',
+            cardCount: this.handSize,
+          },
+          {
+            id: 2,
+            name: 'Louise',
+            color: 'green',
+            cardCount: this.handSize,
+          },
+          {
+            id: 3,
+            name: 'Jack',
+            color: 'blue',
+            cardCount: this.handSize,
+          },
+          {
+            id: 4,
+            name: 'Hannah',
+            color: 'purple',
+            cardCount: this.handSize,
+          },
+          {
+            id: 5,
+            name: 'Andrew',
+            color: 'red',
+            cardCount: this.handSize,
+          },
+          {
+            id: 6,
+            name: 'Will',
+            color: 'white',
+            cardCount: this.handSize,
+          },
+        ]
+      },
     },
     methods: {
       createDeck: function(){
@@ -115,6 +165,7 @@
     components: {
       BdoHand,
       BdoDojo,
+      BdoOpponent,
     }
   };
 </script>
@@ -133,5 +184,10 @@
     content: "";
     display: table;
     clear: both;
+  }
+
+  #opponents {
+    display: flex;
+    justify-content: space-between;
   }
 </style>
