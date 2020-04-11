@@ -2,16 +2,7 @@
   <div id="controls">
     <ul>
       <li>
-        <a href="#">Controls</a>
-      </li>
-      <li>
-        <a href="#">To</a>
-      </li>
-      <li>
-        <a href="#">Be</a>
-      </li>
-      <li>
-        <a href="#">Confirmed</a>
+        <router-link :to="{ name: 'newGame' }">New Game</router-link>
       </li>
     </ul>
   </div>
