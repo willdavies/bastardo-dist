@@ -1,14 +1,14 @@
 <template>
   <div id="bastardo-app">
     <BdoDojo
-        v-bind:cards=playedCards
-        v-bind:leadSuit=leadSuit
+      v-bind:cards=playedCards
+      v-bind:leadSuit=leadSuit
     ></BdoDojo>
     <BdoHand
-        v-bind:cards=handCards
-        v-bind:leadSuit=leadSuit
-        v-on:cardPlay="playCard"
-        v-on:cardDeal="dealCards"
+      v-bind:cards=handCards
+      v-bind:leadSuit=leadSuit
+      v-on:cardPlay="playCard"
+      v-on:cardDeal="dealCards"
     ></BdoHand>
   </div>
 </template>
