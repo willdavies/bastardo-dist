@@ -5,6 +5,9 @@
         v-for="opponent in opponents"
         v-bind:user="opponent"
         v-bind:key="opponent.id"
+        v-bind:isDealer="opponent.id == dealerId"
+        v-bind:isSessionLeader="opponent.id == sessionLeaderId"
+        v-bind:isRoundLeader="opponent.id == roundLeaderId"
       ></BdoOpponent>      
     </div>
     <BdoDojo
@@ -33,6 +36,9 @@
         handCards: [],
         playedCards: [],
         leadSuit: null,
+        dealerId: 4,
+        sessionLeaderId: 4,
+        roundLeaderId: 4,
       }
     },
     computed: {
