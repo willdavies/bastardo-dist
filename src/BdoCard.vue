@@ -32,7 +32,7 @@
       },
     },
     components: {
-      BdoCardSymbol
+      BdoCardSymbol,
     },
     methods: {
       getSuitClass: function(){

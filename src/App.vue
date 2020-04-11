@@ -114,7 +114,7 @@
     },
     components: {
       BdoHand,
-      BdoDojo
+      BdoDojo,
     }
   };
 </script>
@@ -122,7 +122,7 @@
 <style>
   body {
     background-color: #2c8426;
-    font-size: 16px
+    font-size: 16px;
   }
 
   .clearfix {
