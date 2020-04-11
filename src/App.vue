@@ -2,7 +2,7 @@
   <div id="bastardo-app">
     <BdoControls></BdoControls>
     <main>    
-      <BdoGame></BdoGame>      
+      <router-view></router-view>
     </main>
   </div>
 </template>

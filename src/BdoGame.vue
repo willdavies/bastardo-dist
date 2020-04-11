@@ -30,7 +30,10 @@
 
   export default {
     data: function(){
+      console.log(this.$route.params.id);
+
       return {
+        gameId: this.$route.params.id,
         deck: [],
         handSize: 7,
         handCards: [],
