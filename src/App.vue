@@ -1,177 +1,18 @@
 <template>
   <div id="bastardo-app">
-    <div id="opponents">
-      <BdoOpponent
-        v-for="opponent in opponents"
-        v-bind:user="opponent"
-        v-bind:key="opponent.id"
-        v-bind:isDealer="opponent.id == dealerId"
-        v-bind:isSessionLeader="opponent.id == sessionLeaderId"
-        v-bind:isRoundLeader="opponent.id == roundLeaderId"
-      ></BdoOpponent>      
-    </div>
-    <BdoDojo
-      v-bind:cards=playedCards
-      v-bind:leadSuit=leadSuit
-    ></BdoDojo>
-    <BdoHand
-      v-bind:cards=handCards
-      v-bind:leadSuit=leadSuit
-      v-on:cardPlay="playCard"
-      v-on:cardDeal="dealCards"
-    ></BdoHand>
+    <main>    
+      <BdoGame></BdoGame>      
+    </main>
   </div>
 </template>
 
 <script>
-  import BdoHand from './BdoHand.vue';
-  import BdoDojo from './BdoDojo.vue';
-  import BdoOpponent from './BdoOpponent.vue';
+  import BdoControls from './BdoControls.vue';
+  import BdoGame from './BdoGame.vue';
 
   export default {
-    data: function(){
-      return {
-        deck: [],
-        handSize: 7,
-        handCards: [],
-        playedCards: [],
-        leadSuit: null,
-        dealerId: 4,
-        sessionLeaderId: 4,
-        roundLeaderId: 4,
-      }
-    },
-    computed: {
-      opponents: function(){
-        return [
-          {
-            id: 1,
-            name: 'Chris',
-            color: 'black',
-            cardCount: this.handSize,
-          },
-          {
-            id: 2,
-            name: 'Louise',
-            color: 'green',
-            cardCount: this.handSize,
-          },
-          {
-            id: 3,
-            name: 'Jack',
-            color: 'blue',
-            cardCount: this.handSize,
-          },
-          {
-            id: 4,
-            name: 'Hannah',
-            color: 'purple',
-            cardCount: this.handSize,
-          },
-          {
-            id: 5,
-            name: 'Andrew',
-            color: 'red',
-            cardCount: this.handSize,
-          },
-          {
-            id: 6,
-            name: 'Will',
-            color: 'white',
-            cardCount: this.handSize,
-          },
-        ]
-      },
-    },
-    methods: {
-      createDeck: function(){
-        this.deck = [];
-
-        const suits = [
-          {suit: 'clubs'},
-          {suit: 'diamonds'},
-          {suit: 'spades'},
-          {suit: 'hearts'},
-        ];
-
-        const ranks = [
-          { label: '2', value: 1 },
-          { label: '3', value: 2 },
-          { label: '4', value: 3 },
-          { label: '5', value: 4 },
-          { label: '6', value: 5 },
-          { label: '7', value: 6 },
-          { label: '8', value: 7 },
-          { label: '9', value: 8 },
-          { label: '10', value: 9 },
-          { label: 'J', value: 10 },
-          { label: 'Q', value: 11 },
-          { label: 'K', value: 12 },
-          { label: 'A', value: 13 },
-        ];
-
-        while (this.deck.length < 52) {
-          this.deck.push(Object.assign(
-            { relativeValue: 0 },
-            suits[Math.floor(this.deck.length / 13)],
-            ranks[this.deck.length % 13]
-          ));
-        }
-      },
-      dealCards: function(){
-        let cards = [];
-        let usedIndexes = [];
-
-        if (this.deck.length == 0) {
-          this.createDeck();
-        }
-
-        while (cards.length < this.handSize) {
-          let random = Math.floor(Math.random() * this.deck.length);
-
-          if (usedIndexes.indexOf(random) == -1) {
-            cards.push(this.deck[random])
-          }
-
-          usedIndexes.push(random);
-        }
-
-        this.handCards = cards;
-      },
-      playCard: function(card){
-        // Remove from hand
-        this.handCards.splice(this.handCards.indexOf(card), 1);
-
-        // Check whether card is first in dojo
-        if (this.playedCards.length == 0) {
-          this.leadSuit = card.suit;
-        }
-
-        // Set relative value of card
-        let modifier;
-
-        switch (card.suit) {
-          case 'diamonds':
-            modifier = 26;
-            break;
-          case this.leadSuit:
-            modifier = 13;
-            break;
-          default:
-            modifier = 0;
-            break;
-        }
-
-        card.relativeValue = card.value + modifier;
-
-        // Add to dojo
-        this.playedCards.push(card);
-      }
-    },
     components: {
-      BdoHand,
-      BdoDojo,
-      BdoOpponent,
+      BdoGame,
     }
   };
 </script>
@@ -182,6 +23,7 @@
   }
 
   body {
+    margin: 0;
     background-color: #2c8426;
     font-size: 16px;
   }
@@ -192,8 +34,7 @@
     clear: both;
   }
 
-  #opponents {
-    display: flex;
-    justify-content: space-between;
+  main {
+    margin: 1em;
   }
 </style>
