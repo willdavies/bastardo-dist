@@ -1,5 +1,6 @@
 <template>
   <div id="bastardo-app">
+    <BdoControls></BdoControls>
     <main>    
       <BdoGame></BdoGame>      
     </main>
@@ -12,6 +13,7 @@
 
   export default {
     components: {
+      BdoControls,
       BdoGame,
     }
   };
@@ -35,6 +37,6 @@
   }
 
   main {
-    margin: 1em;
+    margin: 3em 1em 1em;
   }
 </style>
