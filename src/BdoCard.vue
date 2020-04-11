@@ -83,10 +83,10 @@
   }
 
   .card-back {
-    width: 7.25em;
-    height: 11.5em;
+    width: 100%;
+    height: 100%;
     background: pink;
-    margin: 0.5em;
+    border: 0.5em solid #f1f0f0;
     border-radius: 0.2em;
   }
 </style>
