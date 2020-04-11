@@ -33,7 +33,7 @@
 
   ul li {
     display: inline-block;
-    margin-left: 1em;
+    margin-left: 0.2em;
   }
 
   ul li a {
