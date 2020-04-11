@@ -11,6 +11,11 @@ import BdoGame from './BdoGame.vue';
 
 const routes = [
     {
+        name: 'home',
+        path: '/',
+        component: BdoWelcome,
+    },
+    {
         name: 'newGame',
         path: '/new-game',
         component: BdoNewGame,

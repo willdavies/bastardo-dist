@@ -2,6 +2,9 @@
   <div id="controls">
     <ul>
       <li>
+        <router-link :to="{ name: 'home' }">Home</router-link>
+      </li>
+      <li>
         <router-link :to="{ name: 'newGame' }">New Game</router-link>
       </li>
     </ul>
