@@ -1,5 +1,8 @@
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+const env = require('./config/dev.env')
 
 module.exports = {
   mode: 'development',
@@ -21,5 +24,11 @@ module.exports = {
       template: './src/index.html',
     }),
     new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': env
+    }),
   ]
 };
+
+
+
