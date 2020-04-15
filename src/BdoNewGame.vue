@@ -39,10 +39,14 @@
     },
     methods: {
       createNewGame: function(){
-        // @TODO Call to register new game and get ID.
-
-        // @TODO Promise complete to set gameId
-        this.gameId = 'exammmple';
+        this.$websocketManager.sendAndAwaitResponse({
+          requestType: 'createSession'
+        })
+        .then(response => {
+          console.log('createSession promise resolved');
+          this.gameId = response.payload.gameSession.id
+        })
+        .catch(error => alert(error));
       },
       getGameLink: function(absolute = false){
         if (this.gameLink == null) {
