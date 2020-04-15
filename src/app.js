@@ -4,6 +4,9 @@ import App from './App.vue';
 
 Vue.use(VueRouter);
 
+import WebSocketManager from './services/websocket-manager';
+Vue.use(WebSocketManager);
+
 // Import components
 import BdoWelcome from './BdoWelcome.vue';
 import BdoNewGame from './BdoNewGame.vue';
@@ -35,5 +38,6 @@ const router = new VueRouter({
 new Vue({
   el: '#bastardo-app',
   router: router,
+  websocketManager: WebSocketManager,
   render: h => h(App),
 });
