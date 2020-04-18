@@ -12,7 +12,6 @@
 
 <script>
   import BdoControls from './BdoControls.vue';
-  import BdoGame from './BdoGame.vue';
   import cookie from 'cookie';
 
   export default {
@@ -57,7 +56,6 @@
     },
     components: {
       BdoControls,
-      BdoGame,
     }
   };
 </script>

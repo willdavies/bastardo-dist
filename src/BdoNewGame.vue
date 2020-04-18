@@ -46,7 +46,7 @@
           console.log('createSession promise resolved');
           this.gameId = response.payload.gameSession.id
         })
-        .catch(error => alert(error));
+        .catch(error => console.error(error));
       },
       getGameLink: function(absolute = false){
         if (this.gameLink == null) {
