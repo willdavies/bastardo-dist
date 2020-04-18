@@ -13,6 +13,7 @@
 <script>
   import BdoControls from './BdoControls.vue';
   import BdoGame from './BdoGame.vue';
+  import cookie from 'cookie';
 
   export default {
     data: function(){
@@ -24,6 +25,35 @@
       setActivePlayer(player){
         this.activePlayer = player;
       },
+    },
+    beforeCreate: function(){
+      // Get cookies
+      const cookies = cookie.parse(document.cookie);
+
+      let playerId = cookies[process.env.PLAYER_COOKIE_NAME];
+
+      if (playerId) {
+        this.$websocketManager.on('open', function(){
+          this.$websocketManager.sendAndAwaitResponse({
+            requestType: 'getPlayer',
+            id: playerId,
+          })
+          .then(response => {
+            this.activePlayer = response.payload.player;
+
+            // Refresh cookie
+            document.cookie = cookie.serialize(
+              process.env.PLAYER_COOKIE_NAME,
+              response.payload.player.id,
+              {
+                sameSite: true,
+                maxAge: process.env.PLAYER_COOKIE_MAX_AGE
+              }
+            );
+          })
+          .catch(error => console.error(error));
+        }.bind(this))
+      }
     },
     components: {
       BdoControls,

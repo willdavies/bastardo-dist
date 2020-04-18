@@ -92,6 +92,21 @@ const WebSocketManager = {
 
     return responsePromise;
   },
+
+  on: function(eventType, callBack) {
+    const eventNames = [
+      'close',
+      'error',
+      'message',
+      'open',
+    ];
+
+    if (eventNames.indexOf(eventType) == -1) {
+      throw new Error('unknown event type provided');
+    }
+
+    this.connection['on' + eventType] = callBack;
+  }
 }
 
 export default WebSocketManager
