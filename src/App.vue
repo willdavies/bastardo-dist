@@ -2,7 +2,10 @@
   <div id="bastardo-app">
     <BdoControls></BdoControls>
     <main>    
-      <router-view></router-view>
+      <router-view
+        v-bind:activePlayer="activePlayer"
+        v-on:setActivePlayer="setActivePlayer($event)"
+      ></router-view>
     </main>
   </div>
 </template>
@@ -12,6 +15,16 @@
   import BdoGame from './BdoGame.vue';
 
   export default {
+    data: function(){
+      return {
+        activePlayer: null,
+      }
+    },
+    methods: {
+      setActivePlayer(player){
+        this.activePlayer = player;
+      },
+    },
     components: {
       BdoControls,
       BdoGame,
