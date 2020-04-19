@@ -1,10 +1,15 @@
 <template>
   <div id="bastardo-app">
-    <BdoControls></BdoControls>
+    <BdoControls
+      v-bind:activePlayer="activePlayer"
+      v-bind:activeGameSession="activeGameSession"
+    ></BdoControls>
     <main>    
       <router-view
         v-bind:activePlayer="activePlayer"
+        v-bind:activeGameSession="activeGameSession"
         v-on:setActivePlayer="setActivePlayer($event)"
+        v-on:setActiveGameSession="setActiveGameSession($event)"
       ></router-view>
     </main>
   </div>
@@ -18,6 +23,7 @@
     data: function(){
       return {
         activePlayer: null,
+        activeGameSession: null,
       }
     },
     methods: {
@@ -30,7 +36,21 @@
           player.id,
           {
             sameSite: true,
-            maxAge: process.env.PLAYER_COOKIE_MAX_AGE
+            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE
+          }
+        );
+      },
+      setActiveGameSession(gameSession){
+
+        this.activeGameSession = gameSession;
+
+        // Set/refresh cookie
+        document.cookie = cookie.serialize(
+          process.env.GAME_SESSION_COOKIE_NAME,
+          gameSession.id,
+          {
+            sameSite: true,
+            maxAge: process.env.GAME_SESSION_COOKIE_MAX_AGE
           }
         );
       },

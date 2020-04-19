@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <div
-        v-if="gameId == null"
+        v-if="activeGameSession == null"
       >
         <p>To start a new game, click the button below</p>
         <button
@@ -15,12 +15,10 @@
       <div
         v-else
       >
-        <p>Game started!</p>
-        <p>You and the other players can join the game at: </p>
+        <p>You appear to have an active game already.</p>
         <p>
-          <router-link :to="getGameLink()">
-            {{ getGameLink(true) }}
-          </router-link>
+          Why not <router-link :to="{ name: 'game', params: {id: activeGameSession.id} }">Active game</router-link> return to the game</p> and see how it goes?
+        <p>
         </p>
       </div>
     </template>
@@ -31,6 +29,10 @@
   import BdoPage from './BdoPage.vue';
 
   export default {
+    props: {
+      activePlayer: Object,
+      activeGameSession: Object,
+    },
     data: function(){
       return {
         gameId: null,
@@ -43,18 +45,18 @@
           requestType: 'createSession'
         })
         .then(response => {
-          console.log('createSession promise resolved');
-          this.gameId = response.payload.gameSession.id
+          // Forward player to new game session
+          this.$router.push({ name: 'game', params: { id: response.payload.gameSession.id } })
         })
         .catch(error => console.error(error));
       },
-      getGameLink: function(absolute = false){
-        if (this.gameLink == null) {
-          this.gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameId } });
-        }
+      // getGameLink: function(absolute = false){
+      //   if (this.gameLink == null) {
+      //     this.gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameId } });
+      //   }
 
-        return absolute ? location.origin + this.gameLink.href : this.gameLink.href;
-      }
+      //   return absolute ? location.origin + this.gameLink.href : this.gameLink.href;
+      // }
     },
     components: {
       BdoPage

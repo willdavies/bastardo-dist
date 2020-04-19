@@ -60,7 +60,7 @@
               response.payload.player.id,
               {
                 sameSite: true,
-                maxAge: process.env.PLAYER_COOKIE_MAX_AGE
+                maxAge: process.env.DEFAULT_COOKIE_MAX_AGE
               }
             );
           })
