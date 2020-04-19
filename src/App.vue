@@ -1,17 +1,25 @@
 <template>
   <div id="bastardo-app">
-    <BdoControls
-      v-bind:activePlayer="activePlayer"
-      v-bind:activeGameSession="activeGameSession"
-    ></BdoControls>
-    <main>    
-      <router-view
+    <div
+      v-if="connected === false"
+    >
+      Connecting&hellip;
+    </div>
+
+    <div v-else >
+      <BdoControls
         v-bind:activePlayer="activePlayer"
         v-bind:activeGameSession="activeGameSession"
-        v-on:setActivePlayer="setActivePlayer($event)"
-        v-on:setActiveGameSession="setActiveGameSession($event)"
-      ></router-view>
-    </main>
+      ></BdoControls>
+      <main>    
+        <router-view
+          v-bind:activePlayer="activePlayer"
+          v-bind:activeGameSession="activeGameSession"
+          v-on:setActivePlayer="setActivePlayer($event)"
+          v-on:setActiveGameSession="setActiveGameSession($event)"
+        ></router-view>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -22,6 +30,7 @@
   export default {
     data: function(){
       return {
+        connected: false,
         activePlayer: null,
         activeGameSession: null,
       }
@@ -63,6 +72,8 @@
 
       if (playerId) {
         this.$websocketManager.on('open', function(){
+          this.connected = true;
+
           this.$websocketManager.sendAndAwaitResponse({
             requestType: 'getPlayer',
             id: playerId,
