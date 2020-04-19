@@ -7,20 +7,30 @@
       <div
         v-if="activePlayer == null"
       >
-        <input v-model="firstName" placeholder="First Name">
+        <form id="player-create-form"
+          v-on:submit.prevent="createNewPlayer"
+        >
+          <div>
+            <input id="first-name" v-model="firstName" placeholder="First Name">            
+          </div>
 
-        <input v-model="lastName" placeholder="Last Name">
+          <div>
+            <input id="last-name" v-model="lastName" placeholder="Last Name">
+          </div>
 
-        <label for="">
-          <input type="checkbox" id="checkbox" v-model="cookieConsent">
-          I agree to this site using cookies
-        </label>
+          <div>
+            <label for="cookie-consent">
+              <input type="checkbox" id="cookie-consent" v-model="cookieConsent">
+              I agree to this site using cookies
+            </label>            
+          </div>
 
-        <button v-on:click="createNewPlayer">Register</button>
+          <div>
+            <button>Register</button>        
+          </div>
+        </form>
       </div>
-      <div
-        v-else
-      >
+      <div v-else >
         <p>Hello {{ activePlayer.firstName }}. You are now registered to play Bastardo! Start a new game and invite your friends!</p>
       </div>
     </template>
@@ -37,7 +47,6 @@
     },
     data: function(){
       return {
-        playerId: null,
         firstName: null,
         lastName: null,
         cookieConsent: null,

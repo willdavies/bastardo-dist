@@ -46,8 +46,6 @@ const WebSocketManager = {
   },
 
   sendAndAwaitResponse: function(data, timeOutSeconds) {
-    console.log('websocketManager sendAndWait', data);
-
     // Get unique id
     let responseId = this.promisedResponseCounter++;
 
