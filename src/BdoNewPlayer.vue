@@ -52,7 +52,7 @@
             lastName: this.lastName,
           })
           .then(response => {
-            this.$emit('setPlayer', response.payload.player);
+            this.$emit('setActivePlayer', response.payload.player);
 
             // Set cookie
             document.cookie = cookie.serialize(

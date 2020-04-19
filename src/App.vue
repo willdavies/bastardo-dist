@@ -23,6 +23,16 @@
     methods: {
       setActivePlayer(player){
         this.activePlayer = player;
+
+        // Set/refresh cookie
+        document.cookie = cookie.serialize(
+          process.env.PLAYER_COOKIE_NAME,
+          player.id,
+          {
+            sameSite: true,
+            maxAge: process.env.PLAYER_COOKIE_MAX_AGE
+          }
+        );
       },
     },
     beforeCreate: function(){
@@ -38,19 +48,11 @@
             id: playerId,
           })
           .then(response => {
-            this.activePlayer = response.payload.player;
-
-            // Refresh cookie
-            document.cookie = cookie.serialize(
-              process.env.PLAYER_COOKIE_NAME,
-              response.payload.player.id,
-              {
-                sameSite: true,
-                maxAge: process.env.PLAYER_COOKIE_MAX_AGE
-              }
-            );
+            this.setActivePlayer(response.payload.player);
           })
-          .catch(error => console.error(error));
+          .catch(error => {
+            console.error(error);
+          });
         }.bind(this))
       }
     },
