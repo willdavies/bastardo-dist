@@ -53,16 +53,6 @@
           })
           .then(response => {
             this.$emit('setActivePlayer', response.payload.player);
-
-            // Set cookie
-            document.cookie = cookie.serialize(
-              process.env.PLAYER_COOKIE_NAME,
-              response.payload.player.id,
-              {
-                sameSite: true,
-                maxAge: process.env.DEFAULT_COOKIE_MAX_AGE
-              }
-            );
           })
           .catch(error => console.error(error));
         }
