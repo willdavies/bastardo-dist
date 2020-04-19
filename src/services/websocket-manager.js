@@ -32,8 +32,8 @@ const WebSocketManager = {
       console.log(message);
 
       if (typeof message.responseId !== 'undefined') {
-        console.log('responseId found');
-        this.promisedResponses[event.data.responseId] = message.payload;
+        console.log('message has responseId', message);
+        this.promisedResponses[event.data.responseId] = message;
       }
 
       console.groupEnd();
@@ -51,7 +51,7 @@ const WebSocketManager = {
     // Get unique id
     let responseId = this.promisedResponseCounter++;
 
-    // Add empty value to list of 
+    // Add empty value to list of promised responses
     this.promisedResponses[responseId] = undefined;
 
     // Create promise to return response once recieved 
@@ -60,8 +60,15 @@ const WebSocketManager = {
       this.responseTickers[responseId] = setInterval((responseId) => {
         // Check whether response has arrived
         if (this.promisedResponses[responseId] != undefined) {
-          // Resolve original promise
-          resolve(this.promisedResponses[responseId]);
+          // Check type of response
+          const response = this.promisedResponses[responseId];
+
+          if (response.payload.type === 'error') {
+            reject(response.payload);
+          } else {
+            // Resolve original promise
+            resolve(response.payload);
+          }
 
           // Delete response value
           delete this.promisedResponses[responseId];
