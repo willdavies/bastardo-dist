@@ -21,7 +21,7 @@
       <div
         v-else
       >
-        <p>Hello {{ activePlayer.firstName }}. You are already registered</p>
+        <p>Hello {{ activePlayer.firstName }}. You are now registered to play Bastardo! Start a new game and invite your friends!</p>
       </div>
     </template>
   </BdoPage>
