@@ -11,7 +11,7 @@ Vue.use(WebSocketManager);
 import BdoWelcome from './BdoWelcome.vue';
 import BdoNewGame from './BdoNewGame.vue';
 import BdoNewPlayer from './BdoNewPlayer.vue';
-import BdoGame from './BdoGame.vue';
+import BdoGameSession from './BdoGameSession.vue';
 
 const routes = [
     {
@@ -30,9 +30,9 @@ const routes = [
         component: BdoNewGame,
     },
     {
-        name: 'game',
-        path: '/game/:id',
-        component: BdoGame,
+        name: 'gameSession',
+        path: '/game-session/:id',
+        component: BdoGameSession,
     },
 ];
 

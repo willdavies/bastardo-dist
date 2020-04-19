@@ -9,7 +9,7 @@
       >
         <p>To start a new game, click the button below</p>
         <button
-          v-on:click="createNewGame"
+          v-on:click="createNewGameSession"
         >Start new game</button>
       </div>
       <div
@@ -40,13 +40,13 @@
       }
     },
     methods: {
-      createNewGame: function(){
+      createNewGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
           requestType: 'createSession'
         })
         .then(response => {
           // Forward player to new game session
-          this.$router.push({ name: 'game', params: { id: response.payload.gameSession.id } })
+          this.$router.push({ name: 'gameSession', params: { id: response.payload.gameSession.id } })
         })
         .catch(error => console.error(error));
       },
