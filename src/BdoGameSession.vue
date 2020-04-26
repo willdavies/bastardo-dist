@@ -45,6 +45,13 @@
         .catch(response => console.error(response));
       }
     },
+    methods: {
+      getGameUrl: function(absolute = false){
+        const gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameSessionId } });
+
+        return absolute ? location.origin + gameLink.href : gameLink.href;
+      }
+    },
     components: {
       BdoJoinGame,
       BdoGame,

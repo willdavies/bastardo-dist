@@ -50,13 +50,6 @@
         })
         .catch(error => console.error(error));
       },
-      // getGameLink: function(absolute = false){
-      //   if (this.gameLink == null) {
-      //     this.gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameId } });
-      //   }
-
-      //   return absolute ? location.origin + this.gameLink.href : this.gameLink.href;
-      // }
     },
     components: {
       BdoPage
