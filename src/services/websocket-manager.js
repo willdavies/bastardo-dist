@@ -81,7 +81,14 @@ const WebSocketManager = {
     });
 
     // Send data via connection
-    this.connection.send(JSON.stringify(Object.assign(data, {metadata: {requestId: requestId}})));
+    this.connection.send(
+      JSON.stringify(
+        Object.assign(
+          data,
+          { metadata: {requestId: requestId} }
+        )
+      )
+    );
 
     return responsePromise;
   },
