@@ -4,12 +4,11 @@
       <li>
         <router-link :to="{ name: 'home' }">Home</router-link>
       </li>
-
       <li v-if="activePlayer === null ">
         <router-link :to="{ name: 'newPlayer' }">Register to play</router-link>
       </li>
       <li v-else-if="activeGameSession !== null">
-        <router-link :to="{ name: 'game', params: {id: activeGameSession.id} }">Active game</router-link>
+        <router-link :to="{ name: 'gameSession', params: {id: activeGameSession.id} }">Active game</router-link>
       </li>
       <li v-else>
         <router-link :to="{ name: 'newGame' }">New Game</router-link>
