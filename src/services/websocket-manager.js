@@ -49,7 +49,7 @@ const WebSocketManager = {
           // Check type of response
           const response = this.promisedResponses[requestId];
 
-          if (response.updateScope === 'error') {
+          if (response.updateScope === 'Error') {
             reject(response.payload);
           } else {
             // Resolve original promise
@@ -109,7 +109,7 @@ const WebSocketManager = {
       console.log('message has requestId', message);
       this.promisedResponses[message.originRequestId] = message;
     } else {
-      console.log('message has requestId', message);
+      console.log('message has no requestId', message);
       // Emit message as event
       this.$emit('update.' + message.updateScope, message);
     }

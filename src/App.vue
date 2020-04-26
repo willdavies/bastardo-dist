@@ -52,7 +52,6 @@
         );
       },
       setActiveGameSession(gameSession){
-
         this.activeGameSession = gameSession;
 
         // Set/refresh cookie
@@ -61,7 +60,7 @@
           gameSession.id,
           {
             sameSite: true,
-            maxAge: process.env.GAME_SESSION_COOKIE_MAX_AGE,
+            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
             path: '/',
           }
         );
