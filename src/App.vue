@@ -74,23 +74,45 @@
 
         // Check cookies
         const cookies = cookie.parse(document.cookie);
-        let playerId = cookies[process.env.PLAYER_COOKIE_NAME];
 
-        if (playerId) {
-          this.$websocketManager.on('open', function(){
-            this.connected = true;
+        // Check for player
+        if (cookies[process.env.PLAYER_COOKIE_NAME]) {
+          // Get active player
+          this.$websocketManager.sendAndAwaitResponse({
+            destination: {
+              resource: 'Player',
+              action: 'get',
+            },
+            payload: {
+              id: cookies[process.env.PLAYER_COOKIE_NAME],
+            }
+          })
+          .then(responsePayload => {
+            this.setActivePlayer(responsePayload.player);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        }
 
-            this.$websocketManager.sendAndAwaitResponse({
-              requestType: 'getPlayer',
-              id: playerId,
-            })
-            .then(response => {
-              this.setActivePlayer(response.payload.player);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-          }.bind(this))
+        // Check for gameSession
+        if (cookies[process.env.GAME_SESSION_COOKIE_NAME]) {
+          // Get active player
+          this.$websocketManager.sendAndAwaitResponse({
+            destination: {
+              resource: 'GameSession',
+              action: 'get',
+            },
+            payload: {
+              id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
+            }
+          })
+          .then(responsePayload => {
+            this.setActiveGameSession(responsePayload.gameSession);
+          })
+          .catch(error => {
+            console.error(error);
+          });
         }
       }.bind(this));
     },

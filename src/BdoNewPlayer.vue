@@ -53,15 +53,20 @@
       }
     },
     methods: {
-      createNewPlayer: function(){
+      createNewPlayer: function(event){
         if (this.cookieConsent == true) {        
           this.$websocketManager.sendAndAwaitResponse({
-            requestType: 'createPlayer',
-            firstName: this.firstName,
-            lastName: this.lastName,
+            destination: {
+              resource: 'Player',
+              action: 'create',
+            },
+            payload: {            
+              firstName: this.firstName,
+              lastName: this.lastName,
+            }
           })
-          .then(response => {
-            this.$emit('setActivePlayer', response.payload.player);
+          .then(responsePayload => {
+            this.$emit('setActivePlayer', responsePayload.player);
           })
           .catch(error => console.error(error));
         }

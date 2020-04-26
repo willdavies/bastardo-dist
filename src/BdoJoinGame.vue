@@ -57,15 +57,17 @@
     },
     methods: {
       joinGameSession: function(){
-        this.$websocketManager.sendAndAwaitResponse({
-          requestType: 'joinSession',
-          sessionId: this.gameSession.id,
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            action: 'join',
+            id: this.gameSession.id,
+          },
+          payload: {
+            player: this.activePlayer.id,
+            colourChoice: this.selectedColor,
+          }
         })
-        .then(response => {
-          // Set game session as active session
-          this.$emit('setActiveGameSession', response.payload.gameSession)
-        })
-        .catch(error => console.error(error));
       },
       getColorClaimant: function(color){
         let seatIndex = this.gameSession.seats

@@ -42,11 +42,15 @@
     methods: {
       createNewGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
-          requestType: 'createSession'
+          destination: {
+            resource: 'GameSession',
+            action: 'create',
+          },
         })
-        .then(response => {
+        .then(responsePayload => {
+          console.log('createNewGameSession callback', responsePayload);
           // Forward player to new game session
-          this.$router.push({ name: 'gameSession', params: { id: response.payload.gameSession.id } })
+          this.$router.push({ name: 'gameSession', params: { id: responsePayload.gameSession.id } })
         })
         .catch(error => console.error(error));
       },
