@@ -47,7 +47,6 @@
   export default {
     props: {
       activePlayer: Object,
-      gameSessionId: String,
       gameSession: Object,
     },
     data: function(){

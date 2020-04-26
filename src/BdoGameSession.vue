@@ -1,10 +1,9 @@
 <template>
   <div id="bastardo-game-session">
     <BdoJoinGame
-      v-if="activeGameSession === null"
+      v-if="activeGameSession.isOpen === true"
       v-bind:activePlayer="activePlayer"
-      v-bind:gameSessionId="gameSessionId"
-      v-bind:gameSession="gameSession"
+      v-bind:gameSession="activeGameSession"
     ></BdoJoinGame>
     <BdoGame
       v-else
