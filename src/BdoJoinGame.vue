@@ -10,6 +10,9 @@
       </div>
 
       <div v-else>
+        <p>Invite others to join by sharing the link below:</p>
+        <a v-bind:href="gameSessionUrl">{{ gameSessionUrl }}</a>
+
         <h2>Pick your color:</h2>
         <p>Fastest finger wins!</p>
         <div id="avatars">
@@ -48,6 +51,7 @@
     props: {
       activePlayer: Object,
       gameSession: Object,
+      gameSessionUrl: String,
     },
     data: function(){
       return {

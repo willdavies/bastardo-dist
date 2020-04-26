@@ -16,6 +16,7 @@
       v-else-if="activeGameSession.isOpen === true"
       v-bind:activePlayer="activePlayer"
       v-bind:gameSession="activeGameSession"
+      v-bind:gameSessionUrl="getGameSessionUrl(true)"
     ></BdoJoinGame>
 
     <BdoGame
@@ -50,8 +51,8 @@
       }
     },
     methods: {
-      getGameUrl: function(absolute = false){
-        const gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameSessionId } });
+      getGameSessionUrl: function(absolute = false){
+        const gameLink = this.$router.resolve({ name: 'gameSession', params: { id: this.activeGameSession.id } });
 
         return absolute ? location.origin + gameLink.href : gameLink.href;
       }
