@@ -1,10 +1,23 @@
 <template>
   <div id="bastardo-game-session">
+    <BdoPage
+      v-if="activeGameSession === null"
+    >
+      <template v-slot:title>
+        No active game session
+      </template>
+
+      <template v-slot:content>
+        You do not currently have an active game session.
+      </template>
+    </BdoPage>
+
     <BdoJoinGame
-      v-if="activeGameSession.isOpen === true"
+      v-else-if="activeGameSession.isOpen === true"
       v-bind:activePlayer="activePlayer"
       v-bind:gameSession="activeGameSession"
     ></BdoJoinGame>
+
     <BdoGame
       v-else
     ></BdoGame>
@@ -12,27 +25,18 @@
 </template>
 
 <script>
-  import BdoJoinGame from './BdoJoinGame.vue';
   import BdoGame from './BdoGame.vue';
+  import BdoJoinGame from './BdoJoinGame.vue';
+  import BdoPage from './BdoPage.vue';
 
   export default {
     props: {
       activePlayer: Object,
       activeGameSession: Object,
     },
-    data: function(){
-      return {
-        gameSessionId: this.$route.params.id,
-        gameSession: null,
-      }
-    },
     created: function() {
-      console.log('game session aftercreate');
-
       // Check for active game session
-      if (this.activeGameSession !== null) {
-        this.gameSession = this.activeGameSession;
-      } else {
+      if (this.activeGameSession === null) {
         // Retrieve game session
         this.$websocketManager.send({
           destination: {
@@ -40,7 +44,7 @@
             action: 'get',
           },
           payload: {
-            id: this.gameSessionId,
+            id: this.$route.params.id,
           },
         })
       }
@@ -53,8 +57,9 @@
       }
     },
     components: {
-      BdoJoinGame,
       BdoGame,
+      BdoJoinGame,
+      BdoPage,
     },
   };
 </script>
