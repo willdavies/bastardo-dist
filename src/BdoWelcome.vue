@@ -1,7 +1,7 @@
 <template>
   <BdoPage>
     <template v-slot:title>
-      Welcome to Bastardo
+      <span v-text="activePlayer == null ? 'Welcome to Bastardo' : 'Hello ' + activePlayer.firstName"></span>
     </template>
     <template v-slot:content>
       <p>Everyone loves Bastardo! Now, thanks to the Coronavirus you can play online to your heart's content</p>
@@ -14,6 +14,9 @@
   import BdoPage from './BdoPage.vue';
 
   export default {
+    props: {
+      activePlayer: Object,
+    },
     components: {
       BdoPage
     }

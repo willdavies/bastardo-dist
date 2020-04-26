@@ -5,22 +5,20 @@
     </template>
     <template v-slot:content>
       <div
-        v-if="gameId == null"
+        v-if="activeGameSession == null"
       >
         <p>To start a new game, click the button below</p>
         <button
-          v-on:click="createNewGame"
+          v-on:click="createNewGameSession"
         >Start new game</button>
       </div>
       <div
         v-else
       >
-        <p>Game started!</p>
-        <p>You and the other players can join the game at: </p>
+        <p>You appear to have an active game already.</p>
         <p>
-          <router-link :to="getGameLink()">
-            {{ getGameLink(true) }}
-          </router-link>
+          Why not <router-link :to="{ name: 'game', params: {id: activeGameSession.id} }">Active game</router-link> return to the game</p> and see how it goes?
+        <p>
         </p>
       </div>
     </template>
@@ -31,6 +29,10 @@
   import BdoPage from './BdoPage.vue';
 
   export default {
+    props: {
+      activePlayer: Object,
+      activeGameSession: Object,
+    },
     data: function(){
       return {
         gameId: null,
@@ -38,19 +40,20 @@
       }
     },
     methods: {
-      createNewGame: function(){
-        // @TODO Call to register new game and get ID.
-
-        // @TODO Promise complete to set gameId
-        this.gameId = 'exammmple';
+      createNewGameSession: function(){
+        this.$websocketManager.sendAndAwaitResponse({
+          destination: {
+            resource: 'GameSession',
+            action: 'create',
+          },
+        })
+        .then(responsePayload => {
+          console.log('createNewGameSession callback', responsePayload);
+          // Forward player to new game session
+          this.$router.push({ name: 'gameSession', params: { id: responsePayload.gameSession.id } })
+        })
+        .catch(error => console.error(error));
       },
-      getGameLink: function(absolute = false){
-        if (this.gameLink == null) {
-          this.gameLink = this.$router.resolve({ name: 'game', params: { id: this.gameId } });
-        }
-
-        return absolute ? location.origin + this.gameLink.href : this.gameLink.href;
-      }
     },
     components: {
       BdoPage

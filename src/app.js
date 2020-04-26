@@ -4,10 +4,16 @@ import App from './App.vue';
 
 Vue.use(VueRouter);
 
+export const eventBus = new Vue();
+
+import WebSocketManager from './services/websocket-manager';
+Vue.use(WebSocketManager);
+
 // Import components
 import BdoWelcome from './BdoWelcome.vue';
 import BdoNewGame from './BdoNewGame.vue';
-import BdoGame from './BdoGame.vue';
+import BdoNewPlayer from './BdoNewPlayer.vue';
+import BdoGameSession from './BdoGameSession.vue';
 
 const routes = [
     {
@@ -16,14 +22,19 @@ const routes = [
         component: BdoWelcome,
     },
     {
+        name: 'newPlayer',
+        path: '/new-player',
+        component: BdoNewPlayer,
+    },
+    {
         name: 'newGame',
         path: '/new-game',
         component: BdoNewGame,
     },
     {
-        name: 'game',
-        path: '/game/:id',
-        component: BdoGame,
+        name: 'gameSession',
+        path: '/game-session/:id',
+        component: BdoGameSession,
     },
 ];
 
@@ -35,5 +46,6 @@ const router = new VueRouter({
 new Vue({
   el: '#bastardo-app',
   router: router,
+  websocketManager: WebSocketManager,
   render: h => h(App),
 });

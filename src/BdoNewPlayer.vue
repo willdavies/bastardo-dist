@@ -1,0 +1,79 @@
+<template>
+  <BdoPage>
+    <template v-slot:title>
+      Register to play bastardo
+    </template>
+    <template v-slot:content>
+      <div
+        v-if="activePlayer == null"
+      >
+        <form id="player-create-form"
+          v-on:submit.prevent="createNewPlayer"
+        >
+          <div>
+            <input id="first-name" v-model="firstName" placeholder="First Name">            
+          </div>
+
+          <div>
+            <input id="last-name" v-model="lastName" placeholder="Last Name">
+          </div>
+
+          <div>
+            <label for="cookie-consent">
+              <input type="checkbox" id="cookie-consent" v-model="cookieConsent">
+              I agree to this site using cookies
+            </label>            
+          </div>
+
+          <div>
+            <button>Register</button>        
+          </div>
+        </form>
+      </div>
+      <div v-else >
+        <p>Hello {{ activePlayer.firstName }}. You are now registered to play Bastardo! Start a new game and invite your friends!</p>
+      </div>
+    </template>
+  </BdoPage>
+</template>
+
+<script>
+  import BdoPage from './BdoPage.vue';
+  import cookie from 'cookie';
+
+  export default {
+    props: {
+      activePlayer: Object
+    },
+    data: function(){
+      return {
+        firstName: null,
+        lastName: null,
+        cookieConsent: null,
+      }
+    },
+    methods: {
+      createNewPlayer: function(event){
+        if (this.cookieConsent == true) {        
+          this.$websocketManager.sendAndAwaitResponse({
+            destination: {
+              resource: 'Player',
+              action: 'create',
+            },
+            payload: {            
+              firstName: this.firstName,
+              lastName: this.lastName,
+            }
+          })
+          .then(responsePayload => {
+            this.$emit('setActivePlayer', responsePayload.player);
+          })
+          .catch(error => console.error(error));
+        }
+      },
+    },
+    components: {
+      BdoPage
+    }
+  };
+</script>
