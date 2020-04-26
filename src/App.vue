@@ -45,7 +45,8 @@
           player.id,
           {
             sameSite: true,
-            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE
+            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+            path: '/',
           }
         );
       },
@@ -59,7 +60,8 @@
           gameSession.id,
           {
             sameSite: true,
-            maxAge: process.env.GAME_SESSION_COOKIE_MAX_AGE
+            maxAge: process.env.GAME_SESSION_COOKIE_MAX_AGE,
+            path: '/',
           }
         );
       },
