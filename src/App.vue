@@ -15,8 +15,6 @@
         <router-view
           v-bind:activePlayer="activePlayer"
           v-bind:activeGameSession="activeGameSession"
-          v-on:setActivePlayer="setActivePlayer($event)"
-          v-on:setActiveGameSession="setActiveGameSession($event)"
         ></router-view>
       </main>
     </div>
@@ -114,6 +112,18 @@
           });
         }
       }.bind(this));
+
+      eventBus.$on('update.activePlayer', (message) => {
+        console.log('update.activePlayer', message);
+
+        this.setActivePlayer(message.payload.player);
+      });
+
+      eventBus.$on('update.activeGameSession', (message) => {
+        console.log('update.activeGameSession', message);
+
+        this.setActiveGameSession(message.payload.gameSession);
+      });
     },
     components: {
       BdoControls,

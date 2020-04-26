@@ -27,6 +27,7 @@
 
 <script>
   import BdoPage from './BdoPage.vue';
+  import { eventBus } from './app'
 
   export default {
     props: {
@@ -47,10 +48,16 @@
             action: 'create',
           },
         })
-        .then(responsePayload => {
-          console.log('createNewGameSession callback', responsePayload);
+        .then(response => {
+          eventBus.$emit('update.activeGameSession', response);
+
           // Forward player to new game session
-          this.$router.push({ name: 'gameSession', params: { id: responsePayload.gameSession.id } })
+          this.$router.push(
+            {
+              name: 'gameSession',
+              params: { id: response.payload.gameSession.id }
+            }
+          );
         })
         .catch(error => console.error(error));
       },

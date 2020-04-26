@@ -40,6 +40,7 @@
 <script>
   import BdoPage from './BdoPage.vue';
   import cookie from 'cookie';
+  import { eventBus } from './app'
 
   export default {
     props: {
@@ -65,8 +66,8 @@
               lastName: this.lastName,
             }
           })
-          .then(responsePayload => {
-            this.$emit('setActivePlayer', responsePayload.player);
+          .then(response => {
+            eventBus.$emit('setActivePlayer', response);
           })
           .catch(error => console.error(error));
         }

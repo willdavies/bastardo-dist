@@ -50,10 +50,10 @@ const WebSocketManager = {
           const response = this.promisedResponses[requestId];
 
           if (response.updateScope === 'Error') {
-            reject(response.payload);
+            reject(response);
           } else {
             // Resolve original promise
-            resolve(response.payload);
+            resolve(response);
           }
 
           // Delete response value
@@ -118,7 +118,7 @@ const WebSocketManager = {
     } else {
       console.log('message has no requestId', message);
       // Emit message as event
-      this.$emit('update.' + message.updateScope, message);
+      eventBus.$emit('update.active' + message.updateScope, message);
     }
   },
 }
