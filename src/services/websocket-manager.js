@@ -43,7 +43,7 @@ const WebSocketManager = {
 
   send: function(data) {
     console.log('websocketManager send', data);
-    this.connection.send(data);
+    this.connection.send(JSON.stringify(data));
   },
 
   sendAndAwaitResponse: function(data, timeOutSeconds) {
