@@ -56,7 +56,7 @@
     methods: {
       createNewPlayer: function(event){
         if (this.cookieConsent == true) {        
-          this.$websocketManager.sendAndAwaitResponse({
+          this.$websocketManager.send({
             destination: {
               resource: 'Player',
               action: 'create',
@@ -66,10 +66,6 @@
               lastName: this.lastName,
             }
           })
-          .then(response => {
-            eventBus.$emit('setActivePlayer', response);
-          })
-          .catch(error => console.error(error));
         }
       },
     },

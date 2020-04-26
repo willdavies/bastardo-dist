@@ -35,7 +35,7 @@
         this.gameSession = this.activeGameSession;
       } else {
         // Retrieve game session
-        this.$websocketManager.sendAndAwaitResponse({
+        this.$websocketManager.send({
           destination: {
             resource: 'GameSession',
             action: 'get',
@@ -44,10 +44,6 @@
             id: this.gameSessionId,
           },
         })
-        .then(responsePayload => {
-          this.gameSession = responsePayload.gameSession
-        })
-        .catch(response => console.error(response));
       }
     },
     methods: {

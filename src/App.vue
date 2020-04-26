@@ -75,7 +75,7 @@
         // Check for player
         if (cookies[process.env.PLAYER_COOKIE_NAME]) {
           // Get active player
-          this.$websocketManager.sendAndAwaitResponse({
+          this.$websocketManager.send({
             destination: {
               resource: 'Player',
               action: 'get',
@@ -84,18 +84,12 @@
               id: cookies[process.env.PLAYER_COOKIE_NAME],
             }
           })
-          .then(responsePayload => {
-            this.setActivePlayer(responsePayload.player);
-          })
-          .catch(error => {
-            console.error(error);
-          });
         }
 
         // Check for gameSession
         if (cookies[process.env.GAME_SESSION_COOKIE_NAME]) {
           // Get active player
-          this.$websocketManager.sendAndAwaitResponse({
+          this.$websocketManager.send({
             destination: {
               resource: 'GameSession',
               action: 'get',
@@ -104,12 +98,6 @@
               id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
             }
           })
-          .then(responsePayload => {
-            this.setActiveGameSession(responsePayload.gameSession);
-          })
-          .catch(error => {
-            console.error(error);
-          });
         }
       }.bind(this));
 
