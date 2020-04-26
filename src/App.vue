@@ -26,6 +26,7 @@
 <script>
   import BdoControls from './BdoControls.vue';
   import cookie from 'cookie';
+  import { eventBus } from './app'
 
   export default {
     data: function(){
@@ -67,27 +68,31 @@
       },
     },
     beforeCreate: function(){
-      // Get cookies
-      const cookies = cookie.parse(document.cookie);
+      eventBus.$on('connectionOpen', function(event){
+        // Set connectied flag to trigger render
+        this.connected = true
 
-      let playerId = cookies[process.env.PLAYER_COOKIE_NAME];
+        // Check cookies
+        const cookies = cookie.parse(document.cookie);
+        let playerId = cookies[process.env.PLAYER_COOKIE_NAME];
 
-      if (playerId) {
-        this.$websocketManager.on('open', function(){
-          this.connected = true;
+        if (playerId) {
+          this.$websocketManager.on('open', function(){
+            this.connected = true;
 
-          this.$websocketManager.sendAndAwaitResponse({
-            requestType: 'getPlayer',
-            id: playerId,
-          })
-          .then(response => {
-            this.setActivePlayer(response.payload.player);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-        }.bind(this))
-      }
+            this.$websocketManager.sendAndAwaitResponse({
+              requestType: 'getPlayer',
+              id: playerId,
+            })
+            .then(response => {
+              this.setActivePlayer(response.payload.player);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+          }.bind(this))
+        }
+      }.bind(this));
     },
     components: {
       BdoControls,

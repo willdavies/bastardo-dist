@@ -4,6 +4,8 @@ import App from './App.vue';
 
 Vue.use(VueRouter);
 
+export const eventBus = new Vue();
+
 import WebSocketManager from './services/websocket-manager';
 Vue.use(WebSocketManager);
 

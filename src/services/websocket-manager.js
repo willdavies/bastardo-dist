@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { eventBus } from '../app'
 
 const WebSocketManager = {
   promisedResponseCounter: 0,
@@ -21,7 +22,7 @@ const WebSocketManager = {
     this.connection =  new WebSocket(process.env.API_HOST);
 
     this.connection.onopen = function(event){
-      console.log('connection open');
+      eventBus.$emit('connectionOpen', event);
     };
 
     this.connection.onmessage = function (event) {
