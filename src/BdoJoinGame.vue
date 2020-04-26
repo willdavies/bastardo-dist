@@ -15,29 +15,41 @@
 
         <h2>Pick your color:</h2>
         <p>Fastest finger wins!</p>
-        <div id="avatars">
-          <div class="avatar-option"
-            v-for="color in gameSession.seatColors"
-            v-bind:class="{
-              selected: (selectedColor == color),
-              taken: getColorClaimant(color) !== null,
-            }"
-            v-on:click="selectColor(color)"
-          >
-            <BdoAvatar v-bind:color="color"></BdoAvatar>
 
-            <div
-              v-if="getColorClaimant(color) != null"
+        <form id="join-session-form"
+          v-on:submit.prevent="joinGameSession"
+        >
+          <div id="avatars">
+            <label class="avatar-option"
+              v-for="color in gameSession.seatColors"
+              v-bind:for="'avatar-' + color" 
+              v-bind:class="{
+                selected: (selectedColor == color),
+                taken: getColorClaimant(color) !== null,
+              }"
             >
-              {{ claimant.player.firstName }}
-            </div>
-          </div>
-        </div>
+              <BdoAvatar v-bind:color="color"></BdoAvatar>
 
-        <button
-          v-if="selectedColor !== null"
-          v-on:click="joinGameSession"
-        >Join this game session!</button>
+              <div
+                v-if="getColorClaimant(color) != null"
+              >
+                {{ claimant.player.firstName }}
+              </div>
+
+              <input type="radio"
+                name="color"
+                v-bind:id="'avatar-' + color"
+                v-bind:value="color"
+                v-model="selectedColor"
+                v-bind:disabled="getColorClaimant(color) !== null"
+              >
+            </label>
+          </div>
+
+          <button v-if="selectedColor !== null">
+            Join this game session!
+          </button>
+        </form>
       </div>
     </template>
   </BdoPage>
@@ -74,15 +86,10 @@
       },
       getColorClaimant: function(color){
         let seatIndex = this.gameSession.seats
-          .map(seat => seat)
+          .map(seat => seat.color)
           .indexOf(color);
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
-      },
-      selectColor: function(color){
-        if (this.getColourClaimant(color) == null) {
-          this.selectedColor = color;
-        }
       },
     },
     components: {
