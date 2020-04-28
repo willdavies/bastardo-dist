@@ -53,6 +53,12 @@
             Join this game session!
           </button>
         </form>
+
+        <button
+          v-on:click="unWatchGameSession"
+        >
+          Cancel
+        </button>
       </div>
     </template>
   </BdoPage>
@@ -61,6 +67,7 @@
 <script>
   import BdoAvatar from './BdoAvatar.vue';
   import BdoPage from './BdoPage.vue';
+  import { eventBus } from './app'
 
   export default {
     props: {
@@ -100,6 +107,26 @@
           .indexOf(color);
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+      },
+      unWatchGameSession: function(){
+        this.$websocketManager.sendAndAwaitResponse({
+          destination: {
+            resource: 'GameSession',
+            action: 'unWatch',
+            id: this.gameSession.id,
+          },
+          payload: {
+            player: this.activePlayer.id,
+          }
+        })
+        .then(response => {
+          if (response.payload.gameSession === null) {
+            this.$router.push({ name: 'home' });
+
+            eventBus.$emit('clear.activeGameSession', response);
+          }
+        })
+        .catch(response => console.error(response))
       },
     },
     components: {

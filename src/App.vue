@@ -52,16 +52,29 @@
       setActiveGameSession(gameSession){
         this.activeGameSession = gameSession;
 
-        // Set/refresh cookie
-        document.cookie = cookie.serialize(
-          process.env.GAME_SESSION_COOKIE_NAME,
-          gameSession.id,
-          {
-            sameSite: true,
-            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
-            path: '/',
-          }
-        );
+        if (gameSession !== null) {
+          // Set/refresh cookie
+          document.cookie = cookie.serialize(
+            process.env.GAME_SESSION_COOKIE_NAME,
+            gameSession.id,
+            {
+              sameSite: true,
+              maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+              path: '/',
+            }
+          );          
+        } else {
+          // Delete cookie
+          document.cookie = cookie.serialize(
+            process.env.GAME_SESSION_COOKIE_NAME,
+            null,
+            {
+              sameSite: true,
+              expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
+              path: '/',
+            }
+          );          
+        }
       },
     },
     beforeCreate: function(){
@@ -111,6 +124,12 @@
         console.log('update.activeGameSession', message);
 
         this.setActiveGameSession(message.payload.gameSession);
+      });
+
+      eventBus.$on('clear.activeGameSession', (message) => {
+        console.log('clear.activeGameSession', message);
+
+        this.setActiveGameSession(null);
       });
     },
     components: {
