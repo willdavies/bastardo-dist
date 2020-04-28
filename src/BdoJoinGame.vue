@@ -1,7 +1,7 @@
 <template>
   <BdoPage>
     <template v-slot:title>
-      Join session {{ gameSessionId }}
+      Join session {{ gameSession.id }}
     </template>
 
     <template v-slot:content>
@@ -25,15 +25,15 @@
               v-bind:for="'avatar-' + color" 
               v-bind:class="{
                 selected: (selectedColor == color),
-                taken: getColorClaimant(color) !== null,
+                taken: getColorOccupant(color) !== null,
               }"
             >
               <BdoAvatar v-bind:color="color"></BdoAvatar>
 
-              <div
-                v-if="getColorClaimant(color) != null"
+              <div class="seat-occupant"
+                v-if="getColorOccupant(color) != null"
               >
-                {{ claimant.player.firstName }}
+                {{ getColorOccupant(color).player.firstName }}
               </div>
 
               <input type="radio"
@@ -41,12 +41,15 @@
                 v-bind:id="'avatar-' + color"
                 v-bind:value="color"
                 v-model="selectedColor"
-                v-bind:disabled="getColorClaimant(color) !== null"
+                v-bind:disabled="getColorOccupant(color) !== null"
               >
             </label>
           </div>
 
-          <button v-if="selectedColor !== null">
+          <button
+            type="submit"
+            v-if="getUserSeat() === null && selectedColor !== null"
+          >
             Join this game session!
           </button>
         </form>
@@ -56,8 +59,8 @@
 </template>
 
 <script>
-  import BdoPage from './BdoPage.vue';
   import BdoAvatar from './BdoAvatar.vue';
+  import BdoPage from './BdoPage.vue';
 
   export default {
     props: {
@@ -84,7 +87,14 @@
           }
         })
       },
-      getColorClaimant: function(color){
+      getUserSeat: function(){
+        let userSeatIndex = this.gameSession.seats
+          .map(seat => seat.player.id)
+          .indexOf(this.activePlayer.id);
+
+        return userSeatIndex !== -1 ? this.gameSession.seats[userSeatIndex] : null;
+      },
+      getColorOccupant: function(color){
         let seatIndex = this.gameSession.seats
           .map(seat => seat.color)
           .indexOf(color);
@@ -104,11 +114,28 @@
     display: flex;
   }
 
+  .avatar-option {
+    position: relative;
+  }
+
+  .avatar-option input[type="radio"] {
+    display: none;
+  }
+
   .avatar-option.selected {
     background: yellow;
   }
 
-  .avatar-option.taken {
-    opacity: 0.7;
+  .avatar-option.taken .avatar {
+    opacity: 0.35;
+  }
+
+  .seat-occupant {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    border: 1px solid #000;
+    background: white;
+    text-align: center;
   }
 </style>
