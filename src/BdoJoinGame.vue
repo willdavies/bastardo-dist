@@ -55,6 +55,14 @@
         </form>
 
         <button
+          v-if="getUserSeat() !== null"
+          v-on:click="signalReadinessToStart"
+        >
+          I'm ready to start playing!
+        </button>
+
+        <button
+          v-else
           v-on:click="unWatchGameSession"
         >
           Cancel
@@ -78,6 +86,7 @@
     data: function(){
       return {
         selectedColor: null,
+        readyToStart: false,
       }
     },
     methods: {
@@ -107,6 +116,18 @@
           .indexOf(color);
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+      },
+      signalReadinessToStart: function(){
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            action: 'voteToStart',
+            id: this.gameSession.id,
+          },
+          payload: {
+            player: this.activePlayer.id,
+          }
+        })
       },
       unWatchGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
