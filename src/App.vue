@@ -38,16 +38,29 @@
       setActivePlayer(player){
         this.activePlayer = player;
 
-        // Set/refresh cookie
-        document.cookie = cookie.serialize(
-          process.env.PLAYER_COOKIE_NAME,
-          player.id,
-          {
-            sameSite: true,
-            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
-            path: '/',
-          }
-        );
+        if (player !== null) {
+          // Set/refresh cookie
+          document.cookie = cookie.serialize(
+            process.env.PLAYER_COOKIE_NAME,
+            player.id,
+            {
+              sameSite: true,
+              maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+              path: '/',
+            }
+          );
+        } else {
+          // Delete cookie
+          document.cookie = cookie.serialize(
+            process.env.PLAYER_COOKIE_NAME,
+            null,
+            {
+              sameSite: true,
+              expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
+              path: '/',
+            }
+          );          
+        }
       },
       setActiveGameSession(gameSession){
         this.activeGameSession = gameSession;
@@ -118,6 +131,12 @@
         console.log('update.activePlayer', message);
 
         this.setActivePlayer(message.payload.player);
+      });
+
+      eventBus.$on('clear.activePlayer', (message) => {
+        console.log('clear.activePlayer', message);
+
+        this.setActivePlayer(null);
       });
 
       eventBus.$on('update.activeGameSession', (message) => {
