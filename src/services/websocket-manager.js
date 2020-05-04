@@ -69,7 +69,7 @@ const WebSocketManager = {
       setTimeout(() => {
         // Check whether empty value still present
         if (this.promisedResponses.hasOwnProperty(requestId)) {
-          reject('no response recieved');
+          reject('No response received');
 
           // Delete response value
           delete this.promisedResponses[requestId];
