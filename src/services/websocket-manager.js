@@ -111,10 +111,13 @@ const WebSocketManager = {
   handleMessage: function(messageEvent){
     let message = JSON.parse(messageEvent.data);
 
-    if (typeof message.originRequestId !== 'undefined') {
+    if (
+      typeof message.originMetadata !== 'undefined'
+      && typeof message.originMetadata.requestId !== 'undefined'
+    ) {
       // Route any promised response back to response promise
       console.log('message has requestId', message);
-      this.promisedResponses[message.originRequestId] = message;
+      this.promisedResponses[message.originMetadata.requestId] = message;
     } else {
       console.log('message has no requestId', message);
       // Emit message as event
