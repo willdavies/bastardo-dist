@@ -69,7 +69,7 @@ const WebSocketManager = {
       setTimeout(() => {
         // Check whether empty value still present
         if (this.promisedResponses.hasOwnProperty(requestId)) {
-          reject('no response recieved');
+          reject('No response received');
 
           // Delete response value
           delete this.promisedResponses[requestId];
@@ -111,10 +111,13 @@ const WebSocketManager = {
   handleMessage: function(messageEvent){
     let message = JSON.parse(messageEvent.data);
 
-    if (typeof message.originRequestId !== 'undefined') {
+    if (
+      typeof message.originMetadata !== 'undefined'
+      && typeof message.originMetadata.requestId !== 'undefined'
+    ) {
       // Route any promised response back to response promise
       console.log('message has requestId', message);
-      this.promisedResponses[message.originRequestId] = message;
+      this.promisedResponses[message.originMetadata.requestId] = message;
     } else {
       console.log('message has no requestId', message);
       // Emit message as event
