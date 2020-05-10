@@ -94,8 +94,8 @@
         this.$websocketManager.send({
           destination: {
             resource: 'GameSession',
-            action: 'join',
             id: this.gameSession.id,
+            action: 'join',
           },
           payload: {
             player: this.activePlayer.id,
@@ -121,8 +121,8 @@
         this.$websocketManager.send({
           destination: {
             resource: 'GameSession',
-            action: 'voteToStart',
             id: this.gameSession.id,
+            action: 'voteToStart',
           },
           payload: {
             player: this.activePlayer.id,
@@ -133,8 +133,8 @@
         this.$websocketManager.sendAndAwaitResponse({
           destination: {
             resource: 'GameSession',
-            action: 'unWatch',
             id: this.gameSession.id,
+            action: 'unWatch',
           },
           payload: {
             player: this.activePlayer.id,

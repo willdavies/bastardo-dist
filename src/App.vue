@@ -103,8 +103,8 @@
           // Get active player
           this.$websocketManager.send({
             destination: {
-              resource: 'Player',
-              action: 'get',
+              resource: 'App',
+              action: 'getPlayer',
             },
             payload: {
               id: cookies[process.env.PLAYER_COOKIE_NAME],
@@ -117,8 +117,8 @@
           // Get active player
           this.$websocketManager.send({
             destination: {
-              resource: 'GameSession',
-              action: 'get',
+              resource: 'App',
+              action: 'getGameSession',
             },
             payload: {
               id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
