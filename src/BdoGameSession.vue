@@ -21,6 +21,7 @@
 
     <BdoGame
       v-else
+      v-bind:gameSession="activeGameSession"
     ></BdoGame>
   </div>
 </template>

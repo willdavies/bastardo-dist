@@ -1,16 +1,19 @@
 <template>
-  <div class="opponent">
-    <BdoAvatar v-bind:color="user.color"></BdoAvatar>
+  <div
+    class="opponent"
+    v-bind:class="{active: isActive}"
+  >
+    <BdoAvatar v-bind:color="seat.color"></BdoAvatar>
     <div class="opponent-hand">
       <div class="opponent-hand-cards clearfix">
         <BdoCard
-          v-for="n in user.cardCount"
+          v-for="n in seat.cardCount"
           v-bind:key="n"
         ></BdoCard>        
       </div>
     </div>
     <div class="opponent-placard">
-      <span class="name">{{ user.name }}</span>
+      <span class="name">{{ seat.player.firstName }}</span>
       <div class="opponent-placard-badges">
         <span class="badge session-leader-badge"
           v-if="isSessionLeader"
@@ -32,7 +35,11 @@
 
   export default {
     props: {
-      user: Object,
+      seat: Object,
+      isActive: {
+        type: Boolean,
+        default: false,
+      },
       isDealer: {
         type: Boolean,
         default: false,
@@ -57,6 +64,10 @@
   .opponent {
     width: 8em;
     font-family: sans-serif;
+  }
+
+  .opponent.active .opponent-placard {
+    background-color: #53F48B;
   }
 
   .avatar {

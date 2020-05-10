@@ -2,14 +2,16 @@
   <div id="bastardo-game">
     <div id="opponents">
       <BdoOpponent
-        v-for="opponent in opponents"
-        v-bind:user="opponent"
-        v-bind:key="opponent.id"
-        v-bind:isDealer="opponent.id == dealerId"
-        v-bind:isSessionLeader="opponent.id == sessionLeaderId"
-        v-bind:isRoundLeader="opponent.id == roundLeaderId"
+        v-for="seat in gameSession.seats"
+        v-bind:seat="seat"
+        v-bind:key="seat.id"
+        v-bind:isDealer="seat.id == gameSession.dealerSeatId"
+        v-bind:isActive="seat.id == gameSession.activeSeatId"
+        v-bind:isSessionLeader="seat.id == sessionLeaderId"
+        v-bind:isRoundLeader="seat.id == roundLeaderId"
       ></BdoOpponent>      
     </div>
+
     <BdoDojo
       v-bind:cards=playedCards
       v-bind:leadSuit=leadSuit
@@ -29,9 +31,10 @@
   import BdoOpponent from './BdoOpponent.vue';
 
   export default {
+    props: {
+      gameSession: Object,
+    },
     data: function(){
-      console.log(this.$route.params.id);
-
       return {
         gameId: this.$route.params.id,
         deck: [],
@@ -39,52 +42,9 @@
         handCards: [],
         playedCards: [],
         leadSuit: null,
-        dealerId: 4,
-        sessionLeaderId: 4,
-        roundLeaderId: 4,
+        sessionLeaderId: null,
+        roundLeaderId: null,
       }
-    },
-    computed: {
-      opponents: function(){
-        return [
-          {
-            id: 1,
-            name: 'Chris',
-            color: 'black',
-            cardCount: this.handSize,
-          },
-          {
-            id: 2,
-            name: 'Louise',
-            color: 'green',
-            cardCount: this.handSize,
-          },
-          {
-            id: 3,
-            name: 'Jack',
-            color: 'blue',
-            cardCount: this.handSize,
-          },
-          {
-            id: 4,
-            name: 'Hannah',
-            color: 'purple',
-            cardCount: this.handSize,
-          },
-          {
-            id: 5,
-            name: 'Andrew',
-            color: 'red',
-            cardCount: this.handSize,
-          },
-          {
-            id: 6,
-            name: 'Will',
-            color: 'white',
-            cardCount: this.handSize,
-          },
-        ]
-      },
     },
     methods: {
       playCard: function(card){
