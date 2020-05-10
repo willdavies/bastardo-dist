@@ -3,6 +3,7 @@
     <div id="opponents">
       <BdoOpponent
         v-for="seat in gameSession.seats"
+        v-if="seat.player.id != player.id"
         v-bind:seat="seat"
         v-bind:key="seat.id"
         v-bind:isDealer="seat.id == gameSession.dealerSeatId"
@@ -16,11 +17,12 @@
       v-bind:cards=playedCards
       v-bind:leadSuit=leadSuit
     ></BdoDojo>
+
     <BdoHand
-      v-bind:cards=handCards
-      v-bind:leadSuit=leadSuit
+      v-bind:cards="gameSession.playerHand"
+      v-bind:leadSuit="leadSuit"
+      v-bind:isActive="getSeatByPlayer(player).id == gameSession.activeSeatId"
       v-on:cardPlay="playCard"
-      v-on:cardDeal="dealCards"
     ></BdoHand>
   </div>
 </template>
@@ -33,13 +35,13 @@
   export default {
     props: {
       gameSession: Object,
+      player: Object,
     },
     data: function(){
       return {
         gameId: this.$route.params.id,
         deck: [],
         handSize: 7,
-        handCards: [],
         playedCards: [],
         leadSuit: null,
         sessionLeaderId: null,
@@ -48,33 +50,12 @@
     },
     methods: {
       playCard: function(card){
-        // Remove from hand
-        this.handCards.splice(this.handCards.indexOf(card), 1);
+        console.log('playCard:', card);
+      },
+      getSeatByPlayer: function(player) {
+        const seatIndex = this.gameSession.seats.map(seat => seat.player.id).indexOf(player.id);
 
-        // Check whether card is first in dojo
-        if (this.playedCards.length == 0) {
-          this.leadSuit = card.suit;
-        }
-
-        // Set relative value of card
-        let modifier;
-
-        switch (card.suit) {
-          case 'diamonds':
-            modifier = 26;
-            break;
-          case this.leadSuit:
-            modifier = 13;
-            break;
-          default:
-            modifier = 0;
-            break;
-        }
-
-        card.relativeValue = card.value + modifier;
-
-        // Add to dojo
-        this.playedCards.push(card);
+        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
       }
     },
     components: {
