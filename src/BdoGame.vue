@@ -14,8 +14,8 @@
     </div>
 
     <BdoDojo
-      v-bind:cards=playedCards
-      v-bind:leadSuit=leadSuit
+      v-bind:cards="gameSession.activeGame.activeRound.playedCards"
+      v-bind:leadSuit="leadSuit"
     ></BdoDojo>
 
     <BdoHand
@@ -39,10 +39,6 @@
     },
     data: function(){
       return {
-        gameId: this.$route.params.id,
-        deck: [],
-        handSize: 7,
-        playedCards: [],
         leadSuit: null,
         sessionLeaderId: null,
         roundLeaderId: null,
