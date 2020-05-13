@@ -21,6 +21,8 @@
 
     <BdoGame
       v-else
+      v-bind:gameSession="activeGameSession"
+      v-bind:player="activePlayer"
     ></BdoGame>
   </div>
 </template>
@@ -41,8 +43,8 @@
         // Retrieve game session
         this.$websocketManager.send({
           destination: {
-            resource: 'GameSession',
-            action: 'get',
+            resource: 'App',
+            action: 'getGameSession',
           },
           payload: {
             id: this.$route.params.id,

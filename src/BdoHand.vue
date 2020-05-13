@@ -1,7 +1,7 @@
 <template>
 	<div id="hand" class="clearfix">
     <button
-      v-if="cards.length == 0"
+      v-if="cards !== undefined && cards.length == 0"
       v-on:click="$emit('cardDeal')"
      >
       Deal hand

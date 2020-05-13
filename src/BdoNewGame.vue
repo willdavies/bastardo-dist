@@ -44,8 +44,8 @@
       createNewGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
           destination: {
-            resource: 'GameSession',
-            action: 'create',
+            resource: 'App',
+            action: 'createGameSession',
           },
         })
         .then(response => {

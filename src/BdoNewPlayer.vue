@@ -58,8 +58,8 @@
         if (this.cookieConsent == true) {        
           this.$websocketManager.send({
             destination: {
-              resource: 'Player',
-              action: 'create',
+              resource: 'App',
+              action: 'createPlayer',
             },
             payload: {            
               firstName: this.firstName,

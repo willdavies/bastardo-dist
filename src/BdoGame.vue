@@ -2,23 +2,27 @@
   <div id="bastardo-game">
     <div id="opponents">
       <BdoOpponent
-        v-for="opponent in opponents"
-        v-bind:user="opponent"
-        v-bind:key="opponent.id"
-        v-bind:isDealer="opponent.id == dealerId"
-        v-bind:isSessionLeader="opponent.id == sessionLeaderId"
-        v-bind:isRoundLeader="opponent.id == roundLeaderId"
+        v-for="seat in gameSession.seats"
+        v-if="seat.player.id != player.id"
+        v-bind:seat="seat"
+        v-bind:key="seat.id"
+        v-bind:isDealer="seat.id == gameSession.dealerSeatId"
+        v-bind:isActive="seat.id == gameSession.activeSeatId"
+        v-bind:isSessionLeader="seat.id == sessionLeaderId"
+        v-bind:isRoundLeader="seat.id == roundLeaderId"
       ></BdoOpponent>      
     </div>
+
     <BdoDojo
-      v-bind:cards=playedCards
-      v-bind:leadSuit=leadSuit
+      v-bind:cards="gameSession.activeGame.activeRound.playedCards"
+      v-bind:leadSuit="leadSuit"
     ></BdoDojo>
+
     <BdoHand
-      v-bind:cards=handCards
-      v-bind:leadSuit=leadSuit
+      v-bind:cards="gameSession.playerHand"
+      v-bind:leadSuit="leadSuit"
+      v-bind:isActive="getSeatByPlayer(player).id == gameSession.activeSeatId"
       v-on:cardPlay="playCard"
-      v-on:cardDeal="dealCards"
     ></BdoHand>
   </div>
 </template>
@@ -29,92 +33,25 @@
   import BdoOpponent from './BdoOpponent.vue';
 
   export default {
-    data: function(){
-      console.log(this.$route.params.id);
-
-      return {
-        gameId: this.$route.params.id,
-        deck: [],
-        handSize: 7,
-        handCards: [],
-        playedCards: [],
-        leadSuit: null,
-        dealerId: 4,
-        sessionLeaderId: 4,
-        roundLeaderId: 4,
-      }
+    props: {
+      gameSession: Object,
+      player: Object,
     },
-    computed: {
-      opponents: function(){
-        return [
-          {
-            id: 1,
-            name: 'Chris',
-            color: 'black',
-            cardCount: this.handSize,
-          },
-          {
-            id: 2,
-            name: 'Louise',
-            color: 'green',
-            cardCount: this.handSize,
-          },
-          {
-            id: 3,
-            name: 'Jack',
-            color: 'blue',
-            cardCount: this.handSize,
-          },
-          {
-            id: 4,
-            name: 'Hannah',
-            color: 'purple',
-            cardCount: this.handSize,
-          },
-          {
-            id: 5,
-            name: 'Andrew',
-            color: 'red',
-            cardCount: this.handSize,
-          },
-          {
-            id: 6,
-            name: 'Will',
-            color: 'white',
-            cardCount: this.handSize,
-          },
-        ]
-      },
+    data: function(){
+      return {
+        leadSuit: null,
+        sessionLeaderId: null,
+        roundLeaderId: null,
+      }
     },
     methods: {
       playCard: function(card){
-        // Remove from hand
-        this.handCards.splice(this.handCards.indexOf(card), 1);
+        console.log('playCard:', card);
+      },
+      getSeatByPlayer: function(player) {
+        const seatIndex = this.gameSession.seats.map(seat => seat.player.id).indexOf(player.id);
 
-        // Check whether card is first in dojo
-        if (this.playedCards.length == 0) {
-          this.leadSuit = card.suit;
-        }
-
-        // Set relative value of card
-        let modifier;
-
-        switch (card.suit) {
-          case 'diamonds':
-            modifier = 26;
-            break;
-          case this.leadSuit:
-            modifier = 13;
-            break;
-          default:
-            modifier = 0;
-            break;
-        }
-
-        card.relativeValue = card.value + modifier;
-
-        // Add to dojo
-        this.playedCards.push(card);
+        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
       }
     },
     components: {
