@@ -5,7 +5,12 @@
           Options
           <ul>
             <li>
-              <a href="#">Example link</a>
+              <a
+                href="#"
+                v-on:click.stop.prevent="$emit('voteToAbort')"
+              >
+                Suggest ending session
+              </a>              
             </li>
           </ul>
         </li>

@@ -74,6 +74,22 @@
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
       },
+      voteToAbort: function() {
+        const agreed = confirm("Are you sure that you want this game session to end?");
+
+        if (agreed) {
+          this.$websocketManager.send({
+            destination: {
+              resource: 'GameSession',
+              action: 'voteToAbort',
+              id: this.gameSession.id,
+            },
+            payload: {
+              player: this.player.id,
+            },
+          });
+        }
+      },
     },
     components: {
       BdoHand,
