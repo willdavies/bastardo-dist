@@ -1,5 +1,9 @@
 <template>
   <div id="bastardo-game">
+    <GameSessionControls
+      v-on:voteToAbort="voteToAbort"
+    ></GameSessionControls>
+
     <div id="opponents">
       <BdoOpponent
         v-for="seat in gameSession.seats"
@@ -39,6 +43,7 @@
   import BdoDojo from './BdoDojo.vue';
   import BdoOpponent from './BdoOpponent.vue';
   import BdoSelectDealer from './BdoSelectDealer.vue';
+  import GameSessionControls from './GameSessionControls.vue';
 
   export default {
     props: {
@@ -75,6 +80,7 @@
       BdoDojo,
       BdoOpponent,
       BdoSelectDealer,
+      GameSessionControls,
     }
   };
 </script>
