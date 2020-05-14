@@ -1,5 +1,5 @@
 <template>
-  <BdoPage>
+  <Page>
     <template v-slot:title>
       Register to play bastardo
     </template>
@@ -34,11 +34,11 @@
         <p>Hello {{ activePlayer.firstName }}. You are now registered to play Bastardo! Start a new game and invite your friends!</p>
       </div>
     </template>
-  </BdoPage>
+  </Page>
 </template>
 
 <script>
-  import BdoPage from './BdoPage.vue';
+  import Page from './Page.vue';
   import cookie from 'cookie';
   import { eventBus } from './app'
 
@@ -70,7 +70,7 @@
       },
     },
     components: {
-      BdoPage
+      Page
     }
   };
 </script>

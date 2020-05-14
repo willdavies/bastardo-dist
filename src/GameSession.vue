@@ -1,6 +1,6 @@
 <template>
   <div id="bastardo-game-session">
-    <BdoPage
+    <Page
       v-if="activeGameSession === null"
     >
       <template v-slot:title>
@@ -10,32 +10,32 @@
       <template v-slot:content>
         You do not currently have an active game session.
       </template>
-    </BdoPage>
+    </Page>
 
-    <BdoJoinGame
+    <JoinGame
       v-else-if="activeGameSession.isOpen === true"
       v-bind:activePlayer="activePlayer"
       v-bind:gameSession="activeGameSession"
       v-bind:gameSessionUrl="getGameSessionUrl(true)"
-    ></BdoJoinGame>
+    ></JoinGame>
 
     <div v-else>    
       <GameSessionControls
         v-on:voteToAbort="voteToAbort"
       ></GameSessionControls>
 
-      <BdoGame
+      <Game
         v-bind:gameSession="activeGameSession"
         v-bind:player="activePlayer"
-      ></BdoGame>
+      ></Game>
     </div>
   </div>
 </template>
 
 <script>
-  import BdoGame from './BdoGame.vue';
-  import BdoJoinGame from './BdoJoinGame.vue';
-  import BdoPage from './BdoPage.vue';
+  import Game from './Game.vue';
+  import JoinGame from './JoinGame.vue';
+  import Page from './Page.vue';
   import GameSessionControls from './GameSessionControls.vue';
 
   export default {
@@ -82,9 +82,9 @@
       },
     },
     components: {
-      BdoGame,
-      BdoJoinGame,
-      BdoPage,
+      Game,
+      JoinGame,
+      Page,
       GameSessionControls,
     },
   };

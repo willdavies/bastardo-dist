@@ -8,9 +8,9 @@
     >
       <div class="card-corner-label">
         <span class="card-value">{{card.label}}</span>
-        <BdoCardSymbol
+        <CardSymbol
           v-bind:suit="card.suit"
-        ></BdoCardSymbol>
+        ></CardSymbol>
       </div>
       <span class="card-value card-value-main">{{card.label}}</span>    
     </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import BdoCardSymbol from './BdoCardSymbol.vue';
+  import CardSymbol from './CardSymbol.vue';
 
   export default {
     props: {
@@ -32,7 +32,7 @@
       },
     },
     components: {
-      BdoCardSymbol,
+      CardSymbol,
     },
     methods: {
       getSuitClass: function(){

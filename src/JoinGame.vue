@@ -1,5 +1,5 @@
 <template>
-  <BdoPage>
+  <Page>
     <template v-slot:title>
       Join session {{ gameSession.id }}
     </template>
@@ -28,7 +28,7 @@
                 taken: getColorOccupant(color) !== null,
               }"
             >
-              <BdoAvatar v-bind:color="color"></BdoAvatar>
+              <Avatar v-bind:color="color"></Avatar>
 
               <div class="seat-occupant"
                 v-if="getColorOccupant(color) != null"
@@ -69,12 +69,12 @@
         </button>
       </div>
     </template>
-  </BdoPage>
+  </Page>
 </template>
 
 <script>
-  import BdoAvatar from './BdoAvatar.vue';
-  import BdoPage from './BdoPage.vue';
+  import Avatar from './Avatar.vue';
+  import Page from './Page.vue';
   import { eventBus } from './app'
 
   export default {
@@ -151,8 +151,8 @@
       },
     },
     components: {
-      BdoPage,
-      BdoAvatar,
+      Page,
+      Avatar,
     }
   };
 </script>

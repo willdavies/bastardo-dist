@@ -6,23 +6,23 @@
      >
       Deal hand
     </button>
-    <BdoCard
+    <Card
       v-for="card in cards"
       v-bind:card="card"
       v-bind:class="[(cardIsPlayable(card) ? '' : 'not-') + 'playable']"
       v-bind:key="card.id"
       v-on:cardClick="cardClickHandler"
-    ></BdoCard>
+    ></Card>
   </div>
 </template>
 
 <script>
-  import BdoCard from './BdoCard.vue';
+  import Card from './Card.vue';
 
   export default {
     props: ['cards', 'leadSuit'],
     components: {
-      BdoCard
+      Card
     },
     methods: {
       cardIsPlayable: function(card){

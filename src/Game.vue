@@ -1,7 +1,7 @@
 <template>
   <div id="bastardo-game">
     <div id="opponents">
-      <BdoOpponent
+      <Opponent
         v-for="seat in gameSession.seats"
         v-if="seat.player.id != player.id"
         v-bind:seat="seat"
@@ -10,35 +10,35 @@
         v-bind:isActive="seat.id == gameSession.activeSeatId"
         v-bind:isSessionLeader="seat.id == sessionLeaderId"
         v-bind:isRoundLeader="seat.id == roundLeaderId"
-      ></BdoOpponent>      
+      ></Opponent>      
     </div>
 
-    <BdoDojo
+    <Dojo
       v-bind:cards="gameSession.activeGame.activeRound.playedCards"
       v-bind:leadSuit="leadSuit"
-    ></BdoDojo>
+    ></Dojo>
 
-    <BdoHand
+    <Hand
       v-bind:cards="gameSession.playerHand"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="getSeatByPlayer(player).id == gameSession.activeSeatId"
       v-on:cardPlay="playCard"
-    ></BdoHand>
+    ></Hand>
 
-    <BdoSelectDealer
+    <SelectDealer
       v-if="gameSession.dealerSelector !== null"
       v-bind:dealerSelector="gameSession.dealerSelector"
       v-bind:player="player"
       v-on:dealCards="dealCards"
-    ></BdoSelectDealer>
+    ></SelectDealer>
   </div>
 </template>
 
 <script>
-  import BdoHand from './BdoHand.vue';
-  import BdoDojo from './BdoDojo.vue';
-  import BdoOpponent from './BdoOpponent.vue';
-  import BdoSelectDealer from './BdoSelectDealer.vue';
+  import Hand from './Hand.vue';
+  import Dojo from './Dojo.vue';
+  import Opponent from './Opponent.vue';
+  import SelectDealer from './SelectDealer.vue';
 
   export default {
     props: {
@@ -71,10 +71,10 @@
       },
     },
     components: {
-      BdoHand,
-      BdoDojo,
-      BdoOpponent,
-      BdoSelectDealer,
+      Hand,
+      Dojo,
+      Opponent,
+      SelectDealer,
     }
   };
 </script>

@@ -3,13 +3,13 @@
     class="opponent"
     v-bind:class="{active: isActive}"
   >
-    <BdoAvatar v-bind:color="seat.color"></BdoAvatar>
+    <Avatar v-bind:color="seat.color"></Avatar>
     <div class="opponent-hand">
       <div class="opponent-hand-cards clearfix">
-        <BdoCard
+        <Card
           v-for="n in seat.cardCount"
           v-bind:key="n"
-        ></BdoCard>        
+        ></Card>        
       </div>
     </div>
     <div class="opponent-placard">
@@ -30,8 +30,8 @@
 </template>
 
 <script>
-  import BdoAvatar from './BdoAvatar.vue';
-  import BdoCard from './BdoCard.vue';
+  import Avatar from './Avatar.vue';
+  import Card from './Card.vue';
 
   export default {
     props: {
@@ -54,8 +54,8 @@
       },
     },
     components: {
-      BdoAvatar,
-      BdoCard,
+      Avatar,
+      Card,
     }
   }
 </script>

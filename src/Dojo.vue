@@ -3,32 +3,32 @@
     <div id="suit-indicator"
       v-if="leadSuit !== null"
     >
-      <BdoCardSymbol
+      <CardSymbol
         v-bind:suit="leadSuit"
-      ></BdoCardSymbol>
+      ></CardSymbol>
     </div>
     <div id="dojo-cards-container" class="clearfix">
-      <BdoCard
+      <Card
         v-bind:card="card"
         v-bind:key="card.id" 
         v-for="card in cards"
         v-bind:class="{
           'card-leader': (cards.length != 1 && cardIsLeader(card))
         }"
-      ></BdoCard>
+      ></Card>
     </div>
   </div>
 </template>
 
 <script>
-  import BdoCard from './BdoCard.vue';
-  import BdoCardSymbol from './BdoCardSymbol.vue';
+  import Card from './Card.vue';
+  import CardSymbol from './CardSymbol.vue';
 
   export default {
     props: ['cards', 'leadSuit'],
     components: {
-      BdoCard,
-      BdoCardSymbol
+      Card,
+      CardSymbol
     },
     methods: {
       cardIsLeader: function(card){

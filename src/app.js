@@ -10,31 +10,31 @@ import WebSocketManager from './services/websocket-manager';
 Vue.use(WebSocketManager);
 
 // Import components
-import BdoWelcome from './BdoWelcome.vue';
-import BdoNewGame from './BdoNewGame.vue';
-import BdoNewPlayer from './BdoNewPlayer.vue';
-import BdoGameSession from './BdoGameSession.vue';
+import Welcome from './Welcome.vue';
+import NewGame from './NewGame.vue';
+import NewPlayer from './NewPlayer.vue';
+import GameSession from './GameSession.vue';
 
 const routes = [
     {
         name: 'home',
         path: '/',
-        component: BdoWelcome,
+        component: Welcome,
     },
     {
         name: 'newPlayer',
         path: '/new-player',
-        component: BdoNewPlayer,
+        component: NewPlayer,
     },
     {
         name: 'newGame',
         path: '/new-game',
-        component: BdoNewGame,
+        component: NewGame,
     },
     {
         name: 'gameSession',
         path: '/game-session/:id',
-        component: BdoGameSession,
+        component: GameSession,
     },
 ];
 

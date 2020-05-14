@@ -13,7 +13,7 @@
         <td>{{ card.player.firstName }}</td>
         <td v-bind:class="['deck-cut-result', card.suit]">
           {{ card.label }}
-          <BdoCardSymbol v-bind:suit="card.suit"></BdoCardSymbol>
+          <CardSymbol v-bind:suit="card.suit"></CardSymbol>
         </td>
       </tr>
     </table>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import BdoCardSymbol from './BdoCardSymbol.vue';
+  import CardSymbol from './CardSymbol.vue';
 
   export default {
     props: {
@@ -103,7 +103,7 @@
       },
     },
     components: {
-      BdoCardSymbol
+      CardSymbol
     }
   };
 </script>

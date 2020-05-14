@@ -7,10 +7,10 @@
     </div>
 
     <div v-else >
-      <BdoControls
+      <AppControls
         v-bind:activePlayer="activePlayer"
         v-bind:activeGameSession="activeGameSession"
-      ></BdoControls>
+      ></AppControls>
       <main>    
         <router-view
           v-bind:activePlayer="activePlayer"
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import BdoControls from './BdoControls.vue';
+  import AppControls from './AppControls.vue';
   import cookie from 'cookie';
   import { eventBus } from './app'
 
@@ -188,7 +188,7 @@
       });
     },
     components: {
-      BdoControls,
+      AppControls,
     }
   };
 </script>

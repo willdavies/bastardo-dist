@@ -1,5 +1,5 @@
 <template>
-  <BdoPage>
+  <Page>
     <template v-slot:title>
       New game
     </template>
@@ -22,11 +22,11 @@
         </p>
       </div>
     </template>
-  </BdoPage>
+  </Page>
 </template>
 
 <script>
-  import BdoPage from './BdoPage.vue';
+  import Page from './Page.vue';
   import { eventBus } from './app'
 
   export default {
@@ -63,7 +63,7 @@
       },
     },
     components: {
-      BdoPage
+      Page
     }
   };
 </script>
