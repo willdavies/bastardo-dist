@@ -1,9 +1,5 @@
 <template>
   <div id="bastardo-game">
-    <GameSessionControls
-      v-on:voteToAbort="voteToAbort"
-    ></GameSessionControls>
-
     <div id="opponents">
       <BdoOpponent
         v-for="seat in gameSession.seats"
@@ -43,7 +39,6 @@
   import BdoDojo from './BdoDojo.vue';
   import BdoOpponent from './BdoOpponent.vue';
   import BdoSelectDealer from './BdoSelectDealer.vue';
-  import GameSessionControls from './GameSessionControls.vue';
 
   export default {
     props: {
@@ -74,29 +69,12 @@
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
       },
-      voteToAbort: function() {
-        const agreed = confirm("Are you sure that you want this game session to end?");
-
-        if (agreed) {
-          this.$websocketManager.send({
-            destination: {
-              resource: 'GameSession',
-              action: 'voteToAbort',
-              id: this.gameSession.id,
-            },
-            payload: {
-              player: this.player.id,
-            },
-          });
-        }
-      },
     },
     components: {
       BdoHand,
       BdoDojo,
       BdoOpponent,
       BdoSelectDealer,
-      GameSessionControls,
     }
   };
 </script>

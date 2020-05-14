@@ -19,11 +19,16 @@
       v-bind:gameSessionUrl="getGameSessionUrl(true)"
     ></BdoJoinGame>
 
-    <BdoGame
-      v-else
-      v-bind:gameSession="activeGameSession"
-      v-bind:player="activePlayer"
-    ></BdoGame>
+    <div v-else>    
+      <GameSessionControls
+        v-on:voteToAbort="voteToAbort"
+      ></GameSessionControls>
+
+      <BdoGame
+        v-bind:gameSession="activeGameSession"
+        v-bind:player="activePlayer"
+      ></BdoGame>
+    </div>
   </div>
 </template>
 
@@ -31,6 +36,7 @@
   import BdoGame from './BdoGame.vue';
   import BdoJoinGame from './BdoJoinGame.vue';
   import BdoPage from './BdoPage.vue';
+  import GameSessionControls from './GameSessionControls.vue';
 
   export default {
     props: {
@@ -57,12 +63,29 @@
         const gameLink = this.$router.resolve({ name: 'gameSession', params: { id: this.activeGameSession.id } });
 
         return absolute ? location.origin + gameLink.href : gameLink.href;
-      }
+      },
+      voteToAbort: function() {
+        const agreed = confirm("Are you sure that you want this game session to end? The session will continue until a majority of players have agreed to end the session.");
+
+        if (agreed) {
+          this.$websocketManager.send({
+            destination: {
+              resource: 'GameSession',
+              action: 'voteToAbort',
+              id: this.activeGameSession.id,
+            },
+            payload: {
+              player: this.activePlayer.id,
+            },
+          });
+        }
+      },
     },
     components: {
       BdoGame,
       BdoJoinGame,
       BdoPage,
+      GameSessionControls,
     },
   };
 </script>
