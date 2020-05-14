@@ -211,6 +211,6 @@
   }
 
   main {
-    margin: 3em 1em 1em;
+    margin-top: 2em;
   }
 </style>
