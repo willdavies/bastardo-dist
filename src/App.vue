@@ -81,8 +81,9 @@
           && gameSession == null
         ) {
           // Check whether game session is being aborted
+          // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
           if (
-            this.activeGameSession.activeGame = null
+            this.activeGameSession.activeGame == null
             || this.activeGameSession.activeGame.isComplete == false
           ) {
             // Forward player to new game session
