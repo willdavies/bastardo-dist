@@ -63,10 +63,11 @@
         }
       },
       setActiveGameSession(gameSession){
-        console.log(gameSession);
+        console.log('setActiveGameSession', gameSession);
 
         if (
           this.activeGameSession !== null
+          && gameSession !== null
           && typeof gameSession.id !== 'undefined'
           && gameSession.id == this.activeGameSession.id
         ) {
@@ -75,6 +76,25 @@
             this.activeGameSession,
             gameSession
           );          
+        } else if (
+          this.activeGameSession !== null
+          && gameSession == null
+        ) {
+          // Check whether game session is being aborted
+          if (
+            this.activeGameSession.activeGame = null
+            || this.activeGameSession.activeGame.isComplete == false
+          ) {
+            // Forward player to new game session
+            this.$router.push(
+              { name: 'home' }
+            );
+
+            alert('Your game session has been aborted with the agreement of a majority of players.')
+          }
+
+          // Replace game session
+          this.activeGameSession = gameSession;
         } else {
           // Replace game session
           this.activeGameSession = gameSession;
