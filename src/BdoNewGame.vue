@@ -17,7 +17,7 @@
       >
         <p>You appear to have an active game already.</p>
         <p>
-          Why not <router-link :to="{ name: 'game', params: {id: activeGameSession.id} }">Active game</router-link> return to the game</p> and see how it goes?
+          Why not <router-link :to="{ name: 'gameSession', params: {id: activeGameSession.id} }">return to the game</router-link> and see how it goes?
         <p>
         </p>
       </div>
