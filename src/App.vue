@@ -63,7 +63,22 @@
         }
       },
       setActiveGameSession(gameSession){
-        this.activeGameSession = gameSession;
+        console.log(gameSession);
+
+        if (
+          this.activeGameSession !== null
+          && typeof gameSession.id !== 'undefined'
+          && gameSession.id == this.activeGameSession.id
+        ) {
+          // Merge in values from supplied game session Object
+          this.activeGameSession = Object.assign(
+            this.activeGameSession,
+            gameSession
+          );          
+        } else {
+          // Replace game session
+          this.activeGameSession = gameSession;
+        }
 
         if (gameSession !== null) {
           // Set/refresh cookie

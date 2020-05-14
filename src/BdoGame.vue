@@ -24,6 +24,13 @@
       v-bind:isActive="getSeatByPlayer(player).id == gameSession.activeSeatId"
       v-on:cardPlay="playCard"
     ></BdoHand>
+
+    <BdoSelectDealer
+      v-if="gameSession.dealerSelector !== null"
+      v-bind:dealerSelector="gameSession.dealerSelector"
+      v-bind:player="player"
+      v-on:dealCards="dealCards"
+    ></BdoSelectDealer>
   </div>
 </template>
 
@@ -31,6 +38,7 @@
   import BdoHand from './BdoHand.vue';
   import BdoDojo from './BdoDojo.vue';
   import BdoOpponent from './BdoOpponent.vue';
+  import BdoSelectDealer from './BdoSelectDealer.vue';
 
   export default {
     props: {
@@ -45,6 +53,9 @@
       }
     },
     methods: {
+      dealCards: function(){
+        alert('dealing cards', arguments);
+      },
       playCard: function(card){
         console.log('playCard:', card);
       },
@@ -52,12 +63,18 @@
         const seatIndex = this.gameSession.seats.map(seat => seat.player.id).indexOf(player.id);
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
-      }
+      },
+      getSeatById: function(id) {
+        const seatIndex = this.gameSession.seats.map(seat => seat.id).indexOf(id);
+
+        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+      },
     },
     components: {
       BdoHand,
       BdoDojo,
       BdoOpponent,
+      BdoSelectDealer,
     }
   };
 </script>
