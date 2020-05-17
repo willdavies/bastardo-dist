@@ -89,10 +89,9 @@
         });
       },
       getSeatByPlayer: function(player) {
-        console.log('getSeatByPlayer:', player);
-        const seatIndex = this.dealerSelector.candidateSeats.map(seat => seat.player.id).indexOf(player.id);
-
-        console.log(seatIndex);
+        const seatIndex = this.dealerSelector.candidateSeats
+          .map(seat => seat.player.id)
+          .indexOf(player.id);
 
         return seatIndex !== -1 ? this.dealerSelector.candidateSeats[seatIndex] : null;
       },
