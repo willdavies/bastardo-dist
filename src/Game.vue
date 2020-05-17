@@ -14,6 +14,7 @@
     </div>
 
     <Dojo
+      v-if="gameSession.activeGame !== null && gameSession.activeGame.activeRound !== null"
       v-bind:cards="gameSession.activeGame.activeRound.playedCards"
       v-bind:leadSuit="leadSuit"
     ></Dojo>
@@ -54,7 +55,16 @@
     },
     methods: {
       dealCards: function(){
-        alert('dealing cards', arguments);
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.gameSession.id,
+            action: 'startNewRound',
+          },
+          payload: {
+            player: this.player.id,
+          }
+        })
       },
       playCard: function(card){
         console.log('playCard:', card);
