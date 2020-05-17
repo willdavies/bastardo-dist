@@ -1,11 +1,11 @@
 <template>
   <Page>
     <template v-slot:title>
-      Join session {{ gameSession.id }}
+      Join session {{ gameState.session.id }}
     </template>
 
     <template v-slot:content>
-      <div v-if="gameSession === null">
+      <div v-if="gameState === null">
         Retrieving game session&hellip;
       </div>
 
@@ -21,7 +21,7 @@
         >
           <div id="avatars">
             <label class="avatar-option"
-              v-for="color in gameSession.seatColors"
+              v-for="color in gameState.session.seatColors"
               v-bind:for="'avatar-' + color" 
               v-bind:class="{
                 selected: (selectedColor == color),
@@ -80,7 +80,7 @@
   export default {
     props: {
       activePlayer: Object,
-      gameSession: Object,
+      gameState: Object,
       gameSessionUrl: String,
     },
     data: function(){
@@ -94,7 +94,7 @@
         this.$websocketManager.send({
           destination: {
             resource: 'GameSession',
-            id: this.gameSession.id,
+            id: this.gameState.session.id,
             action: 'join',
           },
           payload: {
@@ -104,24 +104,24 @@
         })
       },
       getUserSeat: function(){
-        let userSeatIndex = this.gameSession.seats
+        let userSeatIndex = this.gameState.session.seats
           .map(seat => seat.player.id)
           .indexOf(this.activePlayer.id);
 
-        return userSeatIndex !== -1 ? this.gameSession.seats[userSeatIndex] : null;
+        return userSeatIndex !== -1 ? this.gameState.session.seats[userSeatIndex] : null;
       },
       getColorOccupant: function(color){
-        let seatIndex = this.gameSession.seats
+        let seatIndex = this.gameState.session.seats
           .map(seat => seat.color)
           .indexOf(color);
 
-        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
       },
       unWatchGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
           destination: {
             resource: 'GameSession',
-            id: this.gameSession.id,
+            id: this.gameState.session.id,
             action: 'unWatch',
           },
           payload: {
@@ -132,7 +132,7 @@
           if (response.payload.gameSession === null) {
             this.$router.push({ name: 'home' });
 
-            eventBus.$emit('clear.activeGameSession', response);
+            eventBus.$emit('clear.gameState', response);
           }
         })
         .catch(response => console.error(response))

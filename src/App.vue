@@ -9,12 +9,12 @@
     <div v-else >
       <AppControls
         v-bind:activePlayer="activePlayer"
-        v-bind:activeGameSession="activeGameSession"
+        v-bind:gameState="gameState"
       ></AppControls>
       <main>    
         <router-view
           v-bind:activePlayer="activePlayer"
-          v-bind:activeGameSession="activeGameSession"
+          v-bind:gameState="gameState"
         ></router-view>
       </main>
     </div>
@@ -31,7 +31,7 @@
       return {
         connected: false,
         activePlayer: null,
-        activeGameSession: null,
+        gameState: null,
       }
     },
     methods: {
@@ -62,67 +62,95 @@
           );          
         }
       },
-      setActiveGameSession(gameSession){
-        console.log('setActiveGameSession', gameSession);
+      updateGameState(gameData){
+        console.log('updateGameState', gameData);
 
+        // Check whether game state needs to be set up
         if (
-          this.activeGameSession !== null
-          && gameSession !== null
-          && typeof gameSession.id !== 'undefined'
-          && gameSession.id == this.activeGameSession.id
+          this.gameState === null
+          && typeof gameData.gameSession != 'undefined'
         ) {
-          // Merge in values from supplied game session Object
-          this.activeGameSession = Object.assign(
-            this.activeGameSession,
-            gameSession
-          );          
-        } else if (
-          this.activeGameSession !== null
-          && gameSession == null
-        ) {
-          // Check whether game session is being aborted
-          // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
-          if (
-            this.activeGameSession.activeGame == null
-            || this.activeGameSession.activeGame.isComplete == false
-          ) {
-            // Forward player to new game session
-            this.$router.push(
-              { name: 'home' }
-            );
-
-            alert('Your game session has been aborted with the agreement of a majority of players.')
-          }
-
-          // Replace game session
-          this.activeGameSession = gameSession;
-        } else {
-          // Replace game session
-          this.activeGameSession = gameSession;
+          // New game session is being set - create basic structure
+          this.gameState = {
+            session: null,
+            playerHands: null,
+          };
         }
 
-        if (gameSession !== null) {
-          // Set/refresh cookie
-          document.cookie = cookie.serialize(
-            process.env.GAME_SESSION_COOKIE_NAME,
-            gameSession.id,
-            {
-              sameSite: true,
-              maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
-              path: '/',
+        // Check for game session
+        if (typeof gameData.gameSession !== 'undefined') {
+          // Update game state session
+          const gameSession = gameData.gameSession;
+
+          if (
+            this.gameState.session !== null
+            && gameSession !== null
+            && typeof gameSession.id !== 'undefined'
+            && gameSession.id == this.gameState.session.id
+          ) {
+            // Merge in values from supplied game session Object
+            this.gameState.session = Object.assign(
+              this.gameState.session,
+              gameSession
+            );          
+          } else if (
+            this.gameState.session !== null
+            && gameSession == null
+          ) {
+            // Check whether game session is being aborted
+            // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
+            if (
+              this.gameState.session.activeGame == null
+              || this.gameState.session.activeGame.isComplete == false
+            ) {
+              // Forward player to new game session
+              this.$router.push(
+                { name: 'home' }
+              );
+
+              alert('Your game session has been aborted with the agreement of a majority of players.')
             }
-          );          
-        } else {
-          // Delete cookie
-          document.cookie = cookie.serialize(
-            process.env.GAME_SESSION_COOKIE_NAME,
-            null,
-            {
-              sameSite: true,
-              expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
-              path: '/',
-            }
-          );          
+
+            // Replace game session
+            this.gameState = null;
+          } else {
+            // Replace game session
+            this.gameState.session = gameSession;
+          }
+
+          if (gameSession !== null) {
+            // Set/refresh cookie
+            document.cookie = cookie.serialize(
+              process.env.GAME_SESSION_COOKIE_NAME,
+              gameSession.id,
+              {
+                sameSite: true,
+                maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+                path: '/',
+              }
+            );          
+          } else {
+            // Delete cookie
+            document.cookie = cookie.serialize(
+              process.env.GAME_SESSION_COOKIE_NAME,
+              null,
+              {
+                sameSite: true,
+                expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
+                path: '/',
+              }
+            );          
+          }
+        }
+
+        // Check for player hands
+        if (
+          typeof this.gameState.session !== 'undefined'
+          && typeof gameData.playerHands !== 'undefined'
+          && Array.isArray(gameData.playerHands)
+        ) {
+          // Store player hands
+          this.gameState.playerHands = gameData.playerHands;
         }
       },
     },
@@ -136,7 +164,7 @@
 
         // Check for player
         if (cookies[process.env.PLAYER_COOKIE_NAME]) {
-          // Get active player
+          // Get player
           this.$websocketManager.send({
             destination: {
               resource: 'App',
@@ -148,9 +176,9 @@
           })
         }
 
-        // Check for gameSession
+        // Check for game session ID in cookie
         if (cookies[process.env.GAME_SESSION_COOKIE_NAME]) {
-          // Get active player
+          // Get game session
           this.$websocketManager.send({
             destination: {
               resource: 'App',
@@ -163,8 +191,8 @@
         }
       }.bind(this));
 
-      eventBus.$on('update.activePlayer', (message) => {
-        console.log('update.activePlayer', message);
+      eventBus.$on('update.player', (message) => {
+        console.log('update.player', message);
 
         this.setActivePlayer(message.payload.player);
       });
@@ -175,16 +203,16 @@
         this.setActivePlayer(null);
       });
 
-      eventBus.$on('update.activeGameSession', (message) => {
-        console.log('update.activeGameSession', message);
+      eventBus.$on('update.gameState', (message) => {
+        console.log('update.gameState', message);
 
-        this.setActiveGameSession(message.payload.gameSession);
+        this.updateGameState(message.payload);
       });
 
-      eventBus.$on('clear.activeGameSession', (message) => {
-        console.log('clear.activeGameSession', message);
+      eventBus.$on('clear.gameState', (message) => {
+        console.log('clear.gameState', message);
 
-        this.setActiveGameSession(null);
+        this.updateGameState(null);
       });
     },
     components: {

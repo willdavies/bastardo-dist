@@ -7,8 +7,8 @@
       <li v-if="activePlayer === null ">
         <router-link :to="{ name: 'newPlayer' }">Register to play</router-link>
       </li>
-      <li v-else-if="activeGameSession !== null">
-        <router-link :to="{ name: 'gameSession', params: {id: activeGameSession.id} }">Active game</router-link>
+      <li v-else-if="gameState !== null">
+        <router-link :to="{ name: 'gameSession', params: { id: gameState.session.id } }">Active game</router-link>
       </li>
       <li v-else>
         <router-link :to="{ name: 'newGame' }">New Game</router-link>
@@ -21,7 +21,7 @@
   export default {
     props: {
       activePlayer: Object,
-      activeGameSession: Object,
+      gameState: Object,
     },
   };
 </script>

@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <div
-        v-if="activeGameSession == null"
+        v-if="gameState == null"
       >
         <p>To start a new game, click the button below</p>
         <button
@@ -17,7 +17,7 @@
       >
         <p>You appear to have an active game already.</p>
         <p>
-          Why not <router-link :to="{ name: 'gameSession', params: {id: activeGameSession.id} }">return to the game</router-link> and see how it goes?
+          Why not <router-link :to="{ name: 'gameSession', params: { id: gameState.session.id } }">return to the game</router-link> and see how it goes?
         <p>
         </p>
       </div>
@@ -32,7 +32,7 @@
   export default {
     props: {
       activePlayer: Object,
-      activeGameSession: Object,
+      gameState: Object,
     },
     data: function(){
       return {
@@ -49,7 +49,7 @@
           },
         })
         .then(response => {
-          eventBus.$emit('update.activeGameSession', response);
+          eventBus.$emit('update.gameState', response);
 
           // Forward player to new game session
           this.$router.push(

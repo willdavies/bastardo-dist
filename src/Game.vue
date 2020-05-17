@@ -2,33 +2,33 @@
   <div id="bastardo-game">
     <div id="opponents">
       <Opponent
-        v-for="seat in gameSession.seats"
+        v-for="seat in gameState.session.seats"
         v-if="seat.player.id != player.id"
         v-bind:seat="seat"
         v-bind:key="seat.id"
-        v-bind:isDealer="seat.id == gameSession.dealerSeatId"
-        v-bind:isActive="seat.id == gameSession.activeSeatId"
+        v-bind:isDealer="seat.id == gameState.session.dealerSeatId"
+        v-bind:isActive="seat.id == gameState.session.activeSeatId"
         v-bind:isSessionLeader="seat.id == sessionLeaderId"
         v-bind:isRoundLeader="seat.id == roundLeaderId"
       ></Opponent>      
     </div>
 
     <Dojo
-      v-if="gameSession.activeGame !== null && gameSession.activeGame.activeRound !== null"
-      v-bind:cards="gameSession.activeGame.activeRound.playedCards"
+      v-if="gameState.session.activeGame !== null && gameState.session.activeGame.activeRound !== null"
+      v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
       v-bind:leadSuit="leadSuit"
     ></Dojo>
 
     <Hand
-      v-bind:cards="gameSession.playerHand"
+      v-bind:cards="gameState.session.playerHand"
       v-bind:leadSuit="leadSuit"
-      v-bind:isActive="getSeatByPlayer(player).id == gameSession.activeSeatId"
+      v-bind:isActive="getSeatByPlayer(player).id == gameState.session.activeSeatId"
       v-on:cardPlay="playCard"
     ></Hand>
 
     <SelectDealer
-      v-if="gameSession.dealerSelector !== null"
-      v-bind:dealerSelector="gameSession.dealerSelector"
+      v-if="gameState.session.dealerSelector !== null"
+      v-bind:dealerSelector="gameState.session.dealerSelector"
       v-bind:player="player"
       v-on:dealCards="dealCards"
     ></SelectDealer>
@@ -43,7 +43,7 @@
 
   export default {
     props: {
-      gameSession: Object,
+      gameState: Object,
       player: Object,
     },
     data: function(){
@@ -58,7 +58,7 @@
         this.$websocketManager.send({
           destination: {
             resource: 'GameSession',
-            id: this.gameSession.id,
+            id: this.gameState.session.id,
             action: 'startNewRound',
           },
           payload: {
@@ -70,14 +70,14 @@
         console.log('playCard:', card);
       },
       getSeatByPlayer: function(player) {
-        const seatIndex = this.gameSession.seats.map(seat => seat.player.id).indexOf(player.id);
+        const seatIndex = this.gameState.session.seats.map(seat => seat.player.id).indexOf(player.id);
 
-        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
       },
       getSeatById: function(id) {
-        const seatIndex = this.gameSession.seats.map(seat => seat.id).indexOf(id);
+        const seatIndex = this.gameState.session.seats.map(seat => seat.id).indexOf(id);
 
-        return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
+        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
       },
     },
     components: {
