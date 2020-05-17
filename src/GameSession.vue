@@ -17,6 +17,7 @@
       v-bind:activePlayer="activePlayer"
       v-bind:gameSession="activeGameSession"
       v-bind:gameSessionUrl="getGameSessionUrl(true)"
+      v-on:voteToStartGame="voteToStartGame"
     ></JoinGame>
 
     <div v-else>    
@@ -63,6 +64,18 @@
         const gameLink = this.$router.resolve({ name: 'gameSession', params: { id: this.activeGameSession.id } });
 
         return absolute ? location.origin + gameLink.href : gameLink.href;
+      },
+      voteToStartGame: function(){
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.activeGameSession.id,
+            action: 'voteToStartGame',
+          },
+          payload: {
+            player: this.activePlayer.id,
+          }
+        })
       },
       voteToAbort: function() {
         const agreed = confirm("Are you sure that you want this game session to end? The session will continue until a majority of players have agreed to end the session.");

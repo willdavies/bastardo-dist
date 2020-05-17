@@ -56,7 +56,7 @@
 
         <button
           v-if="getUserSeat() !== null"
-          v-on:click="signalReadinessToStart"
+          v-on:click="$emit('voteToStartGame')"
         >
           I'm ready to start playing!
         </button>
@@ -116,18 +116,6 @@
           .indexOf(color);
 
         return seatIndex !== -1 ? this.gameSession.seats[seatIndex] : null;
-      },
-      signalReadinessToStart: function(){
-        this.$websocketManager.send({
-          destination: {
-            resource: 'GameSession',
-            id: this.gameSession.id,
-            action: 'voteToStart',
-          },
-          payload: {
-            player: this.activePlayer.id,
-          }
-        })
       },
       unWatchGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({
