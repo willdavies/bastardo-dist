@@ -1,9 +1,15 @@
 <template>
   <div id="bastardo-app">
     <div
-      v-if="connected === false"
+      v-if="appConnected === false"
     >
       Connecting&hellip;
+    </div>
+
+    <div
+      v-else-if="appBootstrapped === false"
+    >
+      Fetching game and player data&hellip;
     </div>
 
     <div v-else >
@@ -29,7 +35,8 @@
   export default {
     data: function(){
       return {
-        connected: false,
+        appConnected: false,
+        appBootstrapped: false,
         activePlayer: null,
         gameState: null,
       }
@@ -153,48 +160,96 @@
           this.gameState.playerHands = gameData.playerHands;
         }
       },
+      bootstrapApp(){
+        this.bootstrapPlayer().then((player) => {
+          if (player !== null) {
+            this.setActivePlayer(player);
+            return this.bootstrapGame();              
+          } else {
+            return Promise.resolve(null);
+          }
+        }).then((gameState) => {
+          if (gameState !== null) {
+            this.updateGameState(gameState);
+          }
+
+          this.appBootstrapped = true;
+        }).catch(message => {
+          console.error(message);
+        });
+      },
+      bootstrapPlayer(){
+        return new Promise((resolve, reject) => {
+          // Check cookies
+          const cookies = cookie.parse(document.cookie);
+
+          // Check for player
+          if (cookies[process.env.PLAYER_COOKIE_NAME]) {
+            // Get player
+            this.$websocketManager.sendAndAwaitResponse({
+              destination: {
+                resource: 'App',
+                action: 'getPlayer',
+              },
+              payload: {
+                id: cookies[process.env.PLAYER_COOKIE_NAME],
+              }
+            }).then((message) => {
+              resolve(message.payload.player);
+            }).catch((message) => {
+              console.error(message);
+              resolve(null);
+            });
+          } else {
+            // No need to fetch player, resolve promise
+            console.log('resolving bootstrapPlayer - no cookie');
+            resolve(null);
+          }
+        });
+      },
+      bootstrapGame(){
+        return new Promise((resolve, reject) => {
+          // Check cookies
+          const cookies = cookie.parse(document.cookie);
+
+          // Check for game session ID in cookie
+          if (
+            cookies[process.env.GAME_SESSION_COOKIE_NAME]
+          ) {
+            // Get game session
+            this.$websocketManager.sendAndAwaitResponse({
+              destination: {
+                resource: 'App',
+                action: 'getGameSession',
+              },
+              payload: {
+                id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
+                player: this.activePlayer.id,
+              }
+            }).then((message) => {
+              resolve(message.payload);
+            }).catch((message) => {
+              resolve(null)
+            });
+          } else {
+            // No need to fetch game, resolve promise
+            resolve(null);
+          }
+        });
+      },
     },
     beforeCreate: function(){
       eventBus.$on('connectionOpen', function(event){
-        // Set connectied flag to trigger render
-        this.connected = true
+        // Set connected flag to allow render
+        this.appConnected = true;
 
-        // Check cookies
-        const cookies = cookie.parse(document.cookie);
-
-        // Check for player
-        if (cookies[process.env.PLAYER_COOKIE_NAME]) {
-          // Get player
-          this.$websocketManager.send({
-            destination: {
-              resource: 'App',
-              action: 'getPlayer',
-            },
-            payload: {
-              id: cookies[process.env.PLAYER_COOKIE_NAME],
-            }
-          })
-        }
-
-        // Check for game session ID in cookie
-        if (cookies[process.env.GAME_SESSION_COOKIE_NAME]) {
-          // Get game session
-          this.$websocketManager.send({
-            destination: {
-              resource: 'App',
-              action: 'getGameSession',
-            },
-            payload: {
-              id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
-            }
-          })
-        }
+        this.bootstrapApp();
       }.bind(this));
 
-      eventBus.$on('update.player', (message) => {
-        console.log('update.player', message);
+      eventBus.$on('update.player', (player) => {
+        console.log('update.player', player);
 
-        this.setActivePlayer(message.payload.player);
+        this.setActivePlayer(player);
       });
 
       eventBus.$on('clear.activePlayer', (message) => {
