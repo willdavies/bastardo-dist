@@ -153,8 +153,7 @@
         // Check for player hands
         if (
           typeof this.gameState.session !== 'undefined'
-          && typeof gameData.playerHands !== 'undefined'
-          && Array.isArray(gameData.playerHands)
+          && typeof gameData.playerHands === 'object'
         ) {
           // Store player hands
           this.gameState.playerHands = gameData.playerHands;
@@ -259,8 +258,6 @@
       });
 
       eventBus.$on('update.gameState', (message) => {
-        console.log('update.gameState', message);
-
         this.updateGameState(message.payload);
       });
 
