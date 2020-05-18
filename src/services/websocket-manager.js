@@ -1,3 +1,4 @@
+import Case from 'case'
 import Vue from 'vue'
 import { eventBus } from '../app'
 
@@ -121,7 +122,7 @@ const WebSocketManager = {
     } else {
       console.log('message has no requestId', message);
       // Emit message as event
-      eventBus.$emit('update.active' + message.updateScope, message);
+      eventBus.$emit('update.' + Case.camel(message.updateScope), message);
     }
   },
 }

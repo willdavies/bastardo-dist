@@ -1,20 +1,26 @@
 <template>
   <div id="bastardo-app">
     <div
-      v-if="connected === false"
+      v-if="appConnected === false"
     >
       Connecting&hellip;
+    </div>
+
+    <div
+      v-else-if="appBootstrapped === false"
+    >
+      Fetching game and player data&hellip;
     </div>
 
     <div v-else >
       <AppControls
         v-bind:activePlayer="activePlayer"
-        v-bind:activeGameSession="activeGameSession"
+        v-bind:gameState="gameState"
       ></AppControls>
       <main>    
         <router-view
           v-bind:activePlayer="activePlayer"
-          v-bind:activeGameSession="activeGameSession"
+          v-bind:gameState="gameState"
         ></router-view>
       </main>
     </div>
@@ -29,9 +35,10 @@
   export default {
     data: function(){
       return {
-        connected: false,
+        appConnected: false,
+        appBootstrapped: false,
         activePlayer: null,
-        activeGameSession: null,
+        gameState: null,
       }
     },
     methods: {
@@ -62,111 +69,186 @@
           );          
         }
       },
-      setActiveGameSession(gameSession){
-        console.log('setActiveGameSession', gameSession);
+      updateGameState(gameData){
+        console.log('updateGameState', gameData);
 
+        // Check whether game state needs to be set up
         if (
-          this.activeGameSession !== null
-          && gameSession !== null
-          && typeof gameSession.id !== 'undefined'
-          && gameSession.id == this.activeGameSession.id
+          this.gameState === null
+          && typeof gameData.gameSession != 'undefined'
         ) {
-          // Merge in values from supplied game session Object
-          this.activeGameSession = Object.assign(
-            this.activeGameSession,
-            gameSession
-          );          
-        } else if (
-          this.activeGameSession !== null
-          && gameSession == null
-        ) {
-          // Check whether game session is being aborted
-          // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
-          if (
-            this.activeGameSession.activeGame == null
-            || this.activeGameSession.activeGame.isComplete == false
-          ) {
-            // Forward player to new game session
-            this.$router.push(
-              { name: 'home' }
-            );
+          // New game session is being set - create basic structure
+          this.gameState = {
+            session: null,
+            playerHands: null,
+          };
+        }
 
-            alert('Your game session has been aborted with the agreement of a majority of players.')
+        // Check for game session
+        if (typeof gameData.gameSession !== 'undefined') {
+          // Update game state session
+          const gameSession = gameData.gameSession;
+
+          if (
+            this.gameState.session !== null
+            && gameSession !== null
+            && typeof gameSession.id !== 'undefined'
+            && gameSession.id == this.gameState.session.id
+          ) {
+            // Merge in values from supplied game session Object
+            this.gameState.session = Object.assign(
+              this.gameState.session,
+              gameSession
+            );          
+          } else if (
+            this.gameState.session !== null
+            && gameSession == null
+          ) {
+            // Check whether game session is being aborted
+            // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
+            if (
+              this.gameState.session.activeGame == null
+              || this.gameState.session.activeGame.isComplete == false
+            ) {
+              // Forward player to new game session
+              this.$router.push(
+                { name: 'home' }
+              );
+
+              alert('Your game session has been aborted with the agreement of a majority of players.')
+            }
+
+            // Replace game session
+            this.gameState = null;
+          } else {
+            // Replace game session
+            this.gameState.session = gameSession;
           }
 
-          // Replace game session
-          this.activeGameSession = gameSession;
-        } else {
-          // Replace game session
-          this.activeGameSession = gameSession;
+          if (gameSession !== null) {
+            // Set/refresh cookie
+            document.cookie = cookie.serialize(
+              process.env.GAME_SESSION_COOKIE_NAME,
+              gameSession.id,
+              {
+                sameSite: true,
+                maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+                path: '/',
+              }
+            );          
+          } else {
+            // Delete cookie
+            document.cookie = cookie.serialize(
+              process.env.GAME_SESSION_COOKIE_NAME,
+              null,
+              {
+                sameSite: true,
+                expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
+                path: '/',
+              }
+            );          
+          }
         }
 
-        if (gameSession !== null) {
-          // Set/refresh cookie
-          document.cookie = cookie.serialize(
-            process.env.GAME_SESSION_COOKIE_NAME,
-            gameSession.id,
-            {
-              sameSite: true,
-              maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
-              path: '/',
-            }
-          );          
-        } else {
-          // Delete cookie
-          document.cookie = cookie.serialize(
-            process.env.GAME_SESSION_COOKIE_NAME,
-            null,
-            {
-              sameSite: true,
-              expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
-              path: '/',
-            }
-          );          
+        // Check for player hands
+        if (
+          typeof this.gameState.session !== 'undefined'
+          && typeof gameData.playerHands === 'object'
+        ) {
+          // Store player hands
+          this.gameState.playerHands = gameData.playerHands;
         }
+      },
+      bootstrapApp(){
+        this.bootstrapPlayer().then((player) => {
+          if (player !== null) {
+            this.setActivePlayer(player);
+            return this.bootstrapGame();              
+          } else {
+            return Promise.resolve(null);
+          }
+        }).then((gameState) => {
+          if (gameState !== null) {
+            this.updateGameState(gameState);
+          }
+
+          this.appBootstrapped = true;
+        }).catch(message => {
+          console.error(message);
+        });
+      },
+      bootstrapPlayer(){
+        return new Promise((resolve, reject) => {
+          // Check cookies
+          const cookies = cookie.parse(document.cookie);
+
+          // Check for player
+          if (cookies[process.env.PLAYER_COOKIE_NAME]) {
+            // Get player
+            this.$websocketManager.sendAndAwaitResponse({
+              destination: {
+                resource: 'App',
+                action: 'getPlayer',
+              },
+              payload: {
+                id: cookies[process.env.PLAYER_COOKIE_NAME],
+              }
+            }).then((message) => {
+              resolve(message.payload.player);
+            }).catch((message) => {
+              console.error(message);
+              resolve(null);
+            });
+          } else {
+            // No need to fetch player, resolve promise
+            console.log('resolving bootstrapPlayer - no cookie');
+            resolve(null);
+          }
+        });
+      },
+      bootstrapGame(){
+        return new Promise((resolve, reject) => {
+          // Check cookies
+          const cookies = cookie.parse(document.cookie);
+
+          // Check for game session ID in cookie
+          if (
+            cookies[process.env.GAME_SESSION_COOKIE_NAME]
+          ) {
+            // Get game session
+            this.$websocketManager.sendAndAwaitResponse({
+              destination: {
+                resource: 'App',
+                action: 'getGameSession',
+              },
+              payload: {
+                id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
+                player: this.activePlayer.id,
+              }
+            }).then((message) => {
+              resolve(message.payload);
+            }).catch((message) => {
+              resolve(null)
+            });
+          } else {
+            // No need to fetch game, resolve promise
+            resolve(null);
+          }
+        });
       },
     },
     beforeCreate: function(){
       eventBus.$on('connectionOpen', function(event){
-        // Set connectied flag to trigger render
-        this.connected = true
+        // Set connected flag to allow render
+        this.appConnected = true;
 
-        // Check cookies
-        const cookies = cookie.parse(document.cookie);
-
-        // Check for player
-        if (cookies[process.env.PLAYER_COOKIE_NAME]) {
-          // Get active player
-          this.$websocketManager.send({
-            destination: {
-              resource: 'App',
-              action: 'getPlayer',
-            },
-            payload: {
-              id: cookies[process.env.PLAYER_COOKIE_NAME],
-            }
-          })
-        }
-
-        // Check for gameSession
-        if (cookies[process.env.GAME_SESSION_COOKIE_NAME]) {
-          // Get active player
-          this.$websocketManager.send({
-            destination: {
-              resource: 'App',
-              action: 'getGameSession',
-            },
-            payload: {
-              id: cookies[process.env.GAME_SESSION_COOKIE_NAME],
-            }
-          })
-        }
+        this.bootstrapApp();
       }.bind(this));
 
-      eventBus.$on('update.activePlayer', (message) => {
-        console.log('update.activePlayer', message);
+      eventBus.$on('update.player', (player) => {
+        console.log('update.player', player);
 
-        this.setActivePlayer(message.payload.player);
+        this.setActivePlayer(player);
       });
 
       eventBus.$on('clear.activePlayer', (message) => {
@@ -175,16 +257,14 @@
         this.setActivePlayer(null);
       });
 
-      eventBus.$on('update.activeGameSession', (message) => {
-        console.log('update.activeGameSession', message);
-
-        this.setActiveGameSession(message.payload.gameSession);
+      eventBus.$on('update.gameState', (message) => {
+        this.updateGameState(message.payload);
       });
 
-      eventBus.$on('clear.activeGameSession', (message) => {
-        console.log('clear.activeGameSession', message);
+      eventBus.$on('clear.gameState', (message) => {
+        console.log('clear.gameState', message);
 
-        this.setActiveGameSession(null);
+        this.updateGameState(null);
       });
     },
     components: {

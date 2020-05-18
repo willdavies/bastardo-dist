@@ -1,7 +1,7 @@
 <template>
   <div id="bastardo-game-session">
     <Page
-      v-if="activeGameSession === null"
+      v-if="gameState === null"
     >
       <template v-slot:title>
         No active game session
@@ -13,10 +13,11 @@
     </Page>
 
     <JoinGame
-      v-else-if="activeGameSession.isOpen === true"
+      v-else-if="gameState.session.isOpen === true"
       v-bind:activePlayer="activePlayer"
-      v-bind:gameSession="activeGameSession"
+      v-bind:gameState="gameState"
       v-bind:gameSessionUrl="getGameSessionUrl(true)"
+      v-on:voteToStartGame="voteToStartGame"
     ></JoinGame>
 
     <div v-else>    
@@ -25,7 +26,7 @@
       ></GameSessionControls>
 
       <Game
-        v-bind:gameSession="activeGameSession"
+        v-bind:gameState="gameState"
         v-bind:player="activePlayer"
       ></Game>
     </div>
@@ -41,11 +42,16 @@
   export default {
     props: {
       activePlayer: Object,
-      activeGameSession: Object,
+      gameState: Object,
     },
     created: function() {
+      // Check for player
+      if (this.activePlayer == null) {
+        this.$router.push({ name: 'newPlayer' });
+      }
+
       // Check for active game session
-      if (this.activeGameSession === null) {
+      if (this.gameState === null) {
         // Retrieve game session
         this.$websocketManager.send({
           destination: {
@@ -54,15 +60,28 @@
           },
           payload: {
             id: this.$route.params.id,
+            player: this.activePlayer.id
           },
         })
       }
     },
     methods: {
       getGameSessionUrl: function(absolute = false){
-        const gameLink = this.$router.resolve({ name: 'gameSession', params: { id: this.activeGameSession.id } });
+        const gameLink = this.$router.resolve({ name: 'gameSession', params: { id: this.gameState.session.id } });
 
         return absolute ? location.origin + gameLink.href : gameLink.href;
+      },
+      voteToStartGame: function(){
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.gameState.session.id,
+            action: 'voteToStartGame',
+          },
+          payload: {
+            player: this.activePlayer.id,
+          }
+        })
       },
       voteToAbort: function() {
         const agreed = confirm("Are you sure that you want this game session to end? The session will continue until a majority of players have agreed to end the session.");
@@ -72,7 +91,7 @@
             destination: {
               resource: 'GameSession',
               action: 'voteToAbort',
-              id: this.activeGameSession.id,
+              id: this.gameState.session.id,
             },
             payload: {
               player: this.activePlayer.id,
