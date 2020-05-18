@@ -45,6 +45,11 @@
       gameState: Object,
     },
     created: function() {
+      // Check for player
+      if (this.activePlayer == null) {
+        this.$router.push({ name: 'newPlayer' });
+      }
+
       // Check for active game session
       if (this.gameState === null) {
         // Retrieve game session
@@ -55,6 +60,7 @@
           },
           payload: {
             id: this.$route.params.id,
+            player: this.activePlayer.id
           },
         })
       }
