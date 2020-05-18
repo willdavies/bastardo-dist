@@ -5,9 +5,12 @@
   >
     <Avatar v-bind:color="seat.color"></Avatar>
     <div class="opponent-hand">
-      <div class="opponent-hand-cards clearfix">
+      <div
+        v-if="hand !== null"
+        class="opponent-hand-cards clearfix"
+      >
         <Card
-          v-for="n in seat.cardCount"
+          v-for="n in hand.cardCount"
           v-bind:key="n"
         ></Card>        
       </div>
@@ -36,6 +39,7 @@
   export default {
     props: {
       seat: Object,
+      hand: Object,
       isActive: {
         type: Boolean,
         default: false,

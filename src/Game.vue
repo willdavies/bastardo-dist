@@ -5,6 +5,7 @@
         v-for="seat in gameState.session.seats"
         v-if="seat.player.id != player.id"
         v-bind:seat="seat"
+        v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.player.id] : null"
         v-bind:key="seat.id"
         v-bind:isDealer="seat.id == gameState.session.dealerSeatId"
         v-bind:isActive="seat.id == gameState.session.activeSeatId"
@@ -20,7 +21,8 @@
     ></Dojo>
 
     <Hand
-      v-bind:cards="gameState.session.playerHand"
+      v-if="gameState.playerHands !== null"
+      v-bind:cards="gameState.playerHands[player.id].cards"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="getSeatByPlayer(player).id == gameState.session.activeSeatId"
       v-on:cardPlay="playCard"
