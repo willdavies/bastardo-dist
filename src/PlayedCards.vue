@@ -25,7 +25,10 @@
   import CardSymbol from './CardSymbol.vue';
 
   export default {
-    props: ['cards', 'leadSuit'],
+    props: {
+      cards: Array,
+      leadSuit: String,
+    },
     components: {
       Card,
       CardSymbol
