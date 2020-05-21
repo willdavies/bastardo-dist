@@ -1,6 +1,6 @@
 <template>
   <div id="select-dealer">
-    <h2>{{ getHeadingText() }}</h2>
+    <h2 v-html="getHeadingText()"></h2>
 
     <table v-if="dealerSelector.cutCards.length > 0">
       <tr>
