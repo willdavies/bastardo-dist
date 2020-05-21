@@ -20,10 +20,10 @@
 
     <p v-else>Nobody has cut the deck yet</p>
 
-    <div
+    <template
       v-if="dealerSelector.status == 'concluded'"
     >
-      <div
+      <template
         v-if="dealerSelector.dealerSeatId == getSeatByPlayer(player).id"
       >
         <p>You are the dealer!</p>
@@ -32,15 +32,15 @@
         >
           Deal the cards
         </button>
-      </div>
+      </template>
 
       <p v-else>
         Waiting for {{ getSeatById(dealerSelector.dealerSeatId).player.firstName }} to deal the cards.
       </p>      
-    </div>
+    </template>
 
-    <div v-else>
-      <div
+    <template v-else>
+      <template
         v-if="dealerSelector.activeSeatId == getSeatByPlayer(player).id"
       >
         <p>It's your turn!</p>
@@ -49,12 +49,12 @@
         >
           Cut the deck
         </button>
-      </div>      
+      </template>      
 
       <p v-else>
         Waiting for {{ getSeatById(dealerSelector.activeSeatId).player.firstName }} to cut the deck.
       </p>
-    </div>
+    </template>
   </div>
 </template>
 
