@@ -16,21 +16,21 @@
 
     <div id="dojo">
       <SelectDealer
-        v-if="gameState.session.dealerSelector !== null"
+        v-if="gameState.session.activeGame == null && gameState.session.dealerSelector !== null"
         v-bind:dealerSelector="gameState.session.dealerSelector"
         v-bind:player="player"
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
       <PlayedCards
-        v-else-if="gameState.session.activeGame !== null && gameState.session.activeGame.activeRound !== null"
+        v-else-if="gameState.session.activeGame.activeRound.playedCards"
         v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
         v-bind:leadSuit="leadSuit"
       ></PlayedCards>
     </div>
 
     <Hand
-      v-if="gameState.playerHands !== null"
+      v-if="gameState.playerHands"
       v-bind:cards="gameState.playerHands[player.id].cards"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="getSeatByPlayer(player).id == gameState.session.activeSeatId"
