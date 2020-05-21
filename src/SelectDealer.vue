@@ -110,11 +110,6 @@
 <style scoped>
   #select-dealer {
     display: block;
-    position: absolute;
-    top: 6.5em;
-    width: 60%;
-    min-height: 22em;
-    margin: 0 auto;
     box-shadow: 0.5em 0.5em 1em #2d2d2de0;
     padding: 2em;
     background: white;

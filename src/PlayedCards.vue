@@ -1,5 +1,5 @@
 <template>
-	<div id="bastardo-dojo" class="clearfix">
+	<div id="played-cards" class="clearfix">
     <div id="suit-indicator"
       v-if="leadSuit !== null"
     >
@@ -46,7 +46,7 @@
 </script>
 
 <style scoped>
-  #bastardo-dojo {
+  #played-cards {
     height: 25em;
     width: 25em;
     position: relative;
@@ -55,18 +55,18 @@
     margin: 2em auto;
   }
 
-  #bastardo-dojo .card {
+  #played-cards .card {
     position: relative;
     float: left;
     margin-left: -6.5em;
   }
 
-  #bastardo-dojo .card.card-leader {
+  #played-cards .card.card-leader {
     transform: translate(0, -15%);
     transition: transform 0.15s;
   }
 
-  #bastardo-dojo .card:first-child {
+  #played-cards .card:first-child {
     margin-left: 0;
   }
 

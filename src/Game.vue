@@ -14,11 +14,20 @@
       ></Opponent>      
     </div>
 
-    <Dojo
-      v-if="gameState.session.activeGame !== null && gameState.session.activeGame.activeRound !== null"
-      v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
-      v-bind:leadSuit="leadSuit"
-    ></Dojo>
+    <div id="dojo">
+      <SelectDealer
+        v-if="gameState.session.dealerSelector !== null"
+        v-bind:dealerSelector="gameState.session.dealerSelector"
+        v-bind:player="player"
+        v-on:dealCards="dealCards"
+      ></SelectDealer>
+
+      <PlayedCards
+        v-else-if="gameState.session.activeGame !== null && gameState.session.activeGame.activeRound !== null"
+        v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
+        v-bind:leadSuit="leadSuit"
+      ></PlayedCards>
+    </div>
 
     <Hand
       v-if="gameState.playerHands !== null"
@@ -27,19 +36,12 @@
       v-bind:isActive="getSeatByPlayer(player).id == gameState.session.activeSeatId"
       v-on:cardPlay="playCard"
     ></Hand>
-
-    <SelectDealer
-      v-if="gameState.session.dealerSelector !== null"
-      v-bind:dealerSelector="gameState.session.dealerSelector"
-      v-bind:player="player"
-      v-on:dealCards="dealCards"
-    ></SelectDealer>
   </div>
 </template>
 
 <script>
   import Hand from './Hand.vue';
-  import Dojo from './Dojo.vue';
+  import PlayedCards from './PlayedCards.vue';
   import Opponent from './Opponent.vue';
   import SelectDealer from './SelectDealer.vue';
 
@@ -84,7 +86,7 @@
     },
     components: {
       Hand,
-      Dojo,
+      PlayedCards,
       Opponent,
       SelectDealer,
     }
