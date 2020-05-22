@@ -24,7 +24,7 @@
       v-if="dealerSelector.status == 'concluded'"
     >
       <template
-        v-if="dealerSelector.dealerSeatId == getSeatByPlayer(player).id"
+        v-if="dealerSelector.dealerId == player.id"
       >
         <p>You are the dealer!</p>
         <button
@@ -35,13 +35,13 @@
       </template>
 
       <p v-else>
-        Waiting for {{ getSeatById(dealerSelector.dealerSeatId).player.firstName }} to deal the cards.
+        Waiting for {{ players[dealerSelector.dealerId].firstName }} to deal the cards.
       </p>      
     </template>
 
     <template v-else>
       <template
-        v-if="dealerSelector.activeSeatId == getSeatByPlayer(player).id"
+        v-if="dealerSelector.activePlayerId == player.id"
       >
         <p>It's your turn!</p>
         <button
@@ -52,7 +52,7 @@
       </template>      
 
       <p v-else>
-        Waiting for {{ getSeatById(dealerSelector.activeSeatId).player.firstName }} to cut the deck.
+        Waiting for {{ players[dealerSelector.activePlayerId].firstName }} to cut the deck.
       </p>
     </template>
   </div>
@@ -65,6 +65,7 @@
     props: {
       dealerSelector: Object,
       player: Object,
+      players: Object,
     },
     methods: {
       getHeadingText: function(){
@@ -87,18 +88,6 @@
             player: this.player.id,
           },
         });
-      },
-      getSeatByPlayer: function(player) {
-        const seatIndex = this.dealerSelector.candidateSeats
-          .map(seat => seat.player.id)
-          .indexOf(player.id);
-
-        return seatIndex !== -1 ? this.dealerSelector.candidateSeats[seatIndex] : null;
-      },
-      getSeatById: function(id) {
-        const seatIndex = this.dealerSelector.candidateSeats.map(seat => seat.id).indexOf(id);
-
-        return seatIndex !== -1 ? this.dealerSelector.candidateSeats[seatIndex] : null;
       },
     },
     components: {

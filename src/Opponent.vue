@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="opponent-placard">
-      <span class="name">{{ seat.player.firstName }}</span>
+      <span class="name">{{ player.firstName }}</span>
       <div class="opponent-placard-badges">
         <span class="badge session-leader-badge"
           v-if="isSessionLeader"
@@ -39,6 +39,7 @@
   export default {
     props: {
       seat: Object,
+      player: Object,
       hand: Object,
       isActive: {
         type: Boolean,

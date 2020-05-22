@@ -33,7 +33,7 @@
               <div class="seat-occupant"
                 v-if="getColorOccupant(color) != null"
               >
-                {{ getColorOccupant(color).player.firstName }}
+                {{ getColorOccupant(color).firstName }}
               </div>
 
               <input type="radio"
@@ -48,14 +48,14 @@
 
           <button
             type="submit"
-            v-if="getUserSeat() === null && selectedColor !== null"
+            v-if="!playerHasJoined() && selectedColor !== null"
           >
             Join this game session!
           </button>
         </form>
 
         <button
-          v-if="getUserSeat() !== null"
+          v-if="playerHasJoined()"
           v-on:click="$emit('voteToStartGame')"
         >
           I'm ready to start playing!
@@ -103,19 +103,25 @@
           }
         })
       },
-      getUserSeat: function(){
+      playerHasJoined: function(){
         let userSeatIndex = this.gameState.session.seats
-          .map(seat => seat.player.id)
+          .map(seat => seat.playerId)
           .indexOf(this.activePlayer.id);
 
-        return userSeatIndex !== -1 ? this.gameState.session.seats[userSeatIndex] : null;
+        return userSeatIndex !== -1 ;
       },
       getColorOccupant: function(color){
         let seatIndex = this.gameState.session.seats
           .map(seat => seat.color)
           .indexOf(color);
 
-        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
+        if (seatIndex == -1) {
+          return null;
+        }
+
+        const playerId = this.gameState.session.seats[seatIndex].playerId;
+
+        return this.gameState.session.players[playerId];
       },
       unWatchGameSession: function(){
         this.$websocketManager.sendAndAwaitResponse({

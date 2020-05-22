@@ -3,14 +3,15 @@
     <div id="opponents">
       <Opponent
         v-for="seat in gameState.session.seats"
-        v-if="seat.player.id != player.id"
+        v-if="seat.playerId != player.id"
         v-bind:seat="seat"
-        v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.player.id] : null"
+        v-bind:player="gameState.session.players[seat.playerId]"
+        v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.playerId] : null"
         v-bind:key="seat.id"
-        v-bind:isDealer="seat.id == gameState.session.dealerSeatId"
-        v-bind:isActive="seat.id == gameState.session.activeSeatId"
-        v-bind:isSessionLeader="seat.id == sessionLeaderId"
-        v-bind:isRoundLeader="seat.id == roundLeaderId"
+        v-bind:isDealer="seat.playerId == gameState.session.dealerId"
+        v-bind:isActive="seat.playerId == gameState.session.activePlayerId"
+        v-bind:isSessionLeader="seat.playerId == sessionLeaderId"
+        v-bind:isRoundLeader="seat.playerId == roundLeaderId"
       ></Opponent>      
     </div>
 
@@ -19,6 +20,7 @@
         v-if="gameState.session.activeGame == null && gameState.session.dealerSelector !== null"
         v-bind:dealerSelector="gameState.session.dealerSelector"
         v-bind:player="player"
+        v-bind:players="gameState.session.players"
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
@@ -33,7 +35,7 @@
       v-if="gameState.playerHands"
       v-bind:cards="gameState.playerHands[player.id].cards"
       v-bind:leadSuit="leadSuit"
-      v-bind:isActive="getSeatByPlayer(player).id == gameState.session.activeSeatId"
+      v-bind:isActive="player.id == gameState.session.activePlayerId"
       v-on:cardPlay="playCard"
     ></Hand>
   </div>
@@ -72,16 +74,6 @@
       },
       playCard: function(card){
         console.log('playCard:', card);
-      },
-      getSeatByPlayer: function(player) {
-        const seatIndex = this.gameState.session.seats.map(seat => seat.player.id).indexOf(player.id);
-
-        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
-      },
-      getSeatById: function(id) {
-        const seatIndex = this.gameState.session.seats.map(seat => seat.id).indexOf(id);
-
-        return seatIndex !== -1 ? this.gameState.session.seats[seatIndex] : null;
       },
     },
     components: {
