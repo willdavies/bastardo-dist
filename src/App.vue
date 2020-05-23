@@ -116,7 +116,7 @@
         if (this.gameState === null) {
           // New game session is being set - create basic structure
           this.gameState = {
-            sessionId: gameData.sessionId;
+            sessionId: gameData.sessionId,
             session: null,
             dealerSelector: null,
             playerHands: null,
@@ -131,7 +131,7 @@
         // Set/refresh cookie
         document.cookie = cookie.serialize(
           process.env.GAME_SESSION_COOKIE_NAME,
-          gameSession.id,
+          this.gameState.sessionId,
           {
             sameSite: true,
             maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
@@ -142,11 +142,15 @@
         // Check for updates to game state
         // Game session
         if (gameData.gameSession) {
-          // Merge in values from supplied game session Object
-          this.gameState.session = Object.assign(
-            this.gameState.session,
-            gameData.gameSession
-          );
+          if (this.gameState.session == null) {
+            this.gameState.session = gameData.gameSession;
+          } else {
+            // Merge in values from supplied game session Object
+            this.gameState.session = Object.assign(
+              this.gameState.session,
+              gameData.gameSession
+            );
+          }
         }
 
         // Dealer selector
