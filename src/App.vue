@@ -149,6 +149,12 @@
           );
         }
 
+        // Dealer selector
+        if (gameData.dealerSelector) {
+          // Update dealer selector
+          this.gameState.dealerSelector = gameData.dealerSelector;
+        }
+
         // Player hands
         if (gameData.playerHands) {
           // Update player hands

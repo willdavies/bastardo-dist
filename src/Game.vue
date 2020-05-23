@@ -17,8 +17,8 @@
 
     <div id="dojo">
       <SelectDealer
-        v-if="gameState.session.activeGame == null && gameState.session.dealerSelector !== null"
-        v-bind:dealerSelector="gameState.session.dealerSelector"
+        v-if="gameState.dealerSelector"
+        v-bind:dealerSelector="gameState.dealerSelector"
         v-bind:player="player"
         v-bind:players="gameState.session.players"
         v-on:dealCards="dealCards"
