@@ -72,90 +72,86 @@
       updateGameState(gameData){
         console.log('updateGameState', gameData);
 
+        // Verify gameData
+        if (typeof gameData.sessionId == 'undefined') {
+          throw new Error('New game data must include a game session ID.');
+        }
+
+        // Check for null sessionId value
+        if (gameData.sessionId == null) {
+          // Check whether game session is being aborted
+          // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
+          if (
+            this.gameState.session.activeGame == null
+            || this.gameState.session.activeGame.isComplete == false
+          ) {
+            // Forward player to new game session
+            this.$router.push(
+              { name: 'home' }
+            );
+
+            alert('Your game session has been aborted with the agreement of a majority of players.')
+          }
+
+          // Clear game state
+          this.gameState = null;
+
+          // Delete cookie
+          document.cookie = cookie.serialize(
+            process.env.GAME_SESSION_COOKIE_NAME,
+            null,
+            {
+              sameSite: true,
+              expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
+              path: '/',
+            }
+          );          
+
+          return;
+        }
+
+        // We have new game state data
+
         // Check whether game state needs to be set up
-        if (
-          this.gameState === null
-          && typeof gameData.gameSession != 'undefined'
-        ) {
+        if (this.gameState === null) {
           // New game session is being set - create basic structure
           this.gameState = {
+            sessionId: gameData.sessionId;
             session: null,
+            dealerSelector: null,
             playerHands: null,
           };
         }
 
-        // Check for game session
-        if (typeof gameData.gameSession !== 'undefined') {
-          // Update game state session
-          const gameSession = gameData.gameSession;
-
-          if (
-            this.gameState.session !== null
-            && gameSession !== null
-            && typeof gameSession.id !== 'undefined'
-            && gameSession.id == this.gameState.session.id
-          ) {
-            // Merge in values from supplied game session Object
-            this.gameState.session = Object.assign(
-              this.gameState.session,
-              gameSession
-            );          
-          } else if (
-            this.gameState.session !== null
-            && gameSession == null
-          ) {
-            // Check whether game session is being aborted
-            // @TODO Distinguish aborted gamesession from cancelled join of session - currently not possible
-            if (
-              this.gameState.session.activeGame == null
-              || this.gameState.session.activeGame.isComplete == false
-            ) {
-              // Forward player to new game session
-              this.$router.push(
-                { name: 'home' }
-              );
-
-              alert('Your game session has been aborted with the agreement of a majority of players.')
-            }
-
-            // Replace game session
-            this.gameState = null;
-          } else {
-            // Replace game session
-            this.gameState.session = gameSession;
-          }
-
-          if (gameSession !== null) {
-            // Set/refresh cookie
-            document.cookie = cookie.serialize(
-              process.env.GAME_SESSION_COOKIE_NAME,
-              gameSession.id,
-              {
-                sameSite: true,
-                maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
-                path: '/',
-              }
-            );          
-          } else {
-            // Delete cookie
-            document.cookie = cookie.serialize(
-              process.env.GAME_SESSION_COOKIE_NAME,
-              null,
-              {
-                sameSite: true,
-                expires: new Date('Thu, 01 Jan 1970 00:00:00 UTC'),
-                path: '/',
-              }
-            );          
-          }
+        // Verify that new data is for current game session
+        if (gameData.sessionId !== this.gameState.sessionId) {
+          throw new Error('Game session ID in new game data does not match current game session ID.');
         }
 
-        // Check for player hands
-        if (
-          typeof this.gameState.session !== 'undefined'
-          && typeof gameData.playerHands === 'object'
-        ) {
-          // Store player hands
+        // Set/refresh cookie
+        document.cookie = cookie.serialize(
+          process.env.GAME_SESSION_COOKIE_NAME,
+          gameSession.id,
+          {
+            sameSite: true,
+            maxAge: process.env.DEFAULT_COOKIE_MAX_AGE,
+            path: '/',
+          }
+        );          
+
+        // Check for updates to game state
+        // Game session
+        if (gameData.gameSession) {
+          // Merge in values from supplied game session Object
+          this.gameState.session = Object.assign(
+            this.gameState.session,
+            gameData.gameSession
+          );
+        }
+
+        // Player hands
+        if (gameData.playerHands) {
+          // Update player hands
           this.gameState.playerHands = gameData.playerHands;
         }
       },
