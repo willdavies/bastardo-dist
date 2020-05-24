@@ -4,7 +4,7 @@
       <Opponent
         v-for="seat in gameState.session.seats"
         v-if="seat.playerId != player.id"
-        v-bind:seat="seat"
+        v-bind:color="seat.color"
         v-bind:player="gameState.session.players[seat.playerId]"
         v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.playerId] : null"
         v-bind:key="seat.id"

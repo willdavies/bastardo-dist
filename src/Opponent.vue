@@ -3,7 +3,7 @@
     class="opponent"
     v-bind:class="{active: isActive}"
   >
-    <Avatar v-bind:color="seat.color"></Avatar>
+    <Avatar v-bind:color="color"></Avatar>
     <div class="opponent-hand">
       <div
         v-if="hand !== null"
@@ -38,7 +38,7 @@
 
   export default {
     props: {
-      seat: Object,
+      color: String,
       player: Object,
       hand: Object,
       isActive: {
