@@ -19,7 +19,7 @@
       <span class="name">{{ player.firstName }}</span>
       <span
         class="bet"
-        v-if="playerBet"
+        v-if="playerBet !== null"
       >
         Bet: {{ playerBet }}
       </span>
