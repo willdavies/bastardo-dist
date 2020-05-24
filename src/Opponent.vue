@@ -17,6 +17,12 @@
     </div>
     <div class="opponent-placard">
       <span class="name">{{ player.firstName }}</span>
+      <span
+        class="bet"
+        v-if="playerBet"
+      >
+        Bet: {{ playerBet }}
+      </span>
       <div class="opponent-placard-badges">
         <span class="badge session-leader-badge"
           v-if="isSessionLeader"
@@ -41,6 +47,7 @@
       color: String,
       player: Object,
       hand: Object,
+      activeRound: Object,
       isActive: {
         type: Boolean,
         default: false,
@@ -57,6 +64,18 @@
         type: Boolean,
         default: false,
       },
+    },
+    computed: {
+      playerBet: function(){
+        if (
+          this.activeRound
+          && this.activeRound.bets.hasOwnProperty(this.player.id)
+        ) {
+          return this.activeRound.bets[this.player.id];
+        }
+
+        return null;
+      }
     },
     components: {
       Avatar,
@@ -112,6 +131,12 @@
   }
 
   .name {
+    display: block;
+    margin-bottom: 0.5em;
+    font-size: 1.25em
+  }
+
+  .bet {
     display: block;
     margin-bottom: 0.5em;
     font-size: 1.25em
