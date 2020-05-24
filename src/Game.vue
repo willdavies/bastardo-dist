@@ -34,7 +34,7 @@
       ></PlaceBets>
 
       <PlayedCards
-        v-else-if="gameState.session.activeGame.activeRound.playedCards"
+        v-else
         v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
         v-bind:leadSuit="leadSuit"
       ></PlayedCards>
