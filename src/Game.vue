@@ -25,6 +25,14 @@
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
+      <PlaceBets
+        v-else-if="gameState.betsCollector"
+        v-bind:betsCollector="gameState.betsCollector"
+        v-bind:player="player"
+        v-bind:players="gameState.session.players"
+        v-bind:dealerId="gameState.session.dealerId"
+      ></PlaceBets>
+
       <PlayedCards
         v-else-if="gameState.session.activeGame.activeRound.playedCards"
         v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
@@ -47,6 +55,7 @@
   import PlayedCards from './PlayedCards.vue';
   import Opponent from './Opponent.vue';
   import SelectDealer from './SelectDealer.vue';
+  import PlaceBets from './PlaceBets.vue';
 
   export default {
     props: {
@@ -82,6 +91,7 @@
       PlayedCards,
       Opponent,
       SelectDealer,
+      PlaceBets,
     }
   };
 </script>

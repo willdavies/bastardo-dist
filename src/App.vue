@@ -119,6 +119,7 @@
             sessionId: gameData.sessionId,
             session: null,
             dealerSelector: null,
+            betsCollector: null,
             playerHands: null,
           };
         }
@@ -163,6 +164,13 @@
         if (gameData.hasOwnProperty('playerHands')) {
           // Update player hands
           this.gameState.playerHands = gameData.playerHands;
+        }
+
+        // Bets collector
+        if (gameData.hasOwnProperty('betsCollector')) {
+          // Update bets collector
+          console.log('updating bets collector:', gameData.betsCollector);
+          this.gameState.betsCollector = gameData.betsCollector;
         }
       },
       bootstrapApp(){
