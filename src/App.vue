@@ -119,6 +119,7 @@
             sessionId: gameData.sessionId,
             session: null,
             dealerSelector: null,
+            betsCollector: null,
             playerHands: null,
           };
         }
@@ -141,7 +142,7 @@
 
         // Check for updates to game state
         // Game session
-        if (gameData.gameSession) {
+        if (gameData.hasOwnProperty('gameSession')) {
           if (this.gameState.session == null) {
             this.gameState.session = gameData.gameSession;
           } else {
@@ -154,15 +155,22 @@
         }
 
         // Dealer selector
-        if (gameData.dealerSelector) {
+        if (gameData.hasOwnProperty('dealerSelector')) {
           // Update dealer selector
           this.gameState.dealerSelector = gameData.dealerSelector;
         }
 
         // Player hands
-        if (gameData.playerHands) {
+        if (gameData.hasOwnProperty('playerHands')) {
           // Update player hands
           this.gameState.playerHands = gameData.playerHands;
+        }
+
+        // Bets collector
+        if (gameData.hasOwnProperty('betsCollector')) {
+          // Update bets collector
+          console.log('updating bets collector:', gameData.betsCollector);
+          this.gameState.betsCollector = gameData.betsCollector;
         }
       },
       bootstrapApp(){

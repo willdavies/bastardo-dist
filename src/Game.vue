@@ -4,10 +4,11 @@
       <Opponent
         v-for="seat in gameState.session.seats"
         v-if="seat.playerId != player.id"
-        v-bind:seat="seat"
+        v-bind:key="seat.id"
+        v-bind:color="seat.color"
         v-bind:player="gameState.session.players[seat.playerId]"
         v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.playerId] : null"
-        v-bind:key="seat.id"
+        v-bind:activeRound="gameState.session.activeGame !== null ? gameState.session.activeGame.activeRound : null"
         v-bind:isDealer="seat.playerId == gameState.session.dealerId"
         v-bind:isActive="seat.playerId == gameState.session.activePlayerId"
         v-bind:isSessionLeader="seat.playerId == sessionLeaderId"
@@ -24,8 +25,16 @@
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
+      <PlaceBets
+        v-else-if="gameState.betsCollector"
+        v-bind:betsCollector="gameState.betsCollector"
+        v-bind:player="player"
+        v-bind:players="gameState.session.players"
+        v-bind:dealerId="gameState.session.dealerId"
+      ></PlaceBets>
+
       <PlayedCards
-        v-else-if="gameState.session.activeGame.activeRound.playedCards"
+        v-else
         v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
         v-bind:leadSuit="leadSuit"
       ></PlayedCards>
@@ -46,6 +55,7 @@
   import PlayedCards from './PlayedCards.vue';
   import Opponent from './Opponent.vue';
   import SelectDealer from './SelectDealer.vue';
+  import PlaceBets from './PlaceBets.vue';
 
   export default {
     props: {
@@ -81,6 +91,7 @@
       PlayedCards,
       Opponent,
       SelectDealer,
+      PlaceBets,
     }
   };
 </script>
