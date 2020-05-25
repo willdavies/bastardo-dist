@@ -29,10 +29,6 @@
       cards: Array,
       leadSuit: String,
     },
-    components: {
-      Card,
-      CardSymbol
-    },
     methods: {
       cardIsLeader: function(card){
         // Get highest relative value in deck
@@ -44,6 +40,10 @@
 
         return max == card.relativeValue;
       },
+    },
+    components: {
+      Card,
+      CardSymbol
     },
   };
 </script>

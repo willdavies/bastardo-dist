@@ -1,17 +1,16 @@
 <template>
 	<div id="hand" class="clearfix">
-    <button
-      v-if="cards !== undefined && cards.length == 0"
-      v-on:click="$emit('cardDeal')"
-     >
-      Deal hand
-    </button>
     <Card
       v-for="card in cards"
       v-bind:card="card"
-      v-bind:class="[(cardIsPlayable(card) ? '' : 'not-') + 'playable']"
+      v-bind:isPlayable="cardIsPlayable(card)"
+      v-bind:class="{
+        'playable': isPlayable,
+        'not-playable': !isPlayable,
+        'selected': card == selectedCard,
+      }"
       v-bind:key="card.id"
-      v-on:cardClick="cardClickHandler"
+      v-on:cardClick="handleCardClick"
     ></Card>
   </div>
 </template>
@@ -20,7 +19,15 @@
   import Card from './Card.vue';
 
   export default {
-    props: ['cards', 'leadSuit'],
+    props: {
+      cards: Array,
+      leadSuit: String,
+    },
+    data: function(){
+      return {
+        selectedCard: null
+      }
+    },
     components: {
       Card
     },
@@ -32,9 +39,14 @@
           || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
         );
       },
-      cardClickHandler: function($event, card){
-        if (this.cardIsPlayable(card)) {
-          this.$emit('cardPlay', card);
+      handleCardClick: function($event, card){
+        // Toggle selected status
+        if (card == this.selectedCard) {
+          this.selectedCard = null;
+          this.$emit('cardUnSelect', card);
+        } else if (this.cardIsPlayable(card)) {
+          this.selectedCard = card;
+          this.$emit('cardSelect', card);
         }
       }
     }
@@ -56,7 +68,7 @@
     margin-left: 0;
   }
 
-  #hand .card.playable:hover {
+  #hand .card.selected, #hand .card.playable:hover {
     transform: translate(0, -15%);
     transition: transform 0.15s;
   }

@@ -42,22 +42,20 @@
       ></PlayedCards>
     </div>
 
-    <Hand
-      v-if="gameState.playerHands"
-      v-bind:cards="gameState.playerHands[player.id].cards"
+    <PlayerConsole
+      v-bind:gameState="gameState"
+      v-bind:player="player"
       v-bind:leadSuit="leadSuit"
-      v-bind:isActive="player.id == gameState.activePlayerId"
-      v-on:cardPlay="playCard"
-    ></Hand>
+    ></PlayerConsole>
   </div>
 </template>
 
 <script>
-  import Hand from './Hand.vue';
   import PlayedCards from './PlayedCards.vue';
   import Opponent from './Opponent.vue';
   import SelectDealer from './SelectDealer.vue';
   import PlaceBets from './PlaceBets.vue';
+  import PlayerConsole from './PlayerConsole.vue';
 
   export default {
     props: {
@@ -84,16 +82,13 @@
           }
         })
       },
-      playCard: function(card){
-        console.log('playCard:', card);
-      },
     },
     components: {
-      Hand,
       PlayedCards,
       Opponent,
       SelectDealer,
       PlaceBets,
+      PlayerConsole,
     }
   };
 </script>
