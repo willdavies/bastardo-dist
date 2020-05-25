@@ -20,7 +20,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   #game-session-controls {
     width: 100%;
     background: #D5F2C9;
