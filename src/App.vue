@@ -154,6 +154,12 @@
           }
         }
 
+        // Active player ID
+        if (gameData.hasOwnProperty('activePlayerId')) {
+          // Update active player ID
+          this.gameState.activePlayerId = gameData.activePlayerId;
+        }
+
         // Dealer selector
         if (gameData.hasOwnProperty('dealerSelector')) {
           // Update dealer selector

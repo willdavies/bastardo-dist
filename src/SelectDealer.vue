@@ -41,7 +41,7 @@
 
     <template v-else>
       <template
-        v-if="dealerSelector.activePlayerId == player.id"
+        v-if="activePlayerId == player.id"
       >
         <p>It's your turn!</p>
         <button
@@ -52,7 +52,7 @@
       </template>      
 
       <p v-else>
-        Waiting for {{ players[dealerSelector.activePlayerId].firstName }} to cut the deck.
+        Waiting for {{ players[activePlayerId].firstName }} to cut the deck.
       </p>
     </template>
   </div>
@@ -66,6 +66,7 @@
       dealerSelector: Object,
       player: Object,
       players: Object,
+      activePlayerId: String,
     },
     methods: {
       getHeadingText: function(){
