@@ -30,6 +30,7 @@
         v-bind:betsCollector="gameState.betsCollector"
         v-bind:player="player"
         v-bind:players="gameState.session.players"
+        v-bind:activePlayerId="gameState.session.activePlayerId"
         v-bind:dealerId="gameState.session.dealerId"
       ></PlaceBets>
 

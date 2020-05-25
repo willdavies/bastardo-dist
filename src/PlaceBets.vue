@@ -3,7 +3,7 @@
     <h2>Placing bets&hellip;</h2>
 
     <template
-      v-if="betsCollector.activePlayerId == player.id"
+      v-if="activePlayerId == player.id"
     >
       <p>Choose your bet!</p>
 
@@ -18,7 +18,7 @@
     </template>
 
     <p v-else>
-      Waiting for {{ players[betsCollector.activePlayerId].firstName }} to place a bet.
+      Waiting for {{ players[activePlayerId].firstName }} to place a bet.
     </p>
   </div>
 </template>
@@ -29,6 +29,7 @@
       betsCollector: Object,
       player: Object,
       players: Object,
+      activePlayerId: String,
     },
     computed: {
       illegalBetValue: function(){
