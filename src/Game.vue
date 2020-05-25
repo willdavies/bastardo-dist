@@ -51,11 +51,11 @@
 </template>
 
 <script>
-  import PlayedCards from './PlayedCards.vue';
   import Opponent from './Opponent.vue';
-  import SelectDealer from './SelectDealer.vue';
   import PlaceBets from './PlaceBets.vue';
+  import PlayedCards from './PlayedCards.vue';
   import PlayerConsole from './PlayerConsole.vue';
+  import SelectDealer from './SelectDealer.vue';
 
   export default {
     props: {
@@ -84,11 +84,11 @@
       },
     },
     components: {
-      PlayedCards,
       Opponent,
-      SelectDealer,
       PlaceBets,
+      PlayedCards,
       PlayerConsole,
+      SelectDealer,
     }
   };
 </script>
