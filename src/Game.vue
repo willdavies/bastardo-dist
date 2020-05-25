@@ -69,6 +69,17 @@
         roundLeaderId: null,
       }
     },
+    computed: {
+      leadSuit: function(){
+        return (
+          this.gameState.session.activeGame
+          && this.this.gameState.session.activeGame.activeRound
+          && this.this.gameState.session.activeGame.activeRound.playedCards.length > 0
+        )
+          ? this.this.gameState.session.activeGame.activeRound.playedCards[0].suit
+          : null;
+      }
+    },
     methods: {
       dealCards: function(){
         this.$websocketManager.send({
