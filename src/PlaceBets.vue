@@ -10,7 +10,6 @@
       <button
         v-for="(n, i) in (betsCollector.maximumBet + 1)"
         v-bind:disabled="i == illegalBetValue"
-        v-bind:class="illegalBetValue"
         v-on:click="placeBet(i)"
       >
         {{ i }}

@@ -1,18 +1,20 @@
 <template>
-  <div class="card"
-    v-bind:class="this.getSuitClass()"
-    v-on:click="$emit('cardClick', $event, card)"
+  <div
+    class="card"
+    v-bind:class="getSuitClass()"
+    v-on:click.stop="$emit('cardClick', $event, card)"
   >
-    <div class="card-specifics"
+    <div
+      class="card-specifics"
       v-if="card != undefined"
     >
       <div class="card-corner-label">
-        <span class="card-value">{{card.label}}</span>
+        <span class="card-value">{{ card.label }}</span>
         <CardSymbol
           v-bind:suit="card.suit"
         ></CardSymbol>
       </div>
-      <span class="card-value card-value-main">{{card.label}}</span>    
+      <span class="card-value card-value-main">{{ card.label }}</span>
     </div>
     <div
       v-else
@@ -36,7 +38,9 @@
     },
     methods: {
       getSuitClass: function(){
-        return (typeof this.card !== 'undefined') ? 'card-' + this.card.suit : 'card-secret';
+        return (typeof this.card !== 'undefined')
+          ? 'card-' + this.card.suit
+          : 'card-secret';
       }
     }
   };
