@@ -1,7 +1,7 @@
 <template>
   <div
     class="card"
-    v-bind:class="getSuitClass()"
+    v-bind:class="suitClass"
     v-on:click.stop="$emit('cardClick', $event, card)"
   >
     <div
@@ -36,11 +36,9 @@
     components: {
       CardSymbol,
     },
-    methods: {
-      getSuitClass: function(){
-        return (typeof this.card !== 'undefined')
-          ? 'card-' + this.card.suit
-          : 'card-secret';
+    computed: {
+      suitClass: function(){
+        return 'card-' + ((this.card) ? this.card.suit : 'secret');
       }
     }
   };
