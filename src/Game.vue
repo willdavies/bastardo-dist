@@ -23,7 +23,7 @@
         v-bind:player="player"
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
-        v-bind:isActive="playerIsActive()"
+        v-bind:isActive="playerIsActive"
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
@@ -33,7 +33,7 @@
         v-bind:player="player"
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
-        v-bind:isActive="playerIsActive()"
+        v-bind:isActive="playerIsActive"
         v-bind:dealerId="gameState.session.dealerId"
       ></PlaceBets>
 
@@ -47,7 +47,7 @@
     <PlayerConsole
       v-bind:gameState="gameState"
       v-bind:player="player"
-      v-bind:isActive="playerIsActive()"
+      v-bind:isActive="playerIsActive"
       v-bind:leadSuit="leadSuit"
     ></PlayerConsole>
   </div>
@@ -81,6 +81,9 @@
         )
           ? this.this.gameState.session.activeGame.activeRound.playedCards[0].suit
           : null;
+      },
+      playerIsActive: function() {
+        return this.player.id === this.gameState.activePlayerId;
       }
     },
     methods: {
@@ -95,9 +98,6 @@
             player: this.player.id,
           }
         })
-      },
-      playerIsActive: function(){
-        return this.player.id === this.gameState.activePlayerId
       },
     },
     components: {

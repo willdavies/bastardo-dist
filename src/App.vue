@@ -118,6 +118,7 @@
           this.gameState = {
             sessionId: gameData.sessionId,
             session: null,
+            activePlayerId: null,
             dealerSelector: null,
             betsCollector: null,
             playerHands: null,
