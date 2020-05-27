@@ -17,7 +17,21 @@
         </ul>
       </div>
       <div id="player-console-controls">
-        
+        <template v-if="isActive">
+          <p>It's your turn!</p>
+
+          <div v-if="selectedCard">
+            <p>You have selected the {{ selectedCard.label }} of {{ selectedCard.suit }}</p>
+            <button v-on:click="playCard">
+              Play this card
+            </button>
+            <button v-on:click.stop="selectedCard = null">
+              Cancel
+            </button>
+          </div>
+
+          <p v-else>Click on a card to play</p>          
+        </template>
       </div>
     </div>
   </div>
@@ -67,6 +81,26 @@
         } else if (isPlayable) {
           this.selectedCard = card;
         }
+      },
+      playCard: function(){
+        const card = this.selectedCard;
+
+        this.selectedCard = null;
+
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.gameState.sessionId,
+            action: 'playCard',
+          },
+          payload: {
+            player: this.player.id,
+            card: {
+              id: card.id,
+              hash: card.hash,
+            }
+          }
+        });
       },
     },
     components: {
