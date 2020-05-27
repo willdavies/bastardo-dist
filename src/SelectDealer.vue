@@ -41,7 +41,7 @@
 
     <template v-else>
       <template
-        v-if="activePlayerId == player.id"
+        v-if="isActive"
       >
         <p>It's your turn!</p>
         <button
@@ -66,6 +66,7 @@
       dealerSelector: Object,
       player: Object,
       players: Object,
+      isActive: Boolean,
       activePlayerId: String,
     },
     methods: {

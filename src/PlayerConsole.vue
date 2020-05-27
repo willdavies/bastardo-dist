@@ -4,7 +4,7 @@
       v-if="gameState.playerHands"
       v-bind:cards="gameState.playerHands[player.id].cards"
       v-bind:leadSuit="leadSuit"
-      v-bind:isActive="player.id == gameState.activePlayerId"
+      v-bind:isActive="isActive"
       v-on:cardSelect="selectCard"
     ></Hand>
     <div id="player-console-detail" class="clearfix">
@@ -30,9 +30,9 @@
       gameState: Object,
       player: Object,
       leadSuit: String,
+      isActive: Boolean,
     },
     computed: {
-      isActive: function(){},
       color: function(){
         return this.gameState.session.seats
           .find(seat => seat.playerId == this.player.id)

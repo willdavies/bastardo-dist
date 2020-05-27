@@ -3,7 +3,7 @@
     <h2>Placing bets&hellip;</h2>
 
     <template
-      v-if="activePlayerId == player.id"
+      v-if="isActive"
     >
       <p>Choose your bet!</p>
 
@@ -28,6 +28,7 @@
     props: {
       betsCollector: Object,
       player: Object,
+      isActive: Boolean,
       players: Object,
       activePlayerId: String,
     },
