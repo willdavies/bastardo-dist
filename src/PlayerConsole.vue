@@ -5,7 +5,8 @@
       v-bind:cards="gameState.playerHands[player.id].cards"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="isActive"
-      v-on:cardSelect="selectCard"
+      v-bind:selectedCard="selectedCard"
+      v-on:cardClick="handleCardClick"
     ></Hand>
     <div id="player-console-detail" class="clearfix">
       <div id="player-console-information">
@@ -32,6 +33,11 @@
       leadSuit: String,
       isActive: Boolean,
     },
+    data: function(){
+      return {
+        selectedCard: null,
+      }
+    },
     computed: {
       color: function(){
         return this.gameState.session.seats
@@ -54,8 +60,13 @@
       },
     },
     methods: {
-      selectCard: function(){
-
+      handleCardClick: function(card, isPlayable){
+        // Toggle selected status
+        if (card == this.selectedCard) {
+          this.selectedCard = null;
+        } else if (isPlayable) {
+          this.selectedCard = card;
+        }
       },
     },
     components: {

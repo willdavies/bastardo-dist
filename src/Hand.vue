@@ -5,12 +5,12 @@
       v-bind:card="card"
       v-bind:isPlayable="cardIsPlayable(card)"
       v-bind:class="{
-        'playable': isPlayable,
-        'not-playable': !isPlayable,
+        'playable': cardIsPlayable(card),
+        'not-playable': !cardIsPlayable(card),
         'selected': card == selectedCard,
       }"
       v-bind:key="card.id"
-      v-on:cardClick="handleCardClick"
+      v-on:cardClick="$emit('cardClick', card, cardIsPlayable(card))"
     ></Card>
   </div>
 </template>
@@ -22,11 +22,7 @@
     props: {
       cards: Array,
       leadSuit: String,
-    },
-    data: function(){
-      return {
-        selectedCard: null
-      }
+      selectedCard: Object,
     },
     components: {
       Card
@@ -39,16 +35,6 @@
           || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
         );
       },
-      handleCardClick: function($event, card){
-        // Toggle selected status
-        if (card == this.selectedCard) {
-          this.selectedCard = null;
-          this.$emit('cardUnSelect', card);
-        } else if (this.cardIsPlayable(card)) {
-          this.selectedCard = card;
-          this.$emit('cardSelect', card);
-        }
-      }
     }
   };
 </script>
