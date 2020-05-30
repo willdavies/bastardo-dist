@@ -18,7 +18,7 @@
 
     <div id="dojo">
       <SelectDealer
-        v-if="gameState.dealerSelector"
+        v-if="roundPhase == 'choosingDealer'"
         v-bind:dealerSelector="gameState.dealerSelector"
         v-bind:player="player"
         v-bind:players="gameState.session.players"
@@ -46,6 +46,7 @@
 
     <PlayerConsole
       v-bind:gameState="gameState"
+      v-bind:roundPhase="roundPhase"
       v-bind:player="player"
       v-bind:playerHand="getPlayerHand(player.id)"
       v-bind:isActive="playerIsActive"
@@ -73,6 +74,17 @@
       }
     },
     computed: {
+      roundPhase: function(){
+        if (this.gameState.dealerId === null) {
+          return 'choosingDealer';
+        } else if (this.gameState.betsCollector) {
+          return 'betting';
+        } else if (this.gameState.playerHands === null) {
+          return 'dealing';
+        } else if (this.gameState.session.activeGame.activeRound) {}{
+          return 'playing';
+        }
+      },
       leadSuit: function(){
         return (
           this.gameState.session.activeGame

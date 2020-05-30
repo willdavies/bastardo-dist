@@ -18,19 +18,22 @@
       </div>
       <div id="player-console-controls">
         <template v-if="isActive">
-          <p>It's your turn!</p>
+          <template v-if="roundPhase == 'playing'">
+            <p>It's your turn!</p>
 
-          <div v-if="selectedCard">
-            <p>You have selected the {{ selectedCard.label }} of {{ selectedCard.suit }}</p>
-            <button v-on:click="playCard">
-              Play this card
-            </button>
-            <button v-on:click.stop="selectedCard = null">
-              Cancel
-            </button>
-          </div>
+            <div v-if="selectedCard">
+              <p>You have selected the {{ selectedCard.label }} of {{ selectedCard.suit }}</p>
+              <button v-on:click="playCard">
+                Play this card
+              </button>
+              <button v-on:click.stop="selectedCard = null">
+                Cancel
+              </button>
+            </div>
+            
+            <p v-else>Click on a card to play</p>          
+          </template>
 
-          <p v-else>Click on a card to play</p>          
         </template>
       </div>
     </div>
@@ -43,6 +46,7 @@
   export default {
     props: {
       gameState: Object,
+      roundPhase: String,
       player: Object,
       playerHand: {
         type: Object,
