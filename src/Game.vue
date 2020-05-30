@@ -101,9 +101,8 @@
         return (
           this.gameState.session.activeGame
           && this.gameState.session.activeGame.activeRound
-          && this.gameState.session.activeGame.activeRound.playedCards.length > 0
         )
-          ? this.gameState.session.activeGame.activeRound.playedCards[0].suit
+          ? this.gameState.session.activeGame.activeRound.leadSuit
           : null;
       },
       playerIsActive: function() {
