@@ -18,7 +18,7 @@
 
     <div id="dojo">
       <SelectDealer
-        v-if="roundPhase == 'choosingDealer'"
+        v-if="gameState.dealerSelector"
         v-bind:dealerSelector="gameState.dealerSelector"
         v-bind:player="player"
         v-bind:players="gameState.session.players"
@@ -27,21 +27,28 @@
         v-on:dealCards="dealCards"
       ></SelectDealer>
 
-      <PlaceBets
-        v-else-if="gameState.betsCollector"
-        v-bind:betsCollector="gameState.betsCollector"
-        v-bind:player="player"
-        v-bind:players="gameState.session.players"
-        v-bind:activePlayerId="gameState.activePlayerId"
-        v-bind:isActive="playerIsActive"
-        v-bind:dealerId="gameState.dealerId"
-      ></PlaceBets>
+      <template
+        v-else-if="
+          gameState.session.activeGame
+          && gameState.session.activeGame.activeRound
+        "
+      >      
+        <PlaceBets
+          v-if="roundPhase == 'betting'"
+          v-bind:betsCollector="gameState.betsCollector"
+          v-bind:player="player"
+          v-bind:players="gameState.session.players"
+          v-bind:activePlayerId="gameState.activePlayerId"
+          v-bind:isActive="playerIsActive"
+          v-bind:dealerId="gameState.dealerId"
+        ></PlaceBets>
 
-      <PlayedCards
-        v-else
-        v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
-        v-bind:leadSuit="leadSuit"
-      ></PlayedCards>
+        <PlayedCards
+          v-else-if="gameState.session.activeGame.activeRound.playedCards"
+          v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
+          v-bind:leadSuit="leadSuit"
+        ></PlayedCards>
+      </template>
     </div>
 
     <PlayerConsole
@@ -75,13 +82,18 @@
     },
     computed: {
       roundPhase: function(){
-        if (this.gameState.dealerId === null) {
-          return 'choosingDealer';
+        if (this.gameState.playerHands === null) {
+          if (
+            this.gameState.dealerSelector !== null
+            && this.gameState.dealerSelector.status !== 'concluded'
+          ) {
+            return 'choosingDealer';
+          } else {
+            return 'dealing';
+          }
         } else if (this.gameState.betsCollector) {
           return 'betting';
-        } else if (this.gameState.playerHands === null) {
-          return 'dealing';
-        } else if (this.gameState.session.activeGame.activeRound) {}{
+        } else if (this.gameState.session.activeGame.activeRound) {
           return 'playing';
         }
       },
