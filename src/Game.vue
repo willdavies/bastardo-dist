@@ -24,7 +24,6 @@
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
         v-bind:isActive="playerIsActive"
-        v-on:dealCards="dealCards"
       ></SelectDealer>
 
       <template
@@ -57,6 +56,7 @@
       v-bind:player="player"
       v-bind:playerHand="getPlayerHand(player.id)"
       v-bind:isActive="playerIsActive"
+      v-bind:isDealer="playerIsDealer"
       v-bind:leadSuit="leadSuit"
     ></PlayerConsole>
   </div>
@@ -107,21 +107,12 @@
       },
       playerIsActive: function() {
         return this.player.id === this.gameState.activePlayerId;
+      },
+      playerIsDealer: function() {
+        return this.player.id === this.gameState.dealerId;
       }
     },
     methods: {
-      dealCards: function(){
-        this.$websocketManager.send({
-          destination: {
-            resource: 'GameSession',
-            id: this.gameState.session.id,
-            action: 'startNewRound',
-          },
-          payload: {
-            player: this.player.id,
-          }
-        })
-      },
       getPlayerHand(playerId){
         if (
           this.gameState.playerHands 

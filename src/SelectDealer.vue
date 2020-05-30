@@ -27,11 +27,6 @@
         v-if="dealerSelector.dealerId == player.id"
       >
         <p>You are the dealer!</p>
-        <button
-          v-on:click="$emit('dealCards', player)"
-        >
-          Deal the cards
-        </button>
       </template>
 
       <p v-else>

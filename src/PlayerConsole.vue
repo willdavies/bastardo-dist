@@ -34,6 +34,15 @@
             <p v-else>Click on a card to play</p>          
           </template>
 
+          <template v-else-if="isDealer && roundPhase == 'dealing'">
+            <p>You are the dealer!</p>
+
+            <button
+              v-on:click="dealCards"
+            >
+              Deal the cards
+            </button>
+          </template>          
         </template>
       </div>
     </div>
@@ -54,6 +63,7 @@
       },
       leadSuit: String,
       isActive: Boolean,
+      isDealer: Boolean,
     },
     data: function(){
       return {
@@ -117,6 +127,18 @@
             }
           }
         });
+      },
+      dealCards: function(){
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.gameState.session.id,
+            action: 'startNewRound',
+          },
+          payload: {
+            player: this.player.id,
+          }
+        })
       },
     },
     components: {
