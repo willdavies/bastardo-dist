@@ -12,7 +12,7 @@
       <div id="player-console-information">
         <ul>
           <li v-if="currentBet">Bet: {{ currentBet }}</li>
-          <li>Tricks won: {{ tricksWon }}</li>
+          <li v-if="tricksWon">Tricks won: {{ tricksWon }}</li>
           <li>Game score: {{ currentGameScore }}</li>
         </ul>
       </div>
@@ -75,7 +75,15 @@
           : null
       },
       tricksWon: function(){
-        return '#TBC'
+        if (
+          this.gameState.session.activeGame
+          && this.gameState.session.activeGame.activeRound
+          && this.gameState.session.activeGame.activeRound.tricksWon.hasOwnProperty(this.player.id)
+        ) {
+          return Object.keys(this.gameState.session.activeGame.activeRound.tricksWon[this.player.id]).length
+        }
+
+        return null;
       },
       currentGameScore: function(){
         return '#TBC'
