@@ -9,7 +9,7 @@
         v-bind:player="gameState.session.players[seat.playerId]"
         v-bind:hand="getPlayerHand(seat.playerId)"
         v-bind:activeRound="gameState.session.activeGame !== null ? gameState.session.activeGame.activeRound : null"
-        v-bind:isDealer="seat.playerId == gameState.session.dealerId"
+        v-bind:isDealer="seat.playerId == gameState.dealerId"
         v-bind:isActive="seat.playerId == gameState.activePlayerId"
         v-bind:isSessionLeader="seat.playerId == sessionLeaderId"
         v-bind:isRoundLeader="seat.playerId == roundLeaderId"
@@ -34,7 +34,7 @@
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
         v-bind:isActive="playerIsActive"
-        v-bind:dealerId="gameState.session.dealerId"
+        v-bind:dealerId="gameState.dealerId"
       ></PlaceBets>
 
       <PlayedCards
@@ -98,6 +98,7 @@
             player: this.player.id,
           }
         })
+      },
       getPlayerHand(playerId){
         if (
           this.gameState.playerHands 
