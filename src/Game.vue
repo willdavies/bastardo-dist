@@ -7,7 +7,7 @@
         v-bind:key="seat.id"
         v-bind:color="seat.color"
         v-bind:player="gameState.session.players[seat.playerId]"
-        v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.playerId] : null"
+        v-bind:hand="getPlayerHand(seat.playerId)"
         v-bind:activeRound="gameState.session.activeGame !== null ? gameState.session.activeGame.activeRound : null"
         v-bind:isDealer="seat.playerId == gameState.session.dealerId"
         v-bind:isActive="seat.playerId == gameState.activePlayerId"
@@ -47,6 +47,7 @@
     <PlayerConsole
       v-bind:gameState="gameState"
       v-bind:player="player"
+      v-bind:playerHand="getPlayerHand(player.id)"
       v-bind:isActive="playerIsActive"
       v-bind:leadSuit="leadSuit"
     ></PlayerConsole>
@@ -97,6 +98,15 @@
             player: this.player.id,
           }
         })
+      getPlayerHand(playerId){
+        if (
+          this.gameState.playerHands 
+          && this.gameState.playerHands.hasOwnProperty(playerId)
+        ) {
+          return this.gameState.playerHands[playerId]; 
+        }
+
+        return null;
       },
     },
     components: {

@@ -2,7 +2,7 @@
   <div id="player-console">
     <Hand
       v-if="gameState.playerHands"
-      v-bind:cards="gameState.playerHands[player.id].cards"
+      v-bind:cards="playerHand ? playerHand.cards : []"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="isActive"
       v-bind:selectedCard="selectedCard"
@@ -44,6 +44,10 @@
     props: {
       gameState: Object,
       player: Object,
+      playerHand: {
+        type: Object,
+        required: false,
+      },
       leadSuit: String,
       isActive: Boolean,
     },
