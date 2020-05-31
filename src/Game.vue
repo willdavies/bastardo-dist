@@ -16,43 +16,45 @@
       ></Opponent>      
     </div>
 
-    <div id="dojo">
-      <SelectDealer
-        v-if="gameState.dealerSelector"
-        class="dialogue-box"
-        v-bind:dealerSelector="gameState.dealerSelector"
-        v-bind:player="player"
-        v-bind:players="gameState.session.players"
-        v-bind:activePlayerId="gameState.activePlayerId"
-        v-bind:dealerId="gameState.dealerId"
-        v-bind:isActive="playerIsActive"
-      ></SelectDealer>
-
-      <template
-        v-else-if="
-          gameState.session.activeGame
-          && gameState.session.activeGame.activeRound
-        "
-      >      
-        <PlaceBets
-          v-if="roundPhase == 'betting'"
+    <div id="play-area">
+      <div id="dojo">
+        <SelectDealer
+          v-if="gameState.dealerSelector"
           class="dialogue-box"
-          v-bind:betsCollector="gameState.betsCollector"
+          v-bind:dealerSelector="gameState.dealerSelector"
           v-bind:player="player"
           v-bind:players="gameState.session.players"
           v-bind:activePlayerId="gameState.activePlayerId"
-          v-bind:isActive="playerIsActive"
           v-bind:dealerId="gameState.dealerId"
-        ></PlaceBets>
+          v-bind:isActive="playerIsActive"
+        ></SelectDealer>
 
-        <PlayedCards
-          v-else-if="gameState.session.activeGame.activeRound.playedCards"
-          v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
-          v-bind:leadSuit="leadSuit"
-          v-bind:player="player"
-          v-bind:playerCount="Object.keys(gameState.session.players).length"
-        ></PlayedCards>
-      </template>
+        <template
+          v-else-if="
+            gameState.session.activeGame
+            && gameState.session.activeGame.activeRound
+          "
+        >      
+          <PlaceBets
+            v-if="roundPhase == 'betting'"
+            class="dialogue-box"
+            v-bind:betsCollector="gameState.betsCollector"
+            v-bind:player="player"
+            v-bind:players="gameState.session.players"
+            v-bind:activePlayerId="gameState.activePlayerId"
+            v-bind:isActive="playerIsActive"
+            v-bind:dealerId="gameState.dealerId"
+          ></PlaceBets>
+
+          <PlayedCards
+            v-else-if="gameState.session.activeGame.activeRound.playedCards"
+            v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
+            v-bind:leadSuit="leadSuit"
+            v-bind:player="player"
+            v-bind:playerCount="Object.keys(gameState.session.players).length"
+          ></PlayedCards>
+        </template>
+      </div>
     </div>
 
     <PlayerConsole
@@ -145,14 +147,20 @@
     justify-content: space-around;
   }
 
-  #dojo {
-    height: 25em;
-    width: 25em;
-    max-width: 80%;
+  #play-area {
     position: relative;
+    height: 24em;
+    width: 28em;
+    box-sizing: border-box;
+    margin: 1em auto -3em;
+    padding: 0 2em;
+  }
+
+  #dojo {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.5);
-    margin: 1em auto -3em;
   }
 
   #dojo .dialogue-box {

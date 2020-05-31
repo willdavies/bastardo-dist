@@ -87,12 +87,7 @@
 
 <style scoped>
   #played-cards {
-    height: 25em;
-    width: 25em;
-    position: relative;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.5);
-    margin: 2em auto;
+    width: 100%;
   }
 
   #played-cards .card {
@@ -102,7 +97,7 @@
   }
 
   #played-cards .card.card-leader {
-    transform: translate(0, -15%);
+    transform: translateY(-15%);
     transition: transform 0.15s;
   }
 
@@ -111,15 +106,15 @@
   }
 
   #dojo-cards-container {
-    margin: 50% auto 0;
-    transform: translate(0, -50%);
+    margin: 0 auto;
+    transform: translateY(50%);
   }
 
   #suit-indicator {
     position: absolute;
     top: -1em;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translateX(-50%);
     width: 4em;
     border: 0.25em outset #D4AF37;
     padding: 0.5em;
