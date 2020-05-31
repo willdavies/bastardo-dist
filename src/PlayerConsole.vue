@@ -8,15 +8,19 @@
       v-bind:selectedCard="selectedCard"
       v-on:cardClick="handleCardClick"
     ></Hand>
-    <div id="player-console-detail" class="clearfix">
-      <div id="player-console-information">
-        <ul>
-          <li v-if="currentBet">Bet: {{ currentBet }}</li>
-          <li v-if="tricksWon">Tricks won: {{ tricksWon }}</li>
-          <li>Game score: {{ currentGameScore }}</li>
-        </ul>
+    <div id="player-console-detail">
+      <div
+        class="player-console-section"
+        id="player-console-identity"
+      >
+        <Avatar v-bind:color="color"></Avatar>
+        <h2>{{ player.firstName }}</h2>
       </div>
-      <div id="player-console-controls">
+
+      <div
+        class="player-console-section"
+        id="player-console-controls"
+      >
         <template v-if="isActive">
           <template v-if="roundPhase == 'playing'">
             <p>It's your turn!</p>
@@ -45,11 +49,33 @@
           </template>          
         </template>
       </div>
+
+      <GameSessionControls
+        class="player-console-section"
+      />
+
+      <div
+        class="player-console-section"
+        id="player-console-information"
+      >
+        <table>
+          <tr v-if="currentBet !== null">
+            <td>Bet:</td>
+            <td>{{ currentBet }}</td>
+          </tr>
+          <tr v-if="tricksWon !== null">
+            <td>Tricks won:</td>
+            <td>{{ tricksWon }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Avatar from './Avatar.vue';
+  import GameSessionControls from './GameSessionControls.vue';
   import Hand from './Hand.vue';
 
   export default {
@@ -142,31 +168,76 @@
       },
     },
     components: {
+      Avatar,
+      GameSessionControls,
       Hand,
     },
   };
 </script>
 
-<style>
+<style scoped>
   #player-console {
-    width: 100%;
+    display: grid;
+    grid-template-rows: 6em 1fr;
+    /*width: 100%;*/
     margin-top: 1em;
-    clear: both;
+  }
+
+  #hand {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    margin: 0 auto -7.5em;
   }
 
   #player-console-detail {
-    width: 100%;
+    position: relative;
+    display: grid;
+    grid-row-start: 2;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-rows: 1fr 2.3em;
     background: white;
+    border-top: 1px solid black;
+    box-shadow: 0em 0em 0.5em 0px gray;
+  }
+
+  .player-console-section {
+    padding: 0.5em;
+  }
+
+  #player-console-identity {
+    grid-column-start: 1;
+    grid-column-end: span 1;
+    grid-row-start: 1;
+    grid-row-end: none;
   }
   
-  #player-console-information {
-    width: 50%;
-    float: left;
-    border-right: 1px solid black;
+  #player-console-identity h2 {
+    text-align: center;
   }
-  
+
+  #player-console-identity .avatar {
+    display: block;
+    width: 4em;
+    margin: 0 auto;
+  }
+
   #player-console-controls {
-    width: 50%;
-    float: left;
+    grid-column-start: 2;
+    grid-column-end: span 1;
+    grid-row-start: 1;
+    grid-row-end: span 1;
+  }
+
+  #game-session-controls {
+    grid-column-start: 2;
+    grid-column-end: span 1;
+    grid-row-start: 2;
+    grid-row-end: span 1;
+  }
+
+  #player-console-information {
+    grid-column-start: 3;
+    grid-column-end: span 1;
+    border-right: 1px solid black;
   }
 </style>

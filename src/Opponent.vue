@@ -3,7 +3,6 @@
     class="opponent"
     v-bind:class="{active: isActive}"
   >
-    <Avatar v-bind:color="color"></Avatar>
     <div class="opponent-hand">
       <div
         v-if="hand !== null"
@@ -16,23 +15,28 @@
       </div>
     </div>
     <div class="opponent-placard">
-      <span class="name">{{ player.firstName }}</span>
+      <div class="opponent-identity">
+        <Avatar v-bind:color="color"></Avatar>
+        <span class="name">{{ player.firstName }}</span>        
+      </div>
 
-      <span
-        class="bet"
-        v-if="playerBet !== null"
-      >
-        Bet: {{ playerBet }}
-      </span>
+      <div class="opponent-stats">
+        <span
+          class="bet"
+          v-if="playerBet !== null"
+        >
+          Bet: {{ playerBet }}
+        </span>
 
-      <span
-        class="tricks-won"
-        v-if="tricksWon !== null"
-      >
-        Tricks won: {{ tricksWon }}
-      </span>
+        <span
+          class="tricks-won"
+          v-if="tricksWon !== null"
+        >
+          Won: {{ tricksWon }}
+        </span>
+      </div>
 
-      <div class="opponent-placard-badges">
+      <div class="opponent-badges">
         <span class="badge session-leader-badge"
           v-if="isSessionLeader"
         >SL</span>
@@ -42,7 +46,7 @@
         <span class="badge dealer-badge"
           v-if="isDealer"
         >D</span>        
-      </div>
+      </div>        
     </div>
   </div>
 </template>
@@ -103,24 +107,15 @@
   }
 </script>
 
-<style>
+<style scoped>
   .opponent {
-    width: 8em;
+    width: 33.3333%;
+    padding: 0.5em;
     font-family: sans-serif;
   }
 
-  .opponent.active .opponent-placard {
-    background-color: #53F48B;
-  }
-
-  .avatar {
-    display: block;
-    width: 75%;
-    margin: 0 auto;
-  }
-
   .opponent-hand {
-    height: 6em;
+    height: 4.5em;
     overflow: hidden;
     font-size: 8px;
   }
@@ -132,7 +127,7 @@
   .opponent-hand .card {
     position: relative;
     float: left;
-    margin-left: -8em;
+    margin-left: -7em;
   }
 
   .opponent-hand .card:first-child {
@@ -140,19 +135,40 @@
   }
 
   .opponent-placard {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: 1fr 2em;
     box-sizing: border-box;
-    position: relative;
     border: 1px solid #333;
     border-radius: 5px;
-    padding: 0.5em 0.5em 1em;
     background-color: #BFF7FD;
-    text-align: center;
+  }
+
+  .opponent.active .opponent-placard {
+    background-color: #53F48B;
+  }
+
+  .opponent-identity {
+    grid-row-start: 1;
+    grid-row-end: none;
+  }
+
+  .avatar {
+    display: block;
+    max-width: 4em;
+    margin: 0 auto;
   }
 
   .name {
     display: block;
     margin-bottom: 0.5em;
-    font-size: 1.25em
+    font-size: 1.25em;
+    text-align: center;
+  }
+
+  .opponent-stats {
+    padding: 0.5em;
+    font-size: 0.8em
   }
 
   .bet, .tricks-won {
@@ -161,18 +177,17 @@
     font-size: 1.25em
   }
 
-  .opponent-placard-badges {
-    display: flex;
-    justify-content: space-around;
+  .opponent-badges {
     height: 1.5em;
-    margin: 0 auto;
   }
 
   .badge {
-    display: block;
+    display: inline-block;
     height: 1.5em;
     width: 1.5em;
+    margin-right: 0.5em;
     border: 1px solid #888;
+    text-align: center;
     line-height: 1.5;
   }
 

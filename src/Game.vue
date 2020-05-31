@@ -19,6 +19,7 @@
     <div id="dojo">
       <SelectDealer
         v-if="gameState.dealerSelector"
+        class="dialogue-box"
         v-bind:dealerSelector="gameState.dealerSelector"
         v-bind:player="player"
         v-bind:players="gameState.session.players"
@@ -35,6 +36,7 @@
       >      
         <PlaceBets
           v-if="roundPhase == 'betting'"
+          class="dialogue-box"
           v-bind:betsCollector="gameState.betsCollector"
           v-bind:player="player"
           v-bind:players="gameState.session.players"
@@ -139,5 +141,27 @@
   #opponents {
     display: flex;
     justify-content: space-around;
+  }
+
+  #dojo {
+    height: 25em;
+    width: 25em;
+    max-width: 80%;
+    position: relative;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    margin: 1em auto -3em;
+  }
+
+  #dojo .dialogue-box {
+    display: block;
+    box-shadow: 0.5em 0.5em 1em #2d2d2de0;
+    padding: 2em;
+    background: white;
+    position: absolute;
+    top: 50%;
+    width: 150%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>

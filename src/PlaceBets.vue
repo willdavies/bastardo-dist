@@ -68,10 +68,7 @@
 
 <style scoped>
   #place-bets {
-    display: block;
-    box-shadow: 0.5em 0.5em 1em #2d2d2de0;
-    padding: 2em;
-    background: white;
+    text-align: center;
   }
 
   h2 {
