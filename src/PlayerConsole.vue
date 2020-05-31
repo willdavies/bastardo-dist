@@ -169,7 +169,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   #player-console {
     display: grid;
     grid-template-rows: 6em 9em;

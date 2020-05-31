@@ -107,7 +107,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .opponent {
     width: 33.3333%;
     padding: 0.5em;
