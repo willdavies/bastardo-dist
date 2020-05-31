@@ -65,6 +65,13 @@
         id="player-console-information"
       >
         <table>
+          <tr v-if="
+            gameState.session.activeGame
+            && gameState.session.activeGame.activeRound
+          ">
+            <td>Round:</td>
+            <td>{{ gameState.session.activeGame.activeRound.roundNumber }}/{{ gameState.session.activeGame.roundLimit }}</td>
+          </tr>
           <tr v-if="currentBet !== null">
             <td>Bet:</td>
             <td>{{ currentBet }}</td>
