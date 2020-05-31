@@ -34,6 +34,7 @@
     background: #FFF;
     border-bottom: 2px solid #000;
     font-family: sans-serif;
+    z-index: 10;
   }
 
   ul {
