@@ -164,7 +164,7 @@
 
         // Dealer ID
         if (gameData.hasOwnProperty('dealerId')) {
-          // Update active player ID
+          // Update dealer ID
           this.gameState.dealerId = gameData.dealerId;
         }
 

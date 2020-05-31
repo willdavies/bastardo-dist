@@ -24,13 +24,13 @@
       v-if="dealerSelector.status == 'concluded'"
     >
       <template
-        v-if="dealerSelector.dealerId == player.id"
+        v-if="dealerId == player.id"
       >
         <p>You are the dealer!</p>
       </template>
 
       <p v-else>
-        Waiting for {{ players[dealerSelector.dealerId].firstName }} to deal the cards.
+        Waiting for {{ players[dealerId].firstName }} to deal the cards.
       </p>      
     </template>
 
@@ -63,6 +63,7 @@
       players: Object,
       isActive: Boolean,
       activePlayerId: String,
+      dealerId: String,
     },
     methods: {
       getHeadingText: function(){

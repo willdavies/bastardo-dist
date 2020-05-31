@@ -23,6 +23,7 @@
         v-bind:player="player"
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
+        v-bind:dealerId="gameState.dealerId"
         v-bind:isActive="playerIsActive"
       ></SelectDealer>
 
