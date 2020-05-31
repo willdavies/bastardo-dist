@@ -72,10 +72,14 @@
 
   #hand .card:first-child {
     margin-left: 0;
+    transition: transform 0.15s;
   }
 
-  #hand .card.selected, #hand .card.playable:hover {
-    transform: translate(0, -15%);
-    transition: transform 0.15s;
+  #hand .card.playable.selected {
+    transform: translateY(-15%);
+  }
+
+  #hand .card.playable:not(.selected):hover {
+    transform: translateY(-10%);
   }
 </style>
