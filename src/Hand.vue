@@ -40,10 +40,6 @@
 </script>
 
 <style>
-  #hand {
-    margin: 0 auto;
-  }
-
   #hand .card {
     position: relative;
     float: left;
