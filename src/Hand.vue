@@ -3,12 +3,7 @@
     <Card
       v-for="card in cards"
       v-bind:card="card"
-      v-bind:isPlayable="cardIsPlayable(card)"
-      v-bind:class="{
-        'playable': cardIsPlayable(card),
-        'not-playable': !cardIsPlayable(card),
-        'selected': card == selectedCard,
-      }"
+      v-bind:class="getCardClasses(card)"
       v-bind:key="card.id"
       v-on:cardClick="$emit('cardClick', card, cardIsPlayable(card))"
     ></Card>
@@ -21,8 +16,11 @@
   export default {
     props: {
       cards: Array,
+      activeRound: Object,
       leadSuit: String,
       selectedCard: Object,
+      playerCount: Number,
+      isActive: Boolean,
     },
     components: {
       Card
@@ -30,10 +28,36 @@
     methods: {
       cardIsPlayable: function(card){
         return (
-          this.leadSuit === null
-          || card.suit == this.leadSuit
-          || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
+          this.activeRound
+          && this.activeRound.playedCards.length == this.playerCount
+          || (
+            this.leadSuit === null
+            || card.suit == this.leadSuit
+            || this.cards.map(card => card.suit).indexOf(this.leadSuit) == -1
+          )
         );
+      },
+      getCardClasses: function(card){
+        // No interactivity when player is not active
+        if (!this.isActive) {
+          return null
+        }
+
+        const classes = [];
+
+        // All cards are playable if current trick is finished
+        if (this.cardIsPlayable(card)) {
+          classes.push('playable');
+        } else {
+          classes.push('not-playable');
+        }
+
+        // Check whether card is selected
+        if (card == this.selectedCard) {
+          classes.push('selected');
+        }
+
+        return classes;
       },
     }
   };

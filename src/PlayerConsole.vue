@@ -3,6 +3,12 @@
     <Hand
       v-if="gameState.playerHands"
       v-bind:cards="playerHand ? playerHand.cards : []"
+      v-bind:activeRound="
+        gameState.session.activeGame && gameState.session.activeGame.activeRound
+          ? gameState.session.activeGame.activeRound
+          : null
+      "
+      v-bind:playerCount="Object.keys(gameState.session.players).length"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="isActive"
       v-bind:selectedCard="selectedCard"
