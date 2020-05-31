@@ -50,6 +50,10 @@
         </template>
       </div>
 
+      <GameSessionControls
+        class="player-console-section"
+      />
+
       <div
         class="player-console-section"
         id="player-console-information"
@@ -71,6 +75,7 @@
 
 <script>
   import Avatar from './Avatar.vue';
+  import GameSessionControls from './GameSessionControls.vue';
   import Hand from './Hand.vue';
 
   export default {
@@ -164,6 +169,7 @@
     },
     components: {
       Avatar,
+      GameSessionControls,
       Hand,
     },
   };
@@ -172,7 +178,7 @@
 <style scoped>
   #player-console {
     display: grid;
-    grid-template-rows: 6em 9em;
+    grid-template-rows: 6em 1fr;
     /*width: 100%;*/
     margin-top: 1em;
   }
@@ -185,11 +191,10 @@
 
   #player-console-detail {
     position: relative;
-    grid-row-start: 2;
-
     display: grid;
+    grid-row-start: 2;
     grid-template-columns: 30% 40% 30%;
-
+    grid-template-rows: 1fr 2.3em;
     background: white;
     border-top: 1px solid black;
     box-shadow: 0em 0em 0.5em 0px gray;
@@ -201,6 +206,9 @@
 
   #player-console-identity {
     grid-column-start: 1;
+    grid-column-end: span 1;
+    grid-row-start: 1;
+    grid-row-end: none;
   }
   
   #player-console-identity h2 {
@@ -216,6 +224,15 @@
   #player-console-controls {
     grid-column-start: 2;
     grid-column-end: span 1;
+    grid-row-start: 1;
+    grid-row-end: span 1;
+  }
+
+  #game-session-controls {
+    grid-column-start: 2;
+    grid-column-end: span 1;
+    grid-row-start: 2;
+    grid-row-end: span 1;
   }
 
   #player-console-information {

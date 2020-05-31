@@ -21,10 +21,6 @@
     ></JoinGame>
 
     <div v-else>    
-      <GameSessionControls
-        v-on:voteToAbort="voteToAbort"
-      ></GameSessionControls>
-
       <Game
         v-bind:gameState="gameState"
         v-bind:player="activePlayer"
@@ -37,12 +33,17 @@
   import Game from './Game.vue';
   import JoinGame from './JoinGame.vue';
   import Page from './Page.vue';
-  import GameSessionControls from './GameSessionControls.vue';
+  import { eventBus } from './app'
 
   export default {
     props: {
       activePlayer: Object,
       gameState: Object,
+    },
+    beforeCreate: function() {
+      eventBus.$on('session.voteToAbort', () => {
+        this.voteToAbort();
+      });
     },
     created: function() {
       // Check for player
@@ -104,7 +105,6 @@
       Game,
       JoinGame,
       Page,
-      GameSessionControls,
     },
   };
 </script>
