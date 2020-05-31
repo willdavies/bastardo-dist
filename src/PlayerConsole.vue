@@ -54,11 +54,16 @@
         class="player-console-section"
         id="player-console-information"
       >
-        <ul>
-          <li v-if="currentBet">Bet: {{ currentBet }}</li>
-          <li v-if="tricksWon">Tricks won: {{ tricksWon }}</li>
-          <li>Game score: {{ currentGameScore }}</li>
-        </ul>
+        <table>
+          <tr v-if="currentBet !== null">
+            <td>Bet:</td>
+            <td>{{ currentBet }}</td>
+          </tr>
+          <tr v-if="tricksWon !== null">
+            <td>Tricks won:</td>
+            <td>{{ tricksWon }}</td>
+          </tr>
+        </table>
       </div>
     </div>
   </div>
