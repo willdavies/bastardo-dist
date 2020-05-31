@@ -49,6 +49,8 @@
           v-else-if="gameState.session.activeGame.activeRound.playedCards"
           v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
           v-bind:leadSuit="leadSuit"
+          v-bind:player="player"
+          v-bind:playerCount="Object.keys(gameState.session.players).length"
         ></PlayedCards>
       </template>
     </div>
