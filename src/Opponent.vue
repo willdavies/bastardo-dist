@@ -17,12 +17,21 @@
     </div>
     <div class="opponent-placard">
       <span class="name">{{ player.firstName }}</span>
+
       <span
         class="bet"
         v-if="playerBet !== null"
       >
         Bet: {{ playerBet }}
       </span>
+
+      <span
+        class="tricks-won"
+        v-if="tricksWon !== null"
+      >
+        Tricks won: {{ tricksWon }}
+      </span>
+
       <div class="opponent-placard-badges">
         <span class="badge session-leader-badge"
           v-if="isSessionLeader"
@@ -75,7 +84,17 @@
         }
 
         return null;
-      }
+      },
+      tricksWon: function(){
+        if (
+          this.activeRound
+          && this.activeRound.tricksWon.hasOwnProperty(this.player.id)
+        ) {
+          return this.activeRound.tricksWon[this.player.id].length
+        }
+
+        return null;
+      },
     },
     components: {
       Avatar,
@@ -136,7 +155,7 @@
     font-size: 1.25em
   }
 
-  .bet {
+  .bet, .tricks-won {
     display: block;
     margin-bottom: 0.5em;
     font-size: 1.25em

@@ -119,6 +119,7 @@
             sessionId: gameData.sessionId,
             session: null,
             activePlayerId: null,
+            dealerId: null,
             dealerSelector: null,
             betsCollector: null,
             playerHands: null,
@@ -159,6 +160,12 @@
         if (gameData.hasOwnProperty('activePlayerId')) {
           // Update active player ID
           this.gameState.activePlayerId = gameData.activePlayerId;
+        }
+
+        // Dealer ID
+        if (gameData.hasOwnProperty('dealerId')) {
+          // Update dealer ID
+          this.gameState.dealerId = gameData.dealerId;
         }
 
         // Dealer selector

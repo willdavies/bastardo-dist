@@ -7,9 +7,9 @@
         v-bind:key="seat.id"
         v-bind:color="seat.color"
         v-bind:player="gameState.session.players[seat.playerId]"
-        v-bind:hand="gameState.playerHands !== null ? gameState.playerHands[seat.playerId] : null"
+        v-bind:hand="getPlayerHand(seat.playerId)"
         v-bind:activeRound="gameState.session.activeGame !== null ? gameState.session.activeGame.activeRound : null"
-        v-bind:isDealer="seat.playerId == gameState.session.dealerId"
+        v-bind:isDealer="seat.playerId == gameState.dealerId"
         v-bind:isActive="seat.playerId == gameState.activePlayerId"
         v-bind:isSessionLeader="seat.playerId == sessionLeaderId"
         v-bind:isRoundLeader="seat.playerId == roundLeaderId"
@@ -23,31 +23,41 @@
         v-bind:player="player"
         v-bind:players="gameState.session.players"
         v-bind:activePlayerId="gameState.activePlayerId"
+        v-bind:dealerId="gameState.dealerId"
         v-bind:isActive="playerIsActive"
-        v-on:dealCards="dealCards"
       ></SelectDealer>
 
-      <PlaceBets
-        v-else-if="gameState.betsCollector"
-        v-bind:betsCollector="gameState.betsCollector"
-        v-bind:player="player"
-        v-bind:players="gameState.session.players"
-        v-bind:activePlayerId="gameState.activePlayerId"
-        v-bind:isActive="playerIsActive"
-        v-bind:dealerId="gameState.session.dealerId"
-      ></PlaceBets>
+      <template
+        v-else-if="
+          gameState.session.activeGame
+          && gameState.session.activeGame.activeRound
+        "
+      >      
+        <PlaceBets
+          v-if="roundPhase == 'betting'"
+          v-bind:betsCollector="gameState.betsCollector"
+          v-bind:player="player"
+          v-bind:players="gameState.session.players"
+          v-bind:activePlayerId="gameState.activePlayerId"
+          v-bind:isActive="playerIsActive"
+          v-bind:dealerId="gameState.dealerId"
+        ></PlaceBets>
 
-      <PlayedCards
-        v-else
-        v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
-        v-bind:leadSuit="leadSuit"
-      ></PlayedCards>
+        <PlayedCards
+          v-else-if="gameState.session.activeGame.activeRound.playedCards"
+          v-bind:cards="gameState.session.activeGame.activeRound.playedCards"
+          v-bind:leadSuit="leadSuit"
+        ></PlayedCards>
+      </template>
     </div>
 
     <PlayerConsole
       v-bind:gameState="gameState"
+      v-bind:roundPhase="roundPhase"
       v-bind:player="player"
+      v-bind:playerHand="getPlayerHand(player.id)"
       v-bind:isActive="playerIsActive"
+      v-bind:isDealer="playerIsDealer"
       v-bind:leadSuit="leadSuit"
     ></PlayerConsole>
   </div>
@@ -72,31 +82,47 @@
       }
     },
     computed: {
+      roundPhase: function(){
+        if (this.gameState.playerHands === null) {
+          if (
+            this.gameState.dealerSelector !== null
+            && this.gameState.dealerSelector.status !== 'concluded'
+          ) {
+            return 'choosingDealer';
+          } else {
+            return 'dealing';
+          }
+        } else if (this.gameState.betsCollector) {
+          return 'betting';
+        } else if (this.gameState.session.activeGame.activeRound) {
+          return 'playing';
+        }
+      },
       leadSuit: function(){
         return (
           this.gameState.session.activeGame
           && this.gameState.session.activeGame.activeRound
-          && this.gameState.session.activeGame.activeRound.playedCards.length > 0
         )
-          ? this.gameState.session.activeGame.activeRound.playedCards[0].suit
+          ? this.gameState.session.activeGame.activeRound.leadSuit
           : null;
       },
       playerIsActive: function() {
         return this.player.id === this.gameState.activePlayerId;
+      },
+      playerIsDealer: function() {
+        return this.player.id === this.gameState.dealerId;
       }
     },
     methods: {
-      dealCards: function(){
-        this.$websocketManager.send({
-          destination: {
-            resource: 'GameSession',
-            id: this.gameState.session.id,
-            action: 'startNewRound',
-          },
-          payload: {
-            player: this.player.id,
-          }
-        })
+      getPlayerHand(playerId){
+        if (
+          this.gameState.playerHands 
+          && this.gameState.playerHands.hasOwnProperty(playerId)
+        ) {
+          return this.gameState.playerHands[playerId]; 
+        }
+
+        return null;
       },
     },
     components: {

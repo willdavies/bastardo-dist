@@ -2,7 +2,7 @@
   <div id="player-console">
     <Hand
       v-if="gameState.playerHands"
-      v-bind:cards="gameState.playerHands[player.id].cards"
+      v-bind:cards="playerHand ? playerHand.cards : []"
       v-bind:leadSuit="leadSuit"
       v-bind:isActive="isActive"
       v-bind:selectedCard="selectedCard"
@@ -12,25 +12,37 @@
       <div id="player-console-information">
         <ul>
           <li v-if="currentBet">Bet: {{ currentBet }}</li>
-          <li>Tricks won: {{ tricksWon }}</li>
+          <li v-if="tricksWon">Tricks won: {{ tricksWon }}</li>
           <li>Game score: {{ currentGameScore }}</li>
         </ul>
       </div>
       <div id="player-console-controls">
         <template v-if="isActive">
-          <p>It's your turn!</p>
+          <template v-if="roundPhase == 'playing'">
+            <p>It's your turn!</p>
 
-          <div v-if="selectedCard">
-            <p>You have selected the {{ selectedCard.label }} of {{ selectedCard.suit }}</p>
-            <button v-on:click="playCard">
-              Play this card
-            </button>
-            <button v-on:click.stop="selectedCard = null">
-              Cancel
-            </button>
-          </div>
+            <div v-if="selectedCard">
+              <p>You have selected the {{ selectedCard.label }} of {{ selectedCard.suit }}</p>
+              <button v-on:click="playCard">
+                Play this card
+              </button>
+              <button v-on:click.stop="selectedCard = null">
+                Cancel
+              </button>
+            </div>
+            
+            <p v-else>Click on a card to play</p>          
+          </template>
 
-          <p v-else>Click on a card to play</p>          
+          <template v-else-if="isDealer && roundPhase == 'dealing'">
+            <p>You are the dealer!</p>
+
+            <button
+              v-on:click="dealCards"
+            >
+              Deal the cards
+            </button>
+          </template>          
         </template>
       </div>
     </div>
@@ -43,9 +55,15 @@
   export default {
     props: {
       gameState: Object,
+      roundPhase: String,
       player: Object,
+      playerHand: {
+        type: Object,
+        required: false,
+      },
       leadSuit: String,
       isActive: Boolean,
+      isDealer: Boolean,
     },
     data: function(){
       return {
@@ -67,7 +85,15 @@
           : null
       },
       tricksWon: function(){
-        return '#TBC'
+        if (
+          this.gameState.session.activeGame
+          && this.gameState.session.activeGame.activeRound
+          && this.gameState.session.activeGame.activeRound.tricksWon.hasOwnProperty(this.player.id)
+        ) {
+          return Object.keys(this.gameState.session.activeGame.activeRound.tricksWon[this.player.id]).length
+        }
+
+        return null;
       },
       currentGameScore: function(){
         return '#TBC'
@@ -101,6 +127,18 @@
             }
           }
         });
+      },
+      dealCards: function(){
+        this.$websocketManager.send({
+          destination: {
+            resource: 'GameSession',
+            id: this.gameState.session.id,
+            action: 'startNewRound',
+          },
+          payload: {
+            player: this.player.id,
+          }
+        })
       },
     },
     components: {
