@@ -2,7 +2,7 @@
   <div id="bastardo-game">
     <div id="opponents">
       <Opponent
-        v-for="seat in gameState.session.seats"
+        v-for="seat in opponents"
         v-if="seat.playerId != player.id"
         v-bind:key="seat.id"
         v-bind:color="seat.color"
@@ -103,6 +103,27 @@
         } else if (this.gameState.session.activeGame.activeRound) {
           return 'playing';
         }
+      },
+      opponents: function(){
+        // Ensures that player sees preceeding player as last in the list of
+        // opponents
+        const beforePlayer = [];
+        const afterPlayer = [];
+        var passedPlayer = false;
+
+        // Divide opponents between those preceeding and those succeeding
+        // player
+        this.gameState.session.seats.forEach(seat => {
+          if (seat.playerId === this.player.id) {
+            passedPlayer = true;
+          } else {
+            const targetArray = passedPlayer ? afterPlayer : beforePlayer;
+
+            targetArray.push(seat);            
+          }
+        });
+
+        return afterPlayer.concat(beforePlayer);
       },
       leadSuit: function(){
         return (
