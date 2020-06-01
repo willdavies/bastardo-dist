@@ -2,10 +2,10 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-const env = require('./config/dev.env')
+const env = require('./config/prod.env')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: './src/app.js',
   output: {
     publicPath: '/'
