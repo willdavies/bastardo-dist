@@ -8,7 +8,7 @@ module.exports = {
   mode: 'production',
   entry: './src/app.js',
   output: {
-    publicPath: '/'
+    publicPath: '/bastardo-app'
   },
   watch: true,
   module: {
